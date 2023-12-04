@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: planit_db
+      MYSQL_USER: planit_user
+      MYSQL_PASSWORD: planit_password
+    ports:
+      - "3306:3306"

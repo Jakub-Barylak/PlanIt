@@ -33,13 +33,13 @@ from rest_framework_simplejwt.views import (
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'events', EventViewSet)
-router.register(r'calendars', CalendarViewSet)
-router.register(r'shared_calendars', SharedCalendarUserViewSet)
-router.register(r'notifications', NotificationViewSet)
-router.register(r'event_templates', EventTemplateViewSet)
-router.register(r'event_categories', EventsCategoryViewSet)
-router.register(r'join_event_categories', JoinEventCategoryViewSet)
-router.register(r'join_template_categories', JoinTemplateCategoryViewSet)
+router.register(r'calendars', CalendarViewSet, basename='calendars')
+router.register(r'shared_calendars', SharedCalendarUserViewSet, basename='shared_calendars')
+router.register(r'notifications', NotificationViewSet, basename='notifications')
+router.register(r'event_templates', EventTemplateViewSet, basename='event_templates')
+router.register(r'event_categories', EventsCategoryViewSet, basename='event_categories')
+router.register(r'join_event_categories', JoinEventCategoryViewSet, basename='join_event_categories')
+router.register(r'join_template_categories', JoinTemplateCategoryViewSet, basename='join_template_categories')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

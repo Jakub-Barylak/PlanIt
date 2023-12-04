@@ -1,0 +1,6 @@
+Django>=3.2,<4.0
+djangorestframework>=3.12.0,<3.13.0
+mysqlclient>=2.0.0
+djangorestframework-simplejwt>=4.7.0
+django-cors-headers>=3.10.0
+Pillow>=8.0
