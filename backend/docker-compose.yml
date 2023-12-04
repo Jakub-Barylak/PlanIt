@@ -14,5 +14,6 @@ services:
       MYSQL_DATABASE: planit_db
       MYSQL_USER: planit_user
       MYSQL_PASSWORD: planit_password
+      MYSQL_ROOT_PASSWORD: planit_root_password
     ports:
       - "3306:3306"

@@ -87,7 +87,7 @@ DATABASES = {
         'NAME': 'planit_db',  # Name of MySQL database
         'USER': 'planit_user',  # MySQL username
         'PASSWORD': 'planit_password',  # MySQL password
-        'HOST': 'localhost',  # Your MySQL host (use 'localhost' if the database is on the same machine)
+        'HOST': 'db',  # Your MySQL host (use 'localhost' if the database is on the same machine)
         'PORT': '3306',  # The default MySQL port
     }
 }
