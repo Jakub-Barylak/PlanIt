@@ -39,33 +39,14 @@ const LoginPane: NextPage = () => {
 					<h1 className="text-3xl font-bold text-center">Login</h1>
 					<form className="md-8">
 						<div className="mx-auto max-w-lg">
-							<InputField
-								value={username}
-								setValue={setUsername}
-								label="Username"
-								elementName="username"
-							/>
+							<InputField value={username} setValue={setUsername} label="Username" elementName="username" />
 
-							<PasswordField
-								password={password}
-								setPassword={setPassword}
-								label="Password"
-							/>
+							<PasswordField password={password} setPassword={setPassword} label="Password" />
 
 							<div className="flex justify-between">
-								<label
-									htmlFor="remember"
-									className="block text-gray-500 font-bold my-4"
-								>
-									<input
-										type="checkbox"
-										name="remember"
-										id="remember"
-										className="leading-loose mr-1"
-									/>
-									<span className="py-2 text-sm text-gray-600 dark:text-white/80 leading-snug">
-										Remember Me
-									</span>
+								<label htmlFor="remember" className="block text-gray-500 font-bold my-4">
+									<input type="checkbox" name="remember" id="remember" className="leading-loose mr-1" />
+									<span className="py-2 text-sm text-gray-600 dark:text-white/80 leading-snug">Remember Me</span>
 								</label>
 								<label className="block text-gray-500 font-bold my-4">
 									<a
