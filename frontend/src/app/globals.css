@@ -3,25 +3,34 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+	--foreground-rgb: 0, 0, 0;
+	--background-start-rgb: 246, 267, 255;
+	/* --background-end-rgb: 255, 255, 255; */
+	--bazarowy-color: 24, 6, 161;
+	--main-color: 14, 3, 69;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+	:root {
+		--foreground-rgb: 255, 255, 255;
+		--background-start-rgb: 0, 0, 0;
+		--background-end-rgb: 0, 0, 0;
+	}
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+	color: rgb(var(--foreground-rgb));
+	background: rgb(var(--background-start-rgb));
+}
+
+.loginBG {
+	color: rgb(var(--foreground-rgb));
+	background: radial-gradient(
+		circle at bottom left,
+		rgb(var(--background-start-rgb)),
+		rgb(var(--main-color)) 50%,
+		rgb(var(--background-start-rgb)) 70%,
+		rgb(var(--main-color)) 76%
+			/* rgba(var(--background-start-rgb), 0) 75% */
+	);
 }
