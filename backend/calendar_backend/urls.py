@@ -22,7 +22,7 @@ from calendar_app.views import (
     SharedCalendarUserViewSet, NotificationViewSet,
     EventTemplateViewSet, EventsCategoryViewSet,
     JoinEventCategoryViewSet, JoinTemplateCategoryViewSet,
-    RegistrationView
+    RegistrationView, LoginView
 )
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -41,9 +41,11 @@ router.register(r'event_categories', EventsCategoryViewSet, basename='event_cate
 router.register(r'join_event_categories', JoinEventCategoryViewSet, basename='join_event_categories')
 router.register(r'join_template_categories', JoinTemplateCategoryViewSet, basename='join_template_categories')
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('signup/', RegistrationView.as_view(), name='signup'),
+    path('login/', LoginView.as_view(), name='login'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),

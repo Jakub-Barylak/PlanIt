@@ -4,13 +4,13 @@ from .models import (
     Notification, EventTemplate, EventsCategory,
     JoinEventCategory, JoinTemplateCategory
 )
-from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth.hashers import make_password
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'name','username', 'email', 'avatar']
+        fields = ['id', 'username', 'name', 'email', 'avatar']
 
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
@@ -54,26 +54,20 @@ class JoinTemplateCategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class RegistrationSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
-    password2 = serializers.CharField(write_only=True, required=True)
-
     class Meta:
         model = User
-        fields = ('username', 'name', 'password', 'password2', 'email')  # Including 'email' if you want it as part of registration
-
-    def validate(self, attrs):
-        if attrs['password'] != attrs['password2']:
-            raise serializers.ValidationError({"password": "Password fields didn't match."})
-
-        return attrs
+        fields = ('username', 'password', 'name', 'email', 'avatar')  # Include 'name'
 
     def create(self, validated_data):
         user = User.objects.create(
             username=validated_data['username'],
-            name=validated_data['name'],
-            email=validated_data.get('email', '')  # Optional: include only if email is part of your user model and registration process
+            name=validated_data.get('name'),  # Set the 'name' field
+            email=validated_data.get('email')  # Optionally handle 'email' here too
         )
         user.set_password(validated_data['password'])
         user.save()
         return user
 
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField(required=True)
+    password = serializers.CharField(write_only=True, required=True)

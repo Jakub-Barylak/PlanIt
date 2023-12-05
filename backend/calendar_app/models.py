@@ -5,9 +5,14 @@ from django.utils import timezone
 
 # User Model
 class User(AbstractUser):
-    name = models.CharField(max_length=50, unique=False, blank=False, null=False, default='')
-    username = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=150, blank=True)
+    email = models.EmailField(unique=True)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email']
+
+    def __str__(self):
+        return self.username
 
 
 # EventsCategory Model

@@ -17,7 +17,7 @@ from .serializers import (
     SharedCalendarUserSerializer, NotificationSerializer,
     EventTemplateSerializer, EventsCategorySerializer,
     JoinEventCategorySerializer, JoinTemplateCategorySerializer,
-    RegistrationSerializer
+    RegistrationSerializer, LoginSerializer
 )
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -63,16 +63,14 @@ class JoinTemplateCategoryViewSet(viewsets.ModelViewSet):
 
 ### Registration ###
 class RegistrationView(APIView):
-
     permission_classes = [AllowAny]
 
     def post(self, request, *args, **kwargs):
         data = {
-            'username': request.data.get('username'),  # use 'login' field as username
+            'username': request.data.get('username'),  # use 'username' field as username
             'password': request.data.get('password'),
-            'password2': request.data.get('password2'),
-            'name': request.data.get('name'),
-            'email': request.data.get('email')
+            'name': request.data.get('name'),  # Include the 'name' field
+            'email': request.data.get('email'),
         }
         serializer = RegistrationSerializer(data=data)
         if serializer.is_valid():
@@ -88,4 +86,35 @@ class RegistrationView(APIView):
 
             return Response(user_data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
         
+
+### Login ###
+class LoginView(APIView):
+    permission_classes = [AllowAny]
+    def post(self, request, *args, **kwargs):
+        serializer = LoginSerializer(data=request.data)
+
+        if serializer.is_valid():
+            username = serializer.validated_data['username']
+            password = serializer.validated_data['password']
+            user = authenticate(username=username, password=password)
+            print(user)
+
+            if user is not None:
+                print(user)
+                # Create JWT tokens
+                refresh = RefreshToken.for_user(user)
+
+                # Serialize user data
+                user_data = UserSerializer(user).data
+
+                # Include the JWT tokens in the response
+                user_data['refresh'] = str(refresh)
+                user_data['access'] = str(refresh.access_token)
+
+                return Response(user_data, status=status.HTTP_200_OK)
+
+            return Response({'error': 'Invalid Credentials'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
