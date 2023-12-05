@@ -6,6 +6,7 @@ from rest_framework import status
 from django.contrib.auth import authenticate
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import AllowAny
 from .models import (
     User, Event, Calendar, SharedCalendarUser,
     Notification, EventTemplate, EventsCategory,
@@ -62,14 +63,29 @@ class JoinTemplateCategoryViewSet(viewsets.ModelViewSet):
 
 ### Registration ###
 class RegistrationView(APIView):
-    def post(self, request):
-        serializer = RegistrationSerializer(data=request.data)
+
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        data = {
+            'username': request.data.get('username'),  # use 'login' field as username
+            'password': request.data.get('password'),
+            'password2': request.data.get('password2'),
+            'name': request.data.get('name'),
+            'email': request.data.get('email')
+        }
+        serializer = RegistrationSerializer(data=data)
         if serializer.is_valid():
             user = serializer.save()
             refresh = RefreshToken.for_user(user)
-            return Response({
-                'refresh': str(refresh),
-                'access': str(refresh.access_token),
-            }, status=status.HTTP_201_CREATED)
+
+            # Serialize user data
+            user_data = UserSerializer(user).data
+
+            # Include the JWT token in the response
+            user_data['refresh'] = str(refresh)
+            user_data['access'] = str(refresh.access_token)
+
+            return Response(user_data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         

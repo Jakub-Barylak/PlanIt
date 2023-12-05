@@ -1,10 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
+from django.utils import timezone
 
 # User Model
 class User(AbstractUser):
+    name = models.CharField(max_length=50, unique=False, blank=False, null=False, default='')
+    username = models.CharField(max_length=50, unique=True)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
+
 
 # EventsCategory Model
 class EventsCategory(models.Model):
@@ -27,7 +31,7 @@ class EventTemplate(models.Model):
     month_day = models.IntegerField(null=True, blank=True)
     month = models.IntegerField(null=True, blank=True)
     categories = models.ManyToManyField(EventsCategory, through='JoinTemplateCategory', related_name='templates')
-    generation_date = models.DateField(null=False)
+    generation_date = models.DateField(null=False, default=timezone.now)
 
     def __str__(self):
         return self.name
@@ -90,7 +94,7 @@ class SharedEventUser(models.Model):
         return f"{self.user.username} - {self.event.name}"
     
 
-class todo_list(models.Model):
+class TodoList(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='todo_lists')
     todo_element = models.CharField(max_length=100)
     done = models.BooleanField(default=False)

@@ -4,11 +4,13 @@ from .models import (
     Notification, EventTemplate, EventsCategory,
     JoinEventCategory, JoinTemplateCategory
 )
+from django.contrib.auth.password_validation import validate_password
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'avatar']
+        fields = ['id', 'name','username', 'email', 'avatar']
 
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
@@ -52,27 +54,26 @@ class JoinTemplateCategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class RegistrationSerializer(serializers.ModelSerializer):
-    password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True)
+    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
+    password2 = serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'password2']
-        extra_kwargs = {
-            'password': {'write_only': True}
-        }
+        fields = ('username', 'name', 'password', 'password2', 'email')  # Including 'email' if you want it as part of registration
 
-    def save(self):
-        user = User(
-            email=self.validated_data['email'],
-            username=self.validated_data['username']
+    def validate(self, attrs):
+        if attrs['password'] != attrs['password2']:
+            raise serializers.ValidationError({"password": "Password fields didn't match."})
+
+        return attrs
+
+    def create(self, validated_data):
+        user = User.objects.create(
+            username=validated_data['username'],
+            name=validated_data['name'],
+            email=validated_data.get('email', '')  # Optional: include only if email is part of your user model and registration process
         )
-        password = self.validated_data['password']
-        password2 = self.validated_data['password2']
-
-        if password != password2:
-            raise serializers.ValidationError({'password': 'Passwords must match.'})
-        
-        user.set_password(password)
+        user.set_password(validated_data['password'])
         user.save()
         return user
 
