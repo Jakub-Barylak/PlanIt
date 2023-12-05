@@ -27,6 +27,7 @@ class EventTemplate(models.Model):
     month_day = models.IntegerField(null=True, blank=True)
     month = models.IntegerField(null=True, blank=True)
     categories = models.ManyToManyField(EventsCategory, through='JoinTemplateCategory', related_name='templates')
+    generation_date = models.DateField(null=False)
 
     def __str__(self):
         return self.name
@@ -58,7 +59,7 @@ class Event(models.Model):
 class SharedCalendarUser(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='shared_calendars')
     calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE, related_name='shared_users')
-    can_edit = models.BooleanField(default=False)
+    coworked = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.user.username} - {self.calendar.name}"
@@ -72,8 +73,32 @@ class Notification(models.Model):
     def __str__(self):
         return f"Notification for {self.user.username} on {self.notify_at}"
 
-# Join Tables for ManyToMany relationships
+class SharedRepeatedEventTemplate(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='shared_repeated_event_templates')
+    template = models.ForeignKey(EventTemplate, on_delete=models.CASCADE, related_name='shared_users')
+    coworked = models.BooleanField(default=False)
 
+    def __str__(self):
+        return f"{self.user.username} - {self.template.name}"
+
+class SharedEventUser(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='shared_events')
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='shared_users')
+    coworked = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.event.name}"
+    
+
+class todo_list(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='todo_lists')
+    todo_element = models.CharField(max_length=100)
+    done = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.event.name} - {self.todo}"
+
+# Join Tables for ManyToMany relationships
 class JoinEventCategory(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     category = models.ForeignKey(EventsCategory, on_delete=models.CASCADE)
@@ -81,9 +106,12 @@ class JoinEventCategory(models.Model):
     class Meta:
         unique_together = ('event', 'category')
 
+
 class JoinTemplateCategory(models.Model):
     template = models.ForeignKey(EventTemplate, on_delete=models.CASCADE)
     category = models.ForeignKey(EventsCategory, on_delete=models.CASCADE)
 
     class Meta:
         unique_together = ('template', 'category')
+
+
