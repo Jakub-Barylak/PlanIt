@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   web:
@@ -17,3 +17,8 @@ services:
       MYSQL_ROOT_PASSWORD: planit_root_password
     ports:
       - "3306:3306"
+    volumes:
+      - ./db_data:/var/lib/mysql
+
+volumes:
+  db_data:
