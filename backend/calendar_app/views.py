@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from .models import (
     User, Event, Calendar, SharedCalendarUser,
     Notification, EventTemplate, EventsCategory,
@@ -14,10 +15,9 @@ from .models import (
 )
 from .serializers import (
     UserSerializer, EventSerializer, CalendarSerializer,
-    SharedCalendarUserSerializer, NotificationSerializer,
-    EventTemplateSerializer, EventsCategorySerializer,
-    JoinEventCategorySerializer, JoinTemplateCategorySerializer,
-    RegistrationSerializer, LoginSerializer
+    SharedCalendarUserSerializer,
+    RegistrationSerializer, LoginSerializer,
+    UserCalendarsSerializer
 )
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -39,26 +39,6 @@ class CalendarViewSet(viewsets.ReadOnlyModelViewSet):
 class SharedCalendarUserViewSet(viewsets.ModelViewSet):
     queryset = SharedCalendarUser.objects.all()
     serializer_class = SharedCalendarUserSerializer
-
-class NotificationViewSet(viewsets.ModelViewSet):
-    queryset = Notification.objects.all()
-    serializer_class = NotificationSerializer
-
-class EventTemplateViewSet(viewsets.ModelViewSet):
-    queryset = EventTemplate.objects.all()
-    serializer_class = EventTemplateSerializer
-
-class EventsCategoryViewSet(viewsets.ModelViewSet):
-    queryset = EventsCategory.objects.all()
-    serializer_class = EventsCategorySerializer
-
-class JoinEventCategoryViewSet(viewsets.ModelViewSet):
-    queryset = JoinEventCategory.objects.all()
-    serializer_class = JoinEventCategorySerializer
-
-class JoinTemplateCategoryViewSet(viewsets.ModelViewSet):
-    queryset = JoinTemplateCategory.objects.all()
-    serializer_class = JoinTemplateCategorySerializer
 
 
 ### Registration ###
@@ -118,3 +98,14 @@ class LoginView(APIView):
             return Response({'error': 'Invalid Credentials'}, status=status.HTTP_400_BAD_REQUEST)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserCalendarsView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+
+    def post(self, request, *args, **kwargs):
+        user_id = request.user.id
+        calendars = Calendar.objects.filter(owner_id=user_id).prefetch_related('shared_users')
+        serializer = UserCalendarsSerializer(calendars, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

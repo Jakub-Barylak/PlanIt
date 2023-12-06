@@ -24,34 +24,12 @@ class CalendarSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'color', 'owner', 'events']
 
 class SharedCalendarUserSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username')
+    coworked = serializers.BooleanField()
+
     class Meta:
         model = SharedCalendarUser
-        fields = '__all__'
-
-class NotificationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Notification
-        fields = '__all__'
-
-class EventTemplateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = EventTemplate
-        fields = '__all__'
-
-class EventsCategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = EventsCategory
-        fields = '__all__'
-
-class JoinEventCategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = JoinEventCategory
-        fields = '__all__'
-
-class JoinTemplateCategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = JoinTemplateCategory
-        fields = '__all__'
+        fields = ['username', 'coworked']
 
 class RegistrationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -71,3 +49,10 @@ class RegistrationSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(required=True)
     password = serializers.CharField(write_only=True, required=True)
+
+
+class UserCalendarsSerializer(serializers.ModelSerializer):
+    shared_users = SharedCalendarUserSerializer(many=True, read_only=True, source='shared_users')
+    class Meta:
+        model = Calendar
+        fields = ['id', 'name', 'color', 'owner', 'shared_users']
