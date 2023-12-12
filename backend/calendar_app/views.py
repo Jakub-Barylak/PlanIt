@@ -104,8 +104,15 @@ class UserCalendarsView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
 
-    def post(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         user_id = request.user.id
         calendars = Calendar.objects.filter(owner_id=user_id).prefetch_related('shared_users')
         serializer = UserCalendarsSerializer(calendars, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, *args, **kwargs):
+        serializer = CalendarSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            calendar = serializer.save()
+            return Response(CalendarSerializer(calendar).data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

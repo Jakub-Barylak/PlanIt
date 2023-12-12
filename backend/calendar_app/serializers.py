@@ -19,9 +19,14 @@ class EventSerializer(serializers.ModelSerializer):
 
 class CalendarSerializer(serializers.ModelSerializer):
     events = EventSerializer(many=True, read_only=True)
+    owner = serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta:
         model = Calendar
         fields = ['id', 'name', 'color', 'owner', 'events']
+    
+    def create(self, validated_data):
+        validated_data['owner'] = self.context['request'].user
+        return Calendar.objects.create(**validated_data)
 
 class SharedCalendarUserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username')
@@ -52,7 +57,7 @@ class LoginSerializer(serializers.Serializer):
 
 
 class UserCalendarsSerializer(serializers.ModelSerializer):
-    shared_users = SharedCalendarUserSerializer(many=True, read_only=True, source='shared_users')
+    shared_users = SharedCalendarUserSerializer(many=True, read_only=True)
     class Meta:
         model = Calendar
         fields = ['id', 'name', 'color', 'owner', 'shared_users']
