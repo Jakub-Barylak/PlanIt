@@ -3,9 +3,8 @@ import { useState } from "react";
 import { NextPage } from "next";
 import { PasswordField } from "@/ui/PasswordField";
 import { InputField } from "@/ui/InputField";
-import Image from "next/image";
 import { PasswordStrengthBar } from "@/ui/PasswordStrengthBar";
-import { PlanInBigLogo } from "@/ui/PlanInBigLogo";
+import { PlanItBigLogo } from "@/ui/PlanItBigLogo";
 
 const RegisterPane: NextPage = () => {
 	const [username, setUsername] = useState<string>("");
@@ -20,7 +19,7 @@ const RegisterPane: NextPage = () => {
                              grid-rows-[20vh_80%]"
 			>
 				{/* LOGO */}
-				<PlanInBigLogo />
+				<PlanItBigLogo />
 				<div
 					// bg-slate-50
 					className=" block p-6  w-full h-full

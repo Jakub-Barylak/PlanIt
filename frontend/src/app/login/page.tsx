@@ -3,8 +3,7 @@ import { useState } from "react";
 import { NextPage } from "next";
 import { PasswordField } from "@/ui/PasswordField";
 import { InputField } from "@/ui/InputField";
-import Image from "next/image";
-import { PlanInBigLogo } from "@/ui/PlanInBigLogo";
+import { PlanItBigLogo } from "@/ui/PlanItBigLogo";
 
 const LoginPane: NextPage = () => {
 	const [username, setUsername] = useState<string>("");
@@ -17,7 +16,7 @@ const LoginPane: NextPage = () => {
                              grid-rows-[20%_80%]"
 			>
 				{/* LOGO */}
-				<PlanInBigLogo />
+				<PlanItBigLogo />
 				<div
 					// bg-slate-50
 					className=" block p-6  w-full h-full
