@@ -5,6 +5,7 @@ import { PasswordField } from "@/ui/PasswordField";
 import { InputField } from "@/ui/InputField";
 import Image from "next/image";
 import { PasswordStrengthBar } from "@/ui/PasswordStrengthBar";
+import { PlanInBigLogo } from "@/ui/PlanInBigLogo";
 
 const RegisterPane: NextPage = () => {
 	const [username, setUsername] = useState<string>("");
@@ -19,17 +20,7 @@ const RegisterPane: NextPage = () => {
                              grid-rows-[20vh_80%]"
 			>
 				{/* LOGO */}
-				<Image
-					src="/black-logo.svg"
-					alt="PlanIt"
-					width={300}
-					height={100}
-					className=" drop-shadow-[0_10px_10px_rgba(255,255,255,0.5)]
-                                max-h-1/3
-                                p-4
-                                dark:drop-shadow-none
-                                dark:filter dark:invert"
-				/>
+				<PlanInBigLogo />
 				<div
 					// bg-slate-50
 					className=" block p-6  w-full h-full
