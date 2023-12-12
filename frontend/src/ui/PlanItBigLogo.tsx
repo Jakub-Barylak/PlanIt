@@ -6,7 +6,7 @@ interface Props {
 	width?: number;
 }
 
-export const PlanInBigLogo: FC<Props> = ({
+export const PlanItBigLogo: FC<Props> = ({
 	width = 300,
 	height = 100,
 }): JSX.Element => {
