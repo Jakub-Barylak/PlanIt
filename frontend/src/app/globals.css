@@ -5,6 +5,7 @@
 :root {
 	--foreground-rgb: 0, 0, 0;
 	--background-start-rgb: 246, 267, 255;
+	--background-color: 255, 255, 255;
 	/* --background-end-rgb: 255, 255, 255; */
 	--bazarowy-color: 24, 6, 161;
 	--main-color: 14, 3, 69;
@@ -13,6 +14,7 @@
 @media (prefers-color-scheme: dark) {
 	:root {
 		--foreground-rgb: 255, 255, 255;
+		--background-color: 0, 0, 0;
 		--background-start-rgb: 0, 0, 0;
 		--background-end-rgb: 0, 0, 0;
 	}
@@ -20,7 +22,7 @@
 
 body {
 	color: rgb(var(--foreground-rgb));
-	background: rgb(var(--background-start-rgb));
+	background: rgb(var(--background-color));
 }
 
 .loginBG {
@@ -30,6 +32,7 @@ body {
 		rgb(var(--background-start-rgb)),
 		rgb(var(--main-color)) 50%,
 		rgb(var(--background-start-rgb)) 70%,
-		rgb(var(--main-color)) 76% /* rgba(var(--background-start-rgb), 0) 75% */
+		rgb(var(--main-color)) 76%
+			/* rgba(var(--background-start-rgb), 0) 75% */
 	);
 }

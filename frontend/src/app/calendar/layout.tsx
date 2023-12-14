@@ -1,6 +1,6 @@
 "use client";
 
-import { SideNav } from "@/ui/SideNav";
+import { SideNav } from "@/ui/Sidebar/SideNav";
 import DailyPlanner from "@/ui/DailyPlanner";
 
 export default function CalendarLayout({
@@ -9,7 +9,7 @@ export default function CalendarLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<div className="flex max-h-full w-full">
+		<div className="flex h-screen w-full">
 			<SideNav />
 			{children}
 			<DailyPlanner />
