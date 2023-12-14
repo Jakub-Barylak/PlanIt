@@ -9,7 +9,7 @@ export default function CalendarLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<div className="flex w-full h-screen">
+		<div className="flex max-h-full w-full">
 			<SideNav />
 			{children}
 			<DailyPlanner />

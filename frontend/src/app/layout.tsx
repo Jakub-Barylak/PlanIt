@@ -9,15 +9,19 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
 	title: "PlanIt",
-	description: "Plant your ideas"
+	description: "Plant your ideas",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+	children,
+}: {
+	children: React.ReactNode;
+}) {
 	return (
 		<html lang="en">
 			<AuthProvider>
 				<ThemeProvider>
-					<body className={inter.className}>{children}</body>
+					<body className={inter.className + "max-h-screen"}>{children}</body>
 				</ThemeProvider>
 			</AuthProvider>
 		</html>
