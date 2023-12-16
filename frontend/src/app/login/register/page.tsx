@@ -3,7 +3,6 @@ import { useState } from "react";
 import { NextPage } from "next";
 import { PasswordField } from "@/ui/Login/PasswordField";
 import { InputField } from "@/ui/Login/InputField";
-import { PasswordStrengthBar } from "@/ui/Login/PasswordStrengthBar";
 import { PlanItBigLogo } from "@/ui/Login/PlanItBigLogo";
 import Link from "next/link";
 

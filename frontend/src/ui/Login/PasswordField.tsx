@@ -1,6 +1,6 @@
 import { FC, SetStateAction, Dispatch, useState } from "react";
 import { Popover, Transition } from "@headlessui/react";
-import { PasswordStrengthBar } from "./PasswordStrengthBar";
+import { PasswordStrengthBar } from "@/ui/Login/PasswordStrengthBar";
 
 interface Props {
 	password: string;
@@ -58,15 +58,7 @@ export const PasswordField: FC<Props> = ({
 					</label>
 				)}
 
-				{showStrengthBar && (
-					<div className="grid grid-cols-5">
-						<div className="block h-2 bg-red-500"></div>
-						<div className="block h-2 bg-red-500"></div>
-						<div className="block h-2 bg-red-500"></div>
-						<div className="block h-2 bg-red-500"></div>
-						<div className="block h-2 bg-red-500"></div>
-					</div>
-				)}
+				{showStrengthBar && <PasswordStrengthBar password={password} />}
 			</div>
 		</>
 	);
