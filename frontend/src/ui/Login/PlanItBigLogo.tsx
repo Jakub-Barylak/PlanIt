@@ -17,11 +17,7 @@ export const PlanItBigLogo: FC<Props> = ({
 				alt="PlanIt"
 				width={width}
 				height={height}
-				className=" drop-shadow-[0_10px_10px_rgba(255,255,255,0.5)]
-                                max-h-1/3
-                                p-4
-                                dark:drop-shadow-none
-                                dark:filter dark:invert"
+				className=" max-h-1/3 p-4 drop-shadow-[0_10px_10px_rgba(255,255,255,0.5)] dark:drop-shadow-none dark:invert dark:filter"
 			/>
 		</>
 	);
