@@ -8,10 +8,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.decorators import action
 from .models import (
     User, Event, Calendar, SharedCalendarUser,
-    Notification, EventTemplate, EventsCategory,
-    JoinEventCategory, JoinTemplateCategory
+    SharedEventUser
 )
 from .serializers import (
     UserSerializer, EventSerializer, CalendarSerializer,
@@ -24,9 +24,6 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-class EventViewSet(viewsets.ModelViewSet):
-    queryset = Event.objects.all()
-    serializer_class = EventSerializer
 
 class CalendarViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = CalendarSerializer
@@ -99,7 +96,7 @@ class LoginView(APIView):
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+### User Calendars ###
 class UserCalendarsView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
@@ -115,4 +112,42 @@ class UserCalendarsView(APIView):
         if serializer.is_valid():
             calendar = serializer.save()
             return Response(CalendarSerializer(calendar).data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+### User Events ###
+class EventViewSet(viewsets.ModelViewSet):
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    @action(detail=False, methods=['get'])
+    def list_events(self, request):
+        calendar_id = request.query_params.get('calendarId')
+        start_date = request.query_params.get('startDate')
+        end_date = request.query_params.get('endDate')
+
+        events = Event.objects.filter(
+            calendar_id=calendar_id, 
+            begin_date__gte=start_date, 
+            end_date__lte=end_date
+        )
+
+        response_data = []
+        for event in events:
+            event_data = EventSerializer(event).data
+            shared_event = SharedEventUser.objects.filter(event=event).first()
+
+            event_data['shared'] = shared_event is not None
+            event_data['coworked'] = shared_event.coworked if shared_event else False
+            response_data.append(event_data)
+
+        return Response(response_data)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            event = serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
