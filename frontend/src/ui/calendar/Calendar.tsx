@@ -28,8 +28,10 @@ export default function Calendar() {
 		}
 
 		return (
-			<div className="flex w-full flex-grow flex-row flex-nowrap overflow-y-auto bg-slate-300">
-				<DaysView days={numberOfDays} />
+			<div className="m-10 flex-grow overflow-y-auto rounded-2xl">
+				<div className="flex flex-row flex-nowrap  bg-slate-300">
+					<DaysView days={numberOfDays} />
+				</div>
 			</div>
 		);
 	}
