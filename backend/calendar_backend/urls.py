@@ -27,6 +27,9 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('user_calendars/', UserCalendarsView.as_view(), name='user_calendars'),
-    path('events/', EventViewSet.as_view(), name='event-list')
+    path('events/', EventViewSet.as_view({
+        'get': 'list',
+        'post': 'create'
+    }), name='event-list'),
     path('', include(router.urls))
 ]

@@ -1,8 +1,7 @@
 from rest_framework import serializers
 from .models import (
     User, Event, Calendar, SharedCalendarUser,
-    Notification, EventTemplate, EventsCategory,
-    JoinEventCategory, JoinTemplateCategory
+    
 )
 from django.contrib.auth.hashers import make_password
 
