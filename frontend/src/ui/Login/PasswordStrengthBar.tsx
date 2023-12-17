@@ -27,7 +27,7 @@ export const PasswordStrengthBar: FC<Props> = ({ password }): JSX.Element => {
 		<>
 			<div className="py-2 text-sm">
 				Password strength:
-				<div className="grid grid-cols-5 gap-2">
+				<div className="mt-2 grid grid-cols-5 gap-2">
 					<div
 						className={`block h-2 rounded-md transition-colors duration-500 ease-in-out ${
 							strength < 1 ? "bg-gray-500" : ruleColors[strength - 1]

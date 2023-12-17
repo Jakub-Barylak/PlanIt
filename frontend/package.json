@@ -10,6 +10,7 @@
 	},
 	"dependencies": {
 		"@headlessui/react": "^1.7.17",
+		"axios": "^1.6.2",
 		"babel": "^6.23.0",
 		"clsx": "^2.0.0",
 		"cookies-next": "^4.1.0",
