@@ -18,3 +18,15 @@ export type Calendar = {
 	owner: number;
 	shared_users: [];
 };
+
+export type Event = {
+	id: number;
+	name: string;
+	begin_date: string;
+	end_date: string;
+	description: string | null;
+	all_day: boolean;
+	calendar: number;
+	template: number | null;
+	categories: [];
+};

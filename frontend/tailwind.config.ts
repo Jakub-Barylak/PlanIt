@@ -25,6 +25,9 @@ const config: Config = {
 				"landing-light-purple": "rgba(94, 80, 255, 0.05)",
 				"navy-blue": "#0C0093",
 			},
+			gridTemplateRows: {
+				"288": "repeat(288, minmax(0, 1fr))",
+			},
 		},
 	},
 	darkMode: "media",
