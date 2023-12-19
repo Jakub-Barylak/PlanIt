@@ -9,6 +9,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.decorators import action
+from rest_framework_simplejwt.views import TokenRefreshView
 from .models import (
     User, Event, Calendar, SharedCalendarUser,
     SharedEventUser
@@ -151,3 +152,43 @@ class EventViewSet(viewsets.ModelViewSet):
             event = serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+### User Calendars Events ###
+class UserCalendarsEventsView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        start_date = request.data.get('begin_date')
+        end_date = request.data.get('end_date')
+
+        if not start_date or not end_date:
+            return Response(
+                {"error": "Both 'begin_date' and 'end_date' are required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        calendars = Calendar.objects.filter(owner=user)
+        serialized_calendars = CalendarSerializer(calendars, many=True).data
+
+        for calendar in serialized_calendars:
+            events = Event.objects.filter(calendar_id=calendar['id'], begin_date__gte=start_date, end_date__lte=end_date)
+            serialized_events = EventSerializer(events, many=True).data
+            calendar['events'] = serialized_events
+
+        return Response(serialized_calendars)
+    
+
+### Custom token refresh view ###
+class CustomTokenRefreshView(TokenRefreshView):
+    def post(self, request, *args, **kwargs):
+        refresh = RefreshToken(request.data.get('refresh'))
+        data = {'access': str(refresh.access_token)}
+
+        # Rotate the refresh token
+        refresh.set_jti()
+        refresh.set_exp()
+        data['refresh'] = str(refresh)
+
+        return Response(data, status=status.HTTP_200_OK)

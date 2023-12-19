@@ -4,7 +4,8 @@ from rest_framework.routers import DefaultRouter
 from calendar_app.views import (
     UserViewSet, EventViewSet, CalendarViewSet,
     SharedCalendarUserViewSet, 
-    RegistrationView, LoginView, UserCalendarsView
+    RegistrationView, LoginView, UserCalendarsView,
+    UserCalendarsEventsView, CustomTokenRefreshView
 )
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -24,12 +25,13 @@ urlpatterns = [
     path('signup/', RegistrationView.as_view(), name='signup'),
     path('login/', LoginView.as_view(), name='login'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/refresh/', CustomTokenRefreshView.as_view(), name='custom_token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('user_calendars/', UserCalendarsView.as_view(), name='user_calendars'),
     path('events/', EventViewSet.as_view({
         'get': 'list',
         'post': 'create'
     }), name='event-list'),
+    path('user_calendars_events/',UserCalendarsEventsView.as_view(), name='user_calendars_events'),
     path('', include(router.urls))
 ]
