@@ -6,6 +6,7 @@ import SidebarCalendarView from "./SidebarCalendarView";
 import { Tooltip } from "@nextui-org/tooltip";
 import type { Calendar } from "@/lib/types";
 import { AuthContextType, AuthContext } from "@/providers/AuthProvider";
+import { ThemeContextType, ThemeContext } from "@/providers/ThemeProvider";
 
 interface Props {
 	imageSrc?: string;
@@ -18,6 +19,7 @@ export const SideNav: FC<Props> = ({
 }): JSX.Element => {
 	const [showSidebar, setShowSidebar] = useState<boolean>(true);
 	const { user } = useContext(AuthContext) as AuthContextType;
+	const { theme, toggleTheme } = useContext(ThemeContext) as ThemeContextType;
 	// console.log(calendars);
 	//r40 g42 b50 change to rgb #282c34
 	// r20 g22 b30 change to rgb #282c34
@@ -136,7 +138,7 @@ export const SideNav: FC<Props> = ({
 										>
 											<Disclosure.Panel className="ml-[calc(20px+0.5rem)] mt-1 grid grid-cols-1 gap-1">
 												{/* CALENDARS HERE */}
-												<SidebarCalendarView />
+												<SidebarCalendarView calendars={calendars} />
 											</Disclosure.Panel>
 										</Transition>
 									</>
@@ -182,7 +184,7 @@ export const SideNav: FC<Props> = ({
 											leaveTo="transform scale-95 opacity-0"
 										>
 											<Popover.Panel className="absolute -top-9 left-[calc(100%+0.25rem)] z-10 grid grid-cols-[max-content] rounded-lg border-2 bg-white p-2 shadow-md dark:border-[#535353] dark:bg-[#161920] dark:text-white">
-												<SidebarCalendarView />
+												<SidebarCalendarView calendars={calendars} />
 											</Popover.Panel>
 										</Transition>
 									</>
@@ -244,7 +246,7 @@ export const SideNav: FC<Props> = ({
 				{/* DIV FOOTER -> DARK MODE, LOGOUT, LOGO */}
 				<div className="grid grid-cols-1 gap-2 pt-2">
 					<Tooltip
-						content="Dark Mode"
+						content="Switch theme"
 						showArrow={true}
 						placement="right"
 						isDisabled={showSidebar}
@@ -259,9 +261,12 @@ export const SideNav: FC<Props> = ({
 									? "w-full justify-start"
 									: "h-[50px] w-[50px] justify-center"
 							}`}
+							onClick={() => {
+								toggleTheme();
+							}}
 						>
 							<Image alt="" src="/icons/moon.svg" width={20} height={20} />
-							<span className={showSidebar ? "" : "hidden"}>Dark Mode</span>
+							<span className={showSidebar ? "" : "hidden"}>Switch theme</span>
 						</div>
 					</Tooltip>
 					<Tooltip
@@ -288,10 +293,9 @@ export const SideNav: FC<Props> = ({
 					<div className="flex min-h-[5vh] justify-center rounded-lg bg-gray-400 align-middle dark:bg-[#282A32]">
 						<Image
 							alt="PlanIt"
-							src={"/black-logo.svg"}
+							src={theme == "light" ? "/black-logo.svg" : "/white-logo.svg"}
 							width={100}
 							height={90}
-							className="dark:invert"
 						/>
 					</div>
 				</div>

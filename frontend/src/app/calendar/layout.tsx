@@ -26,12 +26,12 @@ export default function CalendarLayout({
 	}, []);
 
 	return (
-		<NextUIProvider>
-			<div className="flex h-screen w-full">
-				<SideNav calendars={calendars} />
-				{children}
-				<DailyPlanner />
-			</div>
-		</NextUIProvider>
+		// <NextUIProvider>
+		<div className="flex h-screen w-full">
+			<SideNav calendars={calendars} />
+			{children}
+			{/* <DailyPlanner /> */}
+		</div>
+		// </NextUIProvider>
 	);
 }

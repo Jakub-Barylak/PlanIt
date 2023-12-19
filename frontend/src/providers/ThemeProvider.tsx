@@ -1,9 +1,54 @@
 "use client";
-import { useState, createContext } from "react";
+import { useState, createContext, useEffect } from "react";
+import { NextUIProvider } from "@nextui-org/system";
+import { Inter } from "next/font/google";
 
-export const ThemeContext = createContext({});
+const inter = Inter({ subsets: ["latin"] });
 
-export default function ThemeProvider({ children }: { children: React.ReactNode }) {
-	const [theme, setTheme] = useState("light");
-	return <ThemeContext.Provider value={{ theme, setTheme }}>{children}</ThemeContext.Provider>;
+export type ThemeContextType = {
+	theme: string;
+	toggleTheme: () => void;
+};
+
+export const ThemeContext = createContext<ThemeContextType | null>({
+	theme: "light",
+	toggleTheme: () => {},
+});
+
+export default function ThemeProvider({
+	children,
+}: {
+	children: React.ReactNode;
+}) {
+	const [theme, setTheme] = useState<string>(
+		typeof window !== "undefined"
+			? localStorage.getItem("theme") != null
+				? (localStorage.getItem("theme") as string)
+				: "light"
+			: "light",
+	);
+
+	useEffect(() => {
+		if (typeof window !== "undefined") {
+			localStorage.setItem("theme", theme);
+		}
+	}, [theme]);
+
+	function toggleTheme() {
+		if (theme === "light") {
+			setTheme("dark");
+		} else {
+			setTheme("light");
+		}
+	}
+
+	return (
+		<ThemeContext.Provider value={{ theme, toggleTheme }}>
+			<NextUIProvider>
+				<body className={`${inter.className} max-h-screen ${theme}`}>
+					{children}
+				</body>
+			</NextUIProvider>
+		</ThemeContext.Provider>
+	);
 }

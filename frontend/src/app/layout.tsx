@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+
 import "./globals.css";
 
 import AuthProvider from "@/providers/AuthProvider";
 import ThemeProvider from "@/providers/ThemeProvider";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
 	title: "PlanIt",
@@ -20,9 +18,7 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<AuthProvider>
-				<ThemeProvider>
-					<body className={inter.className + "max-h-screen"}>{children}</body>
-				</ThemeProvider>
+				<ThemeProvider>{children}</ThemeProvider>
 			</AuthProvider>
 		</html>
 	);
