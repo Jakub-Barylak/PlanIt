@@ -30,8 +30,8 @@ class EventTemplate(models.Model):
     description = models.TextField(blank=True, null=True)
     all_day = models.BooleanField(default=False)
     every = models.CharField(max_length=50)  # Adjust choices as necessary
-    begin_date = models.DateField()
-    end_date = models.DateField()
+    begin_date = models.DateTimeField()
+    end_date = models.DateTimeField()
     weekday = models.IntegerField(null=True, blank=True)
     month_day = models.IntegerField(null=True, blank=True)
     month = models.IntegerField(null=True, blank=True)
@@ -54,8 +54,8 @@ class Calendar(models.Model):
 class Event(models.Model):
     calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE, related_name='events')
     name = models.CharField(max_length=50)
-    begin_date = models.DateField()
-    end_date = models.DateField()
+    begin_date = models.DateTimeField()
+    end_date = models.DateTimeField()
     description = models.TextField(blank=True, null=True)
     all_day = models.BooleanField(default=False)
     template = models.ForeignKey(EventTemplate, on_delete=models.SET_NULL, null=True, blank=True, related_name='events')
@@ -77,7 +77,7 @@ class SharedCalendarUser(models.Model):
 class Notification(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='notifications')
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='notifications')
-    notify_at = models.DateField()
+    notify_at = models.DateTimeField()
 
     def __str__(self):
         return f"Notification for {self.user.username} on {self.notify_at}"

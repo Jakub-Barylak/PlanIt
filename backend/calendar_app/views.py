@@ -10,6 +10,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.decorators import action
 from rest_framework_simplejwt.views import TokenRefreshView
+from django.db.models import Q
+from django.utils.dateparse import parse_datetime
 from .models import (
     User, Event, Calendar, SharedCalendarUser,
     SharedEventUser
@@ -126,14 +128,19 @@ class EventViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def list_events(self, request):
         calendar_id = request.query_params.get('calendarId')
-        start_date = request.query_params.get('startDate')
-        end_date = request.query_params.get('endDate')
+        start_date_str = request.query_params.get('startDate')
+        end_date_str = request.query_params.get('endDate')
 
+        # Parse dates from strings
+        start_date = parse_datetime(start_date_str) if start_date_str else None
+        end_date = parse_datetime(end_date_str) if end_date_str else None
+
+        # Update filter logic
         events = Event.objects.filter(
-            calendar_id=calendar_id, 
-            begin_date__gte=start_date, 
-            end_date__lte=end_date
-        )
+            calendar_id=calendar_id
+            ).filter(
+                Q(begin_date__lte=end_date, end_date__gte=start_date)
+            )
 
         response_data = []
         for event in events:
@@ -152,7 +159,7 @@ class EventViewSet(viewsets.ModelViewSet):
             event = serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
 ### User Calendars Events ###
 class UserCalendarsEventsView(APIView):
     authentication_classes = [JWTAuthentication]
