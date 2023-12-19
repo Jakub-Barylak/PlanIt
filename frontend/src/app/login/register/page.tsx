@@ -47,7 +47,7 @@ const RegisterPane: NextPage = () => {
 			})
 			.then((response) => {
 				const data = response.data as RegisterResponse;
-				console.log(data);
+				// console.log(data);
 				setUserProfile({
 					id: data.id,
 					username: data.username,

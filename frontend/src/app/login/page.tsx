@@ -29,8 +29,8 @@ const LoginPane: NextPage = () => {
 			})
 			.then((response) => {
 				const data = response.data as LoginResponse;
-				console.log(response);
-				alert("Login successful!");
+				// console.log(response);
+				// alert("Login successful!");
 				setUserProfile({
 					id: data.id,
 					username: data.username,
