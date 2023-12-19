@@ -2,6 +2,7 @@
 
 import { SideNav } from "@/ui/Sidebar/SideNav";
 import DailyPlanner from "@/ui/DailyPlanner";
+import { NextUIProvider } from "@nextui-org/system";
 
 export default function CalendarLayout({
 	children,
@@ -9,10 +10,12 @@ export default function CalendarLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<div className="flex h-screen w-full">
-			<SideNav />
-			{children}
-			<DailyPlanner />
-		</div>
+		<NextUIProvider>
+			<div className="flex h-screen w-full">
+				<SideNav />
+				{children}
+				<DailyPlanner />
+			</div>
+		</NextUIProvider>
 	);
 }

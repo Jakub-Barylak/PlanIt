@@ -3,6 +3,7 @@ import { FC, useState, Fragment } from "react";
 import { Disclosure, Popover, Transition } from "@headlessui/react";
 import Image from "next/image";
 import SidebarCalendarView from "./SidebarCalendarView";
+import { Tooltip } from "@nextui-org/tooltip";
 
 interface Props {
 	imageSrc?: string;
@@ -61,17 +62,28 @@ export const SideNav: FC<Props> = ({
 				{/* DIV BODY -> INFO, CALENDARS, ABOUT US */}
 				<div className="grid max-w-full grid-cols-1 gap-3 py-4">
 					{/* INFO */}
-					<div
-						className={`inline-flex gap-2 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-[#282c34] dark:hover:text-white ${
-							showSidebar
-								? "w-full justify-start"
-								: "h-[50px] w-[50px] justify-center"
-						}`}
-						data-tip="Info"
+					<Tooltip
+						content="Info"
+						showArrow={true}
+						placement="right"
+						isDisabled={showSidebar}
+						classNames={{
+							base: ["before:bg-black"],
+							content: ["bg-black text-white"],
+						}}
 					>
-						<Image alt="" src="/icons/help.svg" width={20} height={20} />
-						<span className={showSidebar ? "" : "hidden"}>Info</span>
-					</div>
+						<div
+							className={`inline-flex gap-2 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-[#282c34] dark:hover:text-white ${
+								showSidebar
+									? "w-full justify-start"
+									: "h-[50px] w-[50px] justify-center"
+							}`}
+							data-tip="Info"
+						>
+							<Image alt="" src="/icons/help.svg" width={20} height={20} />
+							<span className={showSidebar ? "" : "hidden"}>Info</span>
+						</div>
+					</Tooltip>
 
 					{/* CALENDARS */}
 					<div>
@@ -130,20 +142,30 @@ export const SideNav: FC<Props> = ({
 							<Popover className="relative">
 								{({ open }) => (
 									<>
-										<Popover.Button
-											className={`${
-												open
-													? "bg-gray-100 dark:bg-[#282c34] dark:text-white"
-													: "hover:bg-gray-100 dark:hover:bg-[#282c34] dark:hover:text-white"
-											} z-10 flex h-[50px] w-[50px] items-center justify-center rounded-lg p-2`}
+										<Tooltip
+											content="Calendars"
+											showArrow={true}
+											placement="right"
+											classNames={{
+												base: ["before:bg-black"],
+												content: ["bg-black text-white"],
+											}}
 										>
-											<Image
-												alt=""
-												src="/icons/calendar-black.svg"
-												width={20}
-												height={20}
-											/>
-										</Popover.Button>
+											<Popover.Button
+												className={`${
+													open
+														? "bg-gray-100 dark:bg-[#282c34] dark:text-white"
+														: "hover:bg-gray-100 dark:hover:bg-[#282c34] dark:hover:text-white"
+												} z-10 flex h-[50px] w-[50px] items-center justify-center rounded-lg p-2`}
+											>
+												<Image
+													alt=""
+													src="/icons/calendar-black.svg"
+													width={20}
+													height={20}
+												/>
+											</Popover.Button>
+										</Tooltip>
 										<Transition
 											show={open}
 											unmount={false}
@@ -164,56 +186,100 @@ export const SideNav: FC<Props> = ({
 						)}
 					</div>
 					{/* ABOUT US */}
-					<div
-						className={`inline-flex gap-2 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-[#282c34] dark:hover:text-white ${
-							showSidebar
-								? "w-full justify-start"
-								: "h-[50px] w-[50px] justify-center"
-						}`}
+					<Tooltip
+						content="About us"
+						showArrow={true}
+						placement="right"
+						isDisabled={showSidebar}
+						classNames={{
+							base: ["before:bg-black"],
+							content: ["bg-black text-white"],
+						}}
 					>
-						<Image alt="" src="/icons/Page.svg" width={20} height={20} />
-						<span className={showSidebar ? "" : "hidden"}>About us</span>
-					</div>
+						<div
+							className={`inline-flex gap-2 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-[#282c34] dark:hover:text-white ${
+								showSidebar
+									? "w-full justify-start"
+									: "h-[50px] w-[50px] justify-center"
+							}`}
+						>
+							<Image alt="" src="/icons/Page.svg" width={20} height={20} />
+							<span className={showSidebar ? "" : "hidden"}>About us</span>
+						</div>
+					</Tooltip>
 				</div>
 
 				<hr className="border-t-2 dark:border-[#282A3B]" />
 
 				<div className="pt-4">
 					{/* SETTINGS */}
-					<div
-						className={`inline-flex gap-2 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-[#282c34] dark:hover:text-white ${
-							showSidebar
-								? "w-full justify-start"
-								: "h-[50px] w-[50px] justify-center"
-						}`}
+					<Tooltip
+						content="Settings"
+						showArrow={true}
+						placement="right"
+						isDisabled={showSidebar}
+						classNames={{
+							base: ["before:bg-black"],
+							content: ["bg-black text-white"],
+						}}
 					>
-						<Image alt="" src="/icons/settings.svg" width={20} height={20} />
-						<span className={showSidebar ? "" : "hidden"}>Settings</span>
-					</div>
+						<div
+							className={`inline-flex gap-2 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-[#282c34] dark:hover:text-white ${
+								showSidebar
+									? "w-full justify-start"
+									: "h-[50px] w-[50px] justify-center"
+							}`}
+						>
+							<Image alt="" src="/icons/settings.svg" width={20} height={20} />
+							<span className={showSidebar ? "" : "hidden"}>Settings</span>
+						</div>
+					</Tooltip>
 				</div>
 
 				{/* DIV FOOTER -> DARK MODE, LOGOUT, LOGO */}
 				<div className="grid grid-cols-1 gap-2 pt-2">
-					<div
-						className={`inline-flex gap-2 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-[#282c34] dark:hover:text-white ${
-							showSidebar
-								? "w-full justify-start"
-								: "h-[50px] w-[50px] justify-center"
-						}`}
+					<Tooltip
+						content="Dark Mode"
+						showArrow={true}
+						placement="right"
+						isDisabled={showSidebar}
+						classNames={{
+							base: ["before:bg-black"],
+							content: ["bg-black text-white"],
+						}}
 					>
-						<Image alt="" src="/icons/moon.svg" width={20} height={20} />
-						<span className={showSidebar ? "" : "hidden"}>Dark Mode</span>
-					</div>
-					<div
-						className={`inline-flex gap-2 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-[#282c34] dark:hover:text-white ${
-							showSidebar
-								? "w-full justify-start"
-								: "h-[50px] w-[50px] justify-center"
-						}`}
+						<div
+							className={`inline-flex gap-2 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-[#282c34] dark:hover:text-white ${
+								showSidebar
+									? "w-full justify-start"
+									: "h-[50px] w-[50px] justify-center"
+							}`}
+						>
+							<Image alt="" src="/icons/moon.svg" width={20} height={20} />
+							<span className={showSidebar ? "" : "hidden"}>Dark Mode</span>
+						</div>
+					</Tooltip>
+					<Tooltip
+						content="Logout"
+						showArrow={true}
+						placement="right"
+						isDisabled={showSidebar}
+						classNames={{
+							base: ["before:bg-black"],
+							content: ["bg-black text-white"],
+						}}
 					>
-						<Image alt="" src="/icons/Log-out.svg" width={20} height={20} />
-						<span className={showSidebar ? "" : "hidden"}>Logout</span>
-					</div>
+						<div
+							className={`inline-flex gap-2 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-[#282c34] dark:hover:text-white ${
+								showSidebar
+									? "w-full justify-start"
+									: "h-[50px] w-[50px] justify-center"
+							}`}
+						>
+							<Image alt="" src="/icons/Log-out.svg" width={20} height={20} />
+							<span className={showSidebar ? "" : "hidden"}>Logout</span>
+						</div>
+					</Tooltip>
 					<div className="flex min-h-[5vh] justify-center rounded-lg bg-gray-400 align-middle dark:bg-[#282A32]">
 						<Image
 							alt="PlanIt"
