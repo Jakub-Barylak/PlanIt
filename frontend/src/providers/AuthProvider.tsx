@@ -18,6 +18,7 @@ export type AuthContextType = {
 	AccessCookieString: string;
 	RefreshCookieString: string;
 	updateTokens: (tokens: { accessToken: string; refreshToken: string }) => void;
+	setUserProfile: (user: UserProfile) => void;
 	axios: AxiosInstance;
 };
 
@@ -33,6 +34,7 @@ export default function AuthProvider({
 }) {
 	const [accessToken, setAccessToken] = useState<string | null>(null);
 	const [refreshToken, setRefreshToken] = useState<string | null>(null);
+	const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
 
 	useEffect(() => {
 		if (accessToken !== null && refreshToken !== null) {
@@ -101,7 +103,7 @@ export default function AuthProvider({
 		},
 	);
 
-	const publicPages = ["/login", "/register"];
+	const publicPages = ["/login", "/login/register"];
 	const path = usePathname();
 
 	if (!publicPages.includes(path)) {
@@ -121,12 +123,13 @@ export default function AuthProvider({
 	return (
 		<AuthContext.Provider
 			value={{
-				user: null,
+				user: userProfile,
 				accessToken,
 				refreshToken,
 				AccessCookieString,
 				RefreshCookieString,
 				updateTokens,
+				setUserProfile,
 				axios: axiosInstance,
 			}}
 		>

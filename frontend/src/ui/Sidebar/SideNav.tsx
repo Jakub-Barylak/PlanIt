@@ -1,9 +1,11 @@
 "use client";
-import { FC, useState, Fragment } from "react";
+import { FC, useState, useContext, Fragment } from "react";
 import { Disclosure, Popover, Transition } from "@headlessui/react";
 import Image from "next/image";
 import SidebarCalendarView from "./SidebarCalendarView";
 import { Tooltip } from "@nextui-org/tooltip";
+
+import { AuthContextType, AuthContext } from "@/providers/AuthProvider";
 
 interface Props {
 	imageSrc?: string;
@@ -13,6 +15,7 @@ export const SideNav: FC<Props> = ({
 	imageSrc = "/userImg.jpeg",
 }): JSX.Element => {
 	const [showSidebar, setShowSidebar] = useState<boolean>(true);
+	const { user } = useContext(AuthContext) as AuthContextType;
 
 	//r40 g42 b50 change to rgb #282c34
 	// r20 g22 b30 change to rgb #282c34
@@ -50,10 +53,10 @@ export const SideNav: FC<Props> = ({
 					>
 						{/* DATA FROM AUTH PROVIDER */}
 						<p className="text-xs text-gray-400 dark:text-[#6A6A6A]">
-							email@email.com
+							{user?.email}
 						</p>
 						<p className="text-sm font-semibold text-gray-800 dark:text-white ">
-							User Name
+							{user?.name}
 						</p>
 					</div>
 				</div>

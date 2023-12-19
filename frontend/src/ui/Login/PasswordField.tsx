@@ -8,6 +8,7 @@ interface Props {
 	label?: string;
 	showCheckbox?: boolean;
 	showStrengthBar?: boolean;
+	reference?: any;
 }
 
 export const PasswordField: FC<Props> = ({
@@ -16,6 +17,7 @@ export const PasswordField: FC<Props> = ({
 	label = "Password",
 	showCheckbox = true,
 	showStrengthBar = false,
+	reference = null,
 }): JSX.Element => {
 	const [visible, setVisible] = useState(false);
 	const [active, setActive] = useState(false);
@@ -42,6 +44,7 @@ export const PasswordField: FC<Props> = ({
 					onChange={(e) => setPassword(e.target.value)}
 					onFocus={() => setActive(true)}
 					onBlur={() => setActive(false)}
+					ref={reference}
 				/>
 
 				{showCheckbox && (
