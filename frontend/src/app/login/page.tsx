@@ -1,13 +1,53 @@
 "use client";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { NextPage } from "next";
 import { PasswordField } from "@/ui/Login/PasswordField";
 import { InputField } from "@/ui/Login/InputField";
 import Link from "next/link";
+import axios from "axios";
+
+import { AuthContext, AuthContextType } from "@/providers/AuthProvider";
+import type { LoginResponse } from "@/lib/types";
+
+import { useRouter } from "next/navigation";
 
 const LoginPane: NextPage = () => {
 	const [username, setUsername] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
+
+	const { updateTokens, setUserProfile } = useContext(
+		AuthContext,
+	) as AuthContextType;
+	const router = useRouter();
+
+	const submitLogin = async (e: React.FormEvent) => {
+		e.preventDefault();
+		axios
+			.post("http://" + "localhost:8000" + "/login/", {
+				username: username,
+				password: password,
+			})
+			.then((response) => {
+				const data = response.data as LoginResponse;
+				console.log(response);
+				alert("Login successful!");
+				setUserProfile({
+					id: data.id,
+					username: data.username,
+					name: data.name,
+					email: data.email,
+					avatar: null,
+				});
+				updateTokens({
+					accessToken: data.access,
+					refreshToken: data.refresh,
+				});
+				router.push("/calendar");
+			})
+			.catch((error) => {
+				alert(error);
+			});
+	};
 
 	return (
 		<>
@@ -21,7 +61,7 @@ const LoginPane: NextPage = () => {
                                 lg:w-1/3 "
 			>
 				<h1 className="text-center text-3xl font-bold">Login</h1>
-				<form className="md-8">
+				<form className="md-8" method="POST" onSubmit={submitLogin}>
 					<div className="mx-auto max-w-lg">
 						<InputField
 							value={username}
@@ -68,6 +108,7 @@ const LoginPane: NextPage = () => {
                                 dark:bg-blue-500
                                 dark:hover:bg-secondary"
 							value="LOGIN"
+							onSubmit={submitLogin}
 						/>
 						<Link
 							className="     mt-2 block w-full rounded-xl border-4 border-gray-800 px-6 py-3 text-center text-lg font-semibold text-gray-800 shadow-xl

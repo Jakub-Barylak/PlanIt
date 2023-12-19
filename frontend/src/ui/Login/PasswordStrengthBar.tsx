@@ -21,8 +21,6 @@ export const PasswordStrengthBar: FC<Props> = ({ password }): JSX.Element => {
 		"bg-green-500",
 	];
 
-	console.log(strength, rules, ruleColors[strength]);
-
 	return (
 		<>
 			<div className="py-2 text-sm">
