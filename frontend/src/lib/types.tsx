@@ -10,3 +10,11 @@ export type LoginResponse = UserProfile & {
 	refresh: string;
 	access: string;
 };
+
+export type Calendar = {
+	id: number;
+	name: string;
+	color: string;
+	owner: number;
+	shared_users: [];
+};

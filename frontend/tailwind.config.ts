@@ -19,15 +19,15 @@ const config: Config = {
 			},
 			colors: {
 				primary: "#0e0345",
-				secondary: "#1806a1"
+				secondary: "#1806a1",
 			},
 			backgroundColor: {
-				'landing-light-purple': 'rgba(94, 80, 255, 0.05)',
-				'navy-blue': '#0C0093'
+				"landing-light-purple": "rgba(94, 80, 255, 0.05)",
+				"navy-blue": "#0C0093",
 			},
-		}
+		},
 	},
-	darkMode: "class",
+	darkMode: "media",
 	plugins: [nextui()],
 };
 export default config;

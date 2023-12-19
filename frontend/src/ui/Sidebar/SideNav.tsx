@@ -4,19 +4,21 @@ import { Disclosure, Popover, Transition } from "@headlessui/react";
 import Image from "next/image";
 import SidebarCalendarView from "./SidebarCalendarView";
 import { Tooltip } from "@nextui-org/tooltip";
-
+import type { Calendar } from "@/lib/types";
 import { AuthContextType, AuthContext } from "@/providers/AuthProvider";
 
 interface Props {
 	imageSrc?: string;
+	calendars: Calendar[];
 }
 
 export const SideNav: FC<Props> = ({
 	imageSrc = "/userImg.jpeg",
+	calendars,
 }): JSX.Element => {
 	const [showSidebar, setShowSidebar] = useState<boolean>(true);
 	const { user } = useContext(AuthContext) as AuthContextType;
-
+	// console.log(calendars);
 	//r40 g42 b50 change to rgb #282c34
 	// r20 g22 b30 change to rgb #282c34
 
