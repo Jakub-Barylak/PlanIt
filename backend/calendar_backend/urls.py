@@ -15,7 +15,7 @@ from rest_framework_simplejwt.views import (
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
-router.register(r'events', EventViewSet)
+"""router.register(r'events', EventViewSet)"""
 router.register(r'calendars', CalendarViewSet, basename='calendars')
 router.register(r'shared_calendars', SharedCalendarUserViewSet, basename='shared_calendars')
 
@@ -29,7 +29,7 @@ urlpatterns = [
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('user_calendars/', UserCalendarsView.as_view(), name='user_calendars'),
     path('events/', EventViewSet.as_view({
-        'get': 'list',
+        'get': 'list_events',
         'post': 'create'
     }), name='event-list'),
     path('user_calendars_events/',UserCalendarsEventsView.as_view(), name='user_calendars_events'),
