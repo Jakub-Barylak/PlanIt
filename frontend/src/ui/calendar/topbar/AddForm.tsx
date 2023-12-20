@@ -38,7 +38,7 @@ export default function AddForm() {
 		axios
 			.post("/events/", { ...formState })
 			.then((response) => {
-				console.log(response);
+				alert("Event added");
 			})
 			.catch((error) => {
 				console.log(error);
