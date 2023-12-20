@@ -11,7 +11,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.decorators import action
 from rest_framework_simplejwt.views import TokenRefreshView
 from django.db.models import Q
-from django.utils.dateparse import parse_datetime
+from django.utils.dateparse import parse_date
 from .models import (
     User, Event, Calendar, SharedCalendarUser,
     SharedEventUser
@@ -127,30 +127,35 @@ class EventViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def list_events(self, request):
+        # Get the calendar ID from the request
         calendar_id = request.query_params.get('calendarId')
+        
+        # Parse the start and end dates
         start_date_str = request.query_params.get('startDate')
         end_date_str = request.query_params.get('endDate')
 
-        # Parse dates from strings
-        start_date = parse_datetime(start_date_str) if start_date_str else None
-        end_date = parse_datetime(end_date_str) if end_date_str else None
+        # Convert the date strings to date objects
+        start_date = parse_date(start_date_str) if start_date_str else None
+        end_date = parse_date(end_date_str) if end_date_str else None
 
-        # Update filter logic
+        if not calendar_id or not start_date or not end_date:
+            return Response({"error": "Missing required parameters: 'calendarId', 'startDate', 'endDate'."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Ensure calendar_id is an integer
+        try:
+            calendar_id = int(calendar_id)
+        except ValueError:
+            return Response({"error": "Invalid 'calendarId'. It must be an integer."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Filter the events based on the calendar ID and the date range
         events = Event.objects.filter(
-            calendar_id=calendar_id
-            ).filter(
-                Q(begin_date__lte=end_date, end_date__gte=start_date)
-            )
+            calendar_id=calendar_id,
+            begin_date__gte=start_date, 
+            end_date__lte=end_date
+        )
 
-        response_data = []
-        for event in events:
-            event_data = EventSerializer(event).data
-            shared_event = SharedEventUser.objects.filter(event=event).first()
-
-            event_data['shared'] = shared_event is not None
-            event_data['coworked'] = shared_event.coworked if shared_event else False
-            response_data.append(event_data)
-
+        # Serialize and return the events
+        response_data = EventSerializer(events, many=True).data
         return Response(response_data)
 
     def create(self, request, *args, **kwargs):
@@ -165,7 +170,7 @@ class UserCalendarsEventsView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         user = request.user
         start_date = request.data.get('begin_date')
         end_date = request.data.get('end_date')
