@@ -44,11 +44,9 @@ export default function ThemeProvider({
 
 	return (
 		<ThemeContext.Provider value={{ theme, toggleTheme }}>
-			<NextUIProvider>
-				<body className={`${inter.className} max-h-screen ${theme}`}>
-					{children}
-				</body>
-			</NextUIProvider>
+			<body className={`${inter.className} max-h-screen ${theme}`}>
+				{children}
+			</body>
 		</ThemeContext.Provider>
 	);
 }
