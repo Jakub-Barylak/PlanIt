@@ -9,9 +9,8 @@ export default function CalendarView({ calendars }: { calendars: Calendar[] }) {
 	const [newCalendarName, setNewCalendarName] = useState<string>("");
 	const { axios } = useContext(AuthContext) as AuthContextType;
 
-	let addCalendar = async (e: React.FormEvent) => {
+	let addCalendar = (e: React.FormEvent) => {
 		e.preventDefault();
-
 		axios
 			.post("/user_calendars/", {
 				name: newCalendarName,
@@ -58,7 +57,7 @@ export default function CalendarView({ calendars }: { calendars: Calendar[] }) {
 			})}
 			<form
 				className="flex items-center justify-between rounded-lg p-2"
-				onSubmit={addCalendar}
+				// onSubmit={addCalendar}
 			>
 				<input
 					type="text"
@@ -68,7 +67,10 @@ export default function CalendarView({ calendars }: { calendars: Calendar[] }) {
 					onChange={(e) => setNewCalendarName(e.target.value)}
 				/>
 				{/* PLUS BUTTON */}
-				<div className="ml-2 h-4 w-4 cursor-pointer overflow-hidden rounded border-2 border-black bg-white dark:border-white dark:bg-black dark:text-white">
+				<div
+					className="ml-2 h-4 w-4 cursor-pointer overflow-hidden rounded border-2 border-black bg-white dark:border-white dark:bg-black dark:text-white"
+					onClick={addCalendar}
+				>
 					<div className="flex -translate-y-[0.46rem] select-none items-center justify-center text-center">
 						+
 					</div>
