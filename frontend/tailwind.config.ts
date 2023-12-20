@@ -19,14 +19,14 @@ const config: Config = {
 			},
 			colors: {
 				primary: "#0e0345",
-				secondary: "#1806a1"
+				secondary: "#1806a1",
 			},
 			backgroundColor: {
 				"landing-light-purple": "rgba(94, 80, 255, 0.05)",
 				"navy-blue": "#0C0093",
 			},
 			gridTemplateRows: {
-				"288": "repeat(288, minmax(0, 1fr))",
+				"288": "repeat(288, 1fr)",
 			},
 		},
 	},
