@@ -6,29 +6,7 @@ const LandingPage = () => {
   const adPath = "ad.svg";
   const ytPath = "youtube-icon.svg";
   const instaPath = "insta-icon.svg";
-
-
-  const testimonials = [
-    {
-      image: "black-logo.jpg",
-      name: "Anna",
-      title: "student",
-      quote:
-        "Lorem losum dolor sit omet. consectetut adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magarud. ot erm ou minim vemam, qurnostrud exercitation ullamco laboris nis. ut aliquip ex ea commodo",
-    },
-    {
-      quote: "Lorem losum dolor sit omet. consectetut adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magarud. ot erm ou minim vemam, qurnostrud exercitation ullamco laboris nis. ut aliquip ex ea commodo",
-      name: "Jan",
-      title: "professor",
-      image: "black-logo.jpg",
-    },
-    {
-      quote: "Lorem losum dolor sit omet. consectetut adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magarud. ot erm ou minim vemam, qurnostrud exercitation ullamco laboris nis. ut aliquip ex ea commodo",
-      name: "John",
-      title: "prezydent",
-      image: "black-logo.jpg",
-    },
-  ];
+  const starsPath = "stars.svg";
 
   const pricingPlans = [
     {
@@ -80,12 +58,11 @@ const LandingPage = () => {
         <section className="text-gray-600 body-font bg-landing-light-purple">
           <div className="container mx-auto flex px-5 py-15 items-center justify-between flex-col md:flex-row">
             <div className="lg:flex-grow md:w-1/2 lg:pr-15 md:pr-16 flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center text-center">
-              <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900 mt-16 md:mt-0">
+              <h1 className="title-font sm:text-4xl text-xl mb-4 font-extrabold text-gray-900 mt-16 md:mt-0">
                 Plant your ideas
               </h1>
               <p className="mb-8 leading-relaxed">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-              </p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.              </p>
               <div className="flex justify-center">
                 <button className="inline-flex text-white bg-navy-blue border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">
                   Get Started
@@ -105,7 +82,7 @@ const LandingPage = () => {
  <section className="text-gray-600 body-font">
   <div className="container px-5 py-24 mx-auto">
     <div className="text-center mb-20">
-      <h2 className="text-3xl font-medium title-font text-center text-gray-900 mb-20">
+      <h2 className="text-3xl font-extrabold title-font text-center text-gray-900 mb-20">
         Features
       </h2>
       <p className="text-base leading-relaxed xl:w-2/4 lg:w-3/4 mx-auto">
@@ -113,7 +90,7 @@ const LandingPage = () => {
       </p>
     </div>
     <div className="flex flex-wrap -m-4">
-      <div className="p-4 lg:w-1/3 md:w-1/2 w-full">
+      <div className="p-4 lg:w-1/3 w-full">
         <div className="h-full bg-white rounded-3xl shadow-md overflow-hidden">
           <div className="p-6">
             {/* Icon and feature #1 */}
@@ -126,7 +103,7 @@ const LandingPage = () => {
           </div>
         </div>
       </div>
-      <div className="p-4 lg:w-1/3 md:w-1/2 w-full">
+      <div className="p-4 lg:w-1/3 w-full">
         <div className="h-full bg-white rounded-3xl  shadow-md overflow-hidden">
           <div className="p-6">
             {/* Icon and feature #2 */}
@@ -138,7 +115,7 @@ const LandingPage = () => {
           </div>
         </div>
       </div>
-      <div className="p-4 lg:w-1/3 md:w-1/2 w-full">
+      <div className="p-4 lg:w-1/3 w-full">
         <div className="h-full bg-white rounded-3xl  shadow-md overflow-hidden">
           <div className="p-6">
             {/* Icon and feature #3 */}
@@ -160,31 +137,31 @@ const LandingPage = () => {
         <section className="text-gray-600 body-font bg-landing-light-purple">
   <div className="container px-4 py-24 mx-auto">
     <div className="flex flex-col text-center w-full mb-20">
-      <h2 className="text-3xl font-medium title-font mb-4 text-gray-900">Metrics</h2>
+      <h2 className="text-3xl font-extrabold title-font mb-4 text-gray-900">Metrics</h2>
       <p className="lg:w-2/3 mx-auto leading-relaxed text-base">
       Our metrics speak for themselves: from millions of events created to a high user retention rate, our numbers showcase our commitment to providing a reliable and efficient scheduling tool.
       </p>
     </div>
     <div className="flex flex-wrap -m-4 justify-center">
-      <div className="p-4 md:w-1/2 lg:w-1/4">
+      <div className="p-4 lg:w-1/4 md:w-1/2 w-full">
         <div className="bg-white rounded-2xl p-6 flex flex-col items-center">
           <span className="text-5xl font-medium text-gray-900 mb-2 p-5">10M+</span>
           <p className="leading-relaxed p-5">Events scheduled</p>
         </div>
       </div>
-      <div className="p-4 md:w-1/2 lg:w-1/4">
+      <div className="p-4 lg:w-1/4 md:w-1/2 w-full">
         <div className="bg-white rounded-2xl p-6 flex flex-col items-center">
           <span className="text-5xl font-medium text-gray-900 mb-2 p-5">1M+</span>
           <p className="leading-relaxed p-5">Active users</p>
         </div>
       </div>
-      <div className="p-4 md:w-1/2 lg:w-1/4">
+      <div className="p-4 lg:w-1/4 md:w-1/2 w-full">
         <div className="bg-white rounded-2xl p-6 flex flex-col items-center">
           <span className="text-5xl font-medium text-gray-900 mb-2 p-5">100%</span>
           <p className="leading-relaxed p-5">Support queries resolved</p>
         </div>
       </div>
-      <div className="p-4 md:w-1/2 lg:w-1/4">
+      <div className="p-4 lg:w-1/4 md:w-1/2 w-full">
         <div className="bg-white rounded-2xl p-6 flex flex-col items-center">
           <span className="text-5xl font-medium text-gray-900 mb-2 p-5">12k+</span>
           <p className="leading-relaxed p-5">Monthly new users</p>
@@ -198,56 +175,70 @@ const LandingPage = () => {
 
         {/* TESTIMONIALS */}
         <section className="text-gray-600 body-font bg-landing-light-purple">
-          <div className="container px-5 py-24 mx-auto">
-            <h2 className="text-3xl font-medium title-font text-center text-gray-900 mb-20">
-              Testimonials
-            </h2>
-            <p className="text-base leading-relaxed xl:w-2/4 lg:w-3/4 mx-auto">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                </p>
-            <div className="flex flex-wrap -m-4">
-              {testimonials.map((testimonial, index) => (
-                <div key={index} className="p-4 md:w-1/2 w-full">
-                  <div className="h-full bg-gray-100 p-8 rounded">
-                    <p className="leading-relaxed mb-6">{testimonial.quote}</p>
-                    <div className="inline-flex items-center">
-                    <span className="flex-grow flex flex-col pl-4">
-                        <span className="title-font font-medium text-gray-900">
-                          {testimonial.name}
-                        </span>
-                        <span className="text-gray-500 text-sm">
-                          {testimonial.title}
-                      <img
-                        alt="testimonial"
-                        src={testimonial.image}
-                        className="w-12 h-12 rounded-full flex-shrink-0 object-cover object-center"
-                      />
-                      
-                        </span>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+  <div className="container px-5 py-24 mx-auto">
+  <div className="flex flex-col text-center w-full mb-20">
+      <h2 className="text-3xl font-extrabold title-font mb-4 text-gray-900">Testimonials</h2>
+      <p className="lg:w-2/3 mx-auto leading-relaxed text-base">
+      Don't just take our word for it - here's what our users have to say! From life-changing organizational improvements to small daily conveniences, discover the diverse and positive impact our app has had on people.</p>
+    </div>
+
+    <div className="flex flex-wrap text-center -m-4">
+      <div className="lg:w-1/3 md:w-full p-4">
+        <div className="h-full bg-white p-8 rounded-3xl">
+          <img className="w-16 h-16 mb-4 object-cover object-center rounded-full bg-gray-200 inline-block" src="/path-to-image" alt="testimonial avatar" />
+          <h2 className="text-lg text-gray-900 font-medium title-font mb-2">Anna</h2>
+          <h1 className="text-sm text-gray-900 font-small title-font mb-4">student</h1>
+
+          <p className="leading-relaxed text-base mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          <div className="flex justify-center items-center flex-wrap ">
+          <img className="w-32" src={starsPath} alt="Star rating" />
           </div>
-        </section>
+        </div>
+      </div>
+
+      <div className="lg:w-1/3 md:w-full p-4">
+        <div className="h-full bg-white p-8 rounded-3xl">
+          <img className="w-16 h-16 mb-4 object-cover object-center rounded-full bg-gray-200 inline-block" src="/path-to-image" alt="testimonial avatar" />
+          <h2 className="text-lg text-gray-900 font-medium title-font mb-2">Jan</h2>
+          <h1 className="text-sm text-gray-900 font-small title-font mb-4">professor</h1>
+          <p className="leading-relaxed text-base mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          <div className="flex justify-center items-center flex-wrap ">
+          <img className="w-24" src={starsPath} alt="Star rating" />
+          </div>
+        </div>
+      </div>
+
+      <div className="lg:w-1/3 md:w-full p-4">
+        <div className="h-full bg-white p-8 rounded-3xl">
+          <img className="w-16 h-16 mb-4 object-cover object-center rounded-full bg-gray-200 inline-block" src="/path-to-image" alt="testimonial avatar" />
+          <h2 className="text-lg text-gray-900 font-medium title-font mb-2">John</h2>
+          <h1 className="text-sm text-gray-900 font-small title-font mb-4">entrepreneur</h1>
+          <p className="leading-relaxed text-base mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          <div className="flex justify-center items-center flex-wrap ">
+          <img className="w-24" src={starsPath} alt="Star rating" />
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
 
         {/* PRICING */}
 
         <section className="text-gray-600 body-font overflow-hidden bg-landing-light-purple">
           <div className="container px-5 py-24 mx-auto">
-          <h2 className="text-3xl font-medium title-font text-center text-gray-900 mb-20">
+          <h2 className="text-3xl font-extrabold title-font text-center text-gray-900 mb-20">
               Pricing 
             </h2>
             <p className="text-base leading-relaxed xl:w-2/4 lg:w-3/4 mx-auto">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
                   do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                 </p>
-            <div className="flex flex-wrap -m-4">
+            <div className="flex flex-wrap -m-4 p-5">
               {pricingPlans.map((plan, index) => (
-                <div key={index} className="p-4 xl:w-1/3 md:w-1/2 w-full">
+                <div key={index} className="p-4 xl:w-1/3 w-full">
                   <div
                     className={`h-full p-6 rounded-lg border-2 ${
                       plan.mostPopular ? "border-indigo-500" : "border-gray-300"
@@ -285,7 +276,7 @@ const LandingPage = () => {
           <div className="h-full bg-white rounded-3xl shadow-md overflow-hidden p-10">
             <div className="flex flex-col text-center w-full mb-12 lg:text-left">
               
-              <h2 className="text-2xl font-medium title-font mb-4 text-gray-900 text-left">
+              <h2 className="text-2xl font-extrabold title-font mb-4 text-gray-900 text-left">
                 Let's get in touch!
               </h2>
               <p className="leading-relaxed text-base text-left">
