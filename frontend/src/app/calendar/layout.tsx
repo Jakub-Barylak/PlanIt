@@ -17,21 +17,25 @@ export default function CalendarLayout({
 
 	useEffect(() => {
 		axios
-			.get("/user_calendars/")
+			.post("/user_calendars_events/", {
+				begin_date: "2023-12-01",
+				end_date: "2023-12-31",
+			})
 			.then((response) => {
 				const data = response.data as Calendar[];
+				// console.log(data);
 				setCalendars(data);
 			})
 			.catch((error) => console.log(error));
 	}, []);
 
 	return (
-		// <NextUIProvider>
-		<div className="flex h-screen w-full">
-			<SideNav calendars={calendars} />
-			{children}
-			{/* <DailyPlanner /> */}
-		</div>
-		// </NextUIProvider>
+		<NextUIProvider>
+			<div className="flex h-screen w-full">
+				<SideNav calendars={calendars} />
+				{children}
+				<DailyPlanner />
+			</div>
+		</NextUIProvider>
 	);
 }
