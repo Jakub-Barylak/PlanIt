@@ -10,7 +10,7 @@ const DailyPlaner: React.FC = () => {
 
   return (
     <div>
-      <h2>Daily Planner</h2>
+      <h2>To Do</h2>
       <TaskManager initialTasks={initialTasks} />
     </div>
   );

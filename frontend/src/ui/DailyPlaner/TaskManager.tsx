@@ -14,6 +14,7 @@ interface TaskManagerProps {
 
 const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
   const [tasks, setTasks] = useState(initialTasks);
+  const [showTaskManager, setShowTaskManager] = useState<boolean>(true);
 
   const handleToggle = (index: number) => {
     const newTasks = [...tasks];
@@ -40,8 +41,26 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
     console.log(`Move task at index ${index}`);
   };
 
+  const toggleTaskManager = () => {
+    setShowTaskManager(!showTaskManager);
+  };
+
   return (
     <div>
+       <span
+        onClick={toggleTaskManager}
+        style={{
+          cursor: 'pointer',
+          transition: 'transform 0.3s ease-in-out',
+          transform: showTaskManager ? 'rotate(0deg)' : 'rotate(180deg)',
+          display: 'inline-block',
+          marginRight: '5px',
+        }}
+      >
+        ▸
+      </span>
+      {showTaskManager && (
+      <>
     <ul>
       {tasks.map((task, index) => (
         <li key={index} style={{ display: 'flex', alignItems: 'center' }}>
@@ -56,6 +75,8 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
     <div style={{ display: 'flex' }}>
       <AddTask onAdd={handleAddTask} />
     </div>
+  </>
+  )}
   </div>
   );
 };
