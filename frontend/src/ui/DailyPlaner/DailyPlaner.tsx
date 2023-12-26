@@ -2,7 +2,7 @@
 import React from 'react';
 import TaskManager from './TaskManager';
 
-const App: React.FC = () => {
+const DailyPlaner: React.FC = () => {
   const initialTasks = [
     { text: 'Task 1', completed: false },
     { text: 'Task 2', completed: true },
@@ -16,4 +16,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default DailyPlaner;

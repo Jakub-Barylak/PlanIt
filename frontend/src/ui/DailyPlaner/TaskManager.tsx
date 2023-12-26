@@ -8,11 +8,11 @@ import AddTask from './AddTask';
 import RemoveTask from './RemoveTask';
 import MoveTask from './MoveTask';
 
-interface DailyPlannerProps {
+interface TaskManagerProps {
   initialTasks: { text: string; completed: boolean }[];
 }
 
-const DailyPlanner: React.FC<DailyPlannerProps> = ({ initialTasks }) => {
+const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
   const [tasks, setTasks] = useState(initialTasks);
 
   const handleToggle = (index: number) => {
@@ -60,4 +60,4 @@ const DailyPlanner: React.FC<DailyPlannerProps> = ({ initialTasks }) => {
   );
 };
 
-export default DailyPlanner;
+export default TaskManager;

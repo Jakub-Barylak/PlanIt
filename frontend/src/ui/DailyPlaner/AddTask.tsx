@@ -19,14 +19,22 @@ const AddTask: React.FC<AddTaskProps> = ({ onAdd }) => {
     }
   };
 
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleAddTask();
+    }
+  };
+
   return (
-    <div>
+    //<div>
+    <div style={{ display: 'flex', gap: '8px' }}>
       <button onClick={handleAddTask}>Add Task</button>
       <input
         type="text"
         placeholder="Enter task"
         value={newTask}
         onChange={handleInputChange}
+        onKeyPress={handleKeyPress}
       />
     </div>
   );
