@@ -174,6 +174,24 @@ class EventViewSet(viewsets.ModelViewSet):
         response_data = self.get_serializer(events, many=True).data
         return Response(response_data)
 
+    @action(methods=['delete'], detail=False, url_path='delete-event')
+    def delete_event(self, request, *args, **kwargs):
+        event_id = request.data.get('eventId')
+        
+        if not event_id:
+            return Response({"error": "Missing 'eventId' in request."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Fetch the event and delete it
+        try:
+            event = Event.objects.get(id=event_id)
+            event.delete()
+            return Response({"message": "Event deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+        except Event.DoesNotExist:
+            return Response({"error": "Event not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 ### User Calendars Events ###
 class UserCalendarsEventsView(APIView):
     authentication_classes = [JWTAuthentication]
@@ -213,3 +231,23 @@ class CustomTokenRefreshView(TokenRefreshView):
         data['refresh'] = str(refresh)
 
         return Response(data, status=status.HTTP_200_OK)
+
+
+
+class DeleteCalendarView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, *args, **kwargs):
+        calendar_id = request.data.get('calendarId')
+        if not calendar_id:
+            return Response({"error": "Calendar ID is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            calendar = Calendar.objects.get(id=calendar_id, owner=request.user)
+            calendar.delete()
+            return Response({"message": "Calendar deleted successfully"}, status=status.HTTP_200_OK)
+        except Calendar.DoesNotExist:
+            return Response({"message": "Calendar not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({"message": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

@@ -5,7 +5,8 @@ from calendar_app.views import (
     UserViewSet, EventViewSet, CalendarViewSet,
     SharedCalendarUserViewSet, 
     RegistrationView, LoginView, UserCalendarsView,
-    UserCalendarsEventsView, CustomTokenRefreshView
+    UserCalendarsEventsView, CustomTokenRefreshView,
+    DeleteCalendarView
 )
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -20,6 +21,7 @@ router.register(r'calendars', CalendarViewSet, basename='calendars')
 router.register(r'shared_calendars', SharedCalendarUserViewSet, basename='shared_calendars')
 router.register(r'events', EventViewSet, basename='events')  # Registering EventViewSet
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('signup/', RegistrationView.as_view(), name='signup'),
@@ -29,5 +31,6 @@ urlpatterns = [
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('user_calendars/', UserCalendarsView.as_view(), name='user_calendars'),
     path('user_calendars_events/', UserCalendarsEventsView.as_view(), name='user_calendars_events'),
+    path('delete_calendar/', DeleteCalendarView.as_view(), name='delete_calendar'),
     path('', include(router.urls))  # This includes all the router generated URLs
 ]
