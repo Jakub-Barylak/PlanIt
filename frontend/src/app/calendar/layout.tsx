@@ -1,7 +1,7 @@
 "use client";
 
 import { SideNav } from "@/ui/Sidebar/SideNav";
-import DailyPlanner from "@/ui/DailyPlanner";
+import DailyPlanner from "@/ui/DailyPlaner/DailyPlaner";
 import { NextUIProvider } from "@nextui-org/system";
 import { AuthContext, AuthContextType } from "@/providers/AuthProvider";
 import { useContext, useEffect, useState } from "react";
