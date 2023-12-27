@@ -1,3 +1,4 @@
+import json
 from rest_framework import viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
@@ -10,8 +11,9 @@ from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.decorators import action
 from rest_framework_simplejwt.views import TokenRefreshView
-from django.db.models import Q
-from django.utils.dateparse import parse_date
+from datetime import datetime, timedelta
+from dateutil.parser import parse
+from django.utils.dateparse import parse_datetime, parse_date
 from .models import (
     User, Event, Calendar, SharedCalendarUser,
     SharedEventUser
@@ -125,21 +127,35 @@ class EventViewSet(viewsets.ModelViewSet):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
-    @action(detail=False, methods=['get'])
-    def list_events(self, request):
-        # Get the calendar ID from the request
-        calendar_id = request.query_params.get('calendarId')
-        
-        # Parse the start and end dates
-        start_date_str = request.query_params.get('startDate')
-        end_date_str = request.query_params.get('endDate')
+    def create(self, request, *args, **kwargs):
+        # Method for creating a new event
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        # Convert the date strings to date objects
-        start_date = parse_date(start_date_str) if start_date_str else None
-        end_date = parse_date(end_date_str) if end_date_str else None
+    @action(detail=False, methods=['post'], url_path='get-events')
+    def get_events(self, request, *args, **kwargs):
+        # Method for listing events based on the request body
+        try:
+            data = json.loads(request.body)
+            calendar_id = data.get('calendarId')
+            start_date_str = data.get('startDate')
+            end_date_str = data.get('endDate')
+        except json.JSONDecodeError:
+            return Response({"error": "Invalid JSON."}, status=status.HTTP_400_BAD_REQUEST)
 
-        if not calendar_id or not start_date or not end_date:
+        # Validate received data
+        if not calendar_id or not start_date_str or not end_date_str:
             return Response({"error": "Missing required parameters: 'calendarId', 'startDate', 'endDate'."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Convert date strings to datetime objects
+        try:
+            start_date = parse(start_date_str)
+            end_date = parse(end_date_str)
+        except ValueError:
+            return Response({"error": "Invalid date format."}, status=status.HTTP_400_BAD_REQUEST)
 
         # Ensure calendar_id is an integer
         try:
@@ -147,23 +163,16 @@ class EventViewSet(viewsets.ModelViewSet):
         except ValueError:
             return Response({"error": "Invalid 'calendarId'. It must be an integer."}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Filter the events based on the calendar ID and the date range
-        events = Event.objects.filter(
+        # Filter the events based on the calendar ID and date range
+        events = self.queryset.filter(
             calendar_id=calendar_id,
             begin_date__gte=start_date, 
             end_date__lte=end_date
         )
 
         # Serialize and return the events
-        response_data = EventSerializer(events, many=True).data
+        response_data = self.get_serializer(events, many=True).data
         return Response(response_data)
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            event = serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 ### User Calendars Events ###
 class UserCalendarsEventsView(APIView):
