@@ -251,3 +251,12 @@ class DeleteCalendarView(APIView):
             return Response({"message": "Calendar not found"}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"message": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class UserInformationView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        user_data = UserSerializer(user).data
+        return Response(user_data, status=status.HTTP_200_OK)

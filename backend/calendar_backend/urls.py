@@ -6,7 +6,7 @@ from calendar_app.views import (
     SharedCalendarUserViewSet, 
     RegistrationView, LoginView, UserCalendarsView,
     UserCalendarsEventsView, CustomTokenRefreshView,
-    DeleteCalendarView
+    DeleteCalendarView, UserInformationView
 )
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -32,5 +32,6 @@ urlpatterns = [
     path('user_calendars/', UserCalendarsView.as_view(), name='user_calendars'),
     path('user_calendars_events/', UserCalendarsEventsView.as_view(), name='user_calendars_events'),
     path('delete_calendar/', DeleteCalendarView.as_view(), name='delete_calendar'),
+    path('user_information/', UserInformationView.as_view(), name='user_information'),
     path('', include(router.urls))  # This includes all the router generated URLs
 ]
