@@ -1,5 +1,6 @@
 import { useState, useContext } from "react";
 import { AuthContextType, AuthContext } from "@/providers/AuthProvider";
+import { FaRegPlusSquare } from "react-icons/fa";
 
 import type { Calendar } from "@/lib/types";
 
@@ -67,14 +68,7 @@ export default function CalendarView({ calendars }: { calendars: Calendar[] }) {
 					onChange={(e) => setNewCalendarName(e.target.value)}
 				/>
 				{/* PLUS BUTTON */}
-				<div
-					className="ml-2 h-4 w-4 cursor-pointer overflow-hidden rounded border-2 border-black bg-white dark:border-white dark:bg-black dark:text-white"
-					onClick={addCalendar}
-				>
-					<div className="flex -translate-y-[0.46rem] select-none items-center justify-center text-center">
-						+
-					</div>
-				</div>
+				<FaRegPlusSquare className="m-0 h-4 w-4 p-0" onClick={addCalendar} />
 			</form>
 		</>
 	);

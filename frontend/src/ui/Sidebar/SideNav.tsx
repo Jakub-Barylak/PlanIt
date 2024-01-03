@@ -8,6 +8,14 @@ import type { Calendar } from "@/lib/types";
 import { AuthContextType, AuthContext } from "@/providers/AuthProvider";
 import { ThemeContextType, ThemeContext } from "@/providers/ThemeProvider";
 
+// ICONS
+import { FiCalendar, FiFileText } from "react-icons/fi";
+import { GrCircleQuestion } from "react-icons/gr";
+import { GoGear } from "react-icons/go";
+import { TbLogout } from "react-icons/tb";
+import { IoMoonOutline } from "react-icons/io5";
+import { SlArrowDown, SlArrowLeft } from "react-icons/sl";
+
 interface Props {
 	imageSrc?: string;
 	calendars: Calendar[];
@@ -28,7 +36,7 @@ export const SideNav: FC<Props> = ({
 		<>
 			{/* MAIN DIV */}
 			<div
-				className={`relative z-30 grid max-h-screen grid-cols-1 grid-rows-[max-content_max-content_max-content_max-content_1fr_max-content] rounded-r-lg border-r-2 bg-inherit p-2 dark:border-[#14161D] dark:bg-[#161920] dark:text-[#6A6A6A]
+				className={`relative z-30 grid max-h-screen grid-cols-1 grid-rows-[max-content_max-content_max-content_max-content_1fr_max-content] rounded-r-lg border-r-2 bg-inherit p-2 text-black transition duration-200 ease-in-out dark:border-darkMode-border dark:bg-darkMode-background dark:text-darkMode-text
 					${showSidebar ? "min-w-[15vw]" : "max-w-[calc(50px+1rem)]"}
                     `}
 			>
@@ -56,7 +64,7 @@ export const SideNav: FC<Props> = ({
 						}`}
 					>
 						{/* DATA FROM AUTH PROVIDER */}
-						<p className="text-xs text-gray-400 dark:text-[#6A6A6A]">
+						<p className="dark:text-dakrMode-text text-xs text-gray-400">
 							{user?.email}
 						</p>
 						<p className="text-sm font-semibold text-gray-800 dark:text-white ">
@@ -65,7 +73,7 @@ export const SideNav: FC<Props> = ({
 					</div>
 				</div>
 
-				<hr className=" border-t-2 dark:border-[#282A3B]" />
+				<hr className=" border-t-2 dark:border-darkMode-hr" />
 				{/* DIV BODY -> INFO, CALENDARS, ABOUT US */}
 				<div className="grid max-w-full grid-cols-1 gap-3 py-4">
 					{/* INFO */}
@@ -80,14 +88,15 @@ export const SideNav: FC<Props> = ({
 						}}
 					>
 						<div
-							className={`inline-flex gap-2 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-[#282c34] dark:hover:text-white ${
+							className={`inline-flex items-center gap-2 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-darkMode-hover-bg dark:hover:text-white ${
 								showSidebar
 									? "w-full justify-start"
 									: "h-[50px] w-[50px] justify-center"
 							}`}
 							data-tip="Info"
 						>
-							<Image alt="" src="/icons/help.svg" width={20} height={20} />
+							{/* <Image alt="" src="/icons/help.svg" width={20} height={20} /> */}
+							<GrCircleQuestion className="h-[20px] w-[20px]" />
 							<span className={showSidebar ? "" : "hidden"}>Info</span>
 						</div>
 					</Tooltip>
@@ -101,27 +110,33 @@ export const SideNav: FC<Props> = ({
 										<Disclosure.Button
 											className={`${
 												open
-													? "bg-gray-100 dark:bg-[#282c34] dark:text-white"
-													: "hover:bg-gray-100 dark:hover:bg-[#282c34] dark:hover:text-white"
+													? "bg-gray-100 dark:bg-darkMode-hover-bg dark:text-white"
+													: "hover:bg-gray-100 dark:hover:bg-darkMode-hover-bg dark:hover:text-white"
 											} z-10 flex w-full rounded-lg p-2`}
 										>
 											<div className="inline-flex w-full items-center justify-between">
-												<div className="inline-flex">
-													<Image
+												<div className="inline-flex items-center">
+													{/* <Image
 														alt=""
 														src="/icons/calendar-black.svg"
 														width={20}
 														height={20}
-													/>
+													/> */}
+													<FiCalendar className="h-[20px] w-[20px]" />
 													<span className="ml-2">Calendars</span>
 												</div>
-												<Image
+												{/* <Image
 													alt=""
 													src="/icons/arrow-left.svg"
 													width={8}
 													height={8}
 													className={`${
 														open ? "rotate-90" : "-rotate-90"
+													} h-4 w-4 transform transition duration-100 ease-in-out`}
+                                                /> */}
+												<SlArrowDown
+													className={`${
+														open ? "rotate-180" : "rotate-0"
 													} h-4 w-4 transform transition duration-100 ease-in-out`}
 												/>
 											</div>
@@ -161,16 +176,17 @@ export const SideNav: FC<Props> = ({
 											<Popover.Button
 												className={`${
 													open
-														? "bg-gray-100 dark:bg-[#282c34] dark:text-white"
-														: "hover:bg-gray-100 dark:hover:bg-[#282c34] dark:hover:text-white"
+														? "bg-gray-100 dark:bg-darkMode-hover-bg dark:text-white"
+														: "hover:bg-gray-100 dark:hover:bg-darkMode-hover-bg dark:hover:text-white"
 												} z-10 flex h-[50px] w-[50px] items-center justify-center rounded-lg p-2`}
 											>
-												<Image
+												{/* <Image
 													alt=""
 													src="/icons/calendar-black.svg"
 													width={20}
 													height={20}
-												/>
+												/> */}
+												<FiCalendar className="h-[20px] w-[20px]" />
 											</Popover.Button>
 										</Tooltip>
 										<Transition
@@ -183,7 +199,7 @@ export const SideNav: FC<Props> = ({
 											leaveFrom="transform scale-100 opacity-100"
 											leaveTo="transform scale-95 opacity-0"
 										>
-											<Popover.Panel className="absolute -top-9 left-[calc(100%+0.25rem)] z-10 grid grid-cols-[max-content] rounded-lg border-2 bg-white p-2 shadow-md dark:border-[#535353] dark:bg-[#161920] dark:text-white">
+											<Popover.Panel className="absolute -top-9 left-[calc(100%+0.25rem)] z-10 grid grid-cols-[max-content] rounded-lg border-2 bg-white p-2 shadow-md dark:border-darkMode-light-border dark:bg-darkMode-background dark:text-white">
 												<SidebarCalendarView calendars={calendars} />
 											</Popover.Panel>
 										</Transition>
@@ -204,19 +220,20 @@ export const SideNav: FC<Props> = ({
 						}}
 					>
 						<div
-							className={`inline-flex gap-2 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-[#282c34] dark:hover:text-white ${
+							className={`inline-flex items-center gap-2 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-darkMode-hover-bg dark:hover:text-white ${
 								showSidebar
 									? "w-full justify-start"
 									: "h-[50px] w-[50px] justify-center"
 							}`}
 						>
-							<Image alt="" src="/icons/Page.svg" width={20} height={20} />
+							{/* <Image alt="" src="/icons/Page.svg" width={20} height={20} /> */}
+							<FiFileText className="h-[20px] w-[20px]" />
 							<span className={showSidebar ? "" : "hidden"}>About us</span>
 						</div>
 					</Tooltip>
 				</div>
 
-				<hr className="border-t-2 dark:border-[#282A3B]" />
+				<hr className="border-t-2 dark:border-darkMode-hr" />
 
 				<div className="pt-4">
 					{/* SETTINGS */}
@@ -231,13 +248,14 @@ export const SideNav: FC<Props> = ({
 						}}
 					>
 						<div
-							className={`inline-flex gap-2 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-[#282c34] dark:hover:text-white ${
+							className={`inline-flex items-center gap-2 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-darkMode-hover-bg dark:hover:text-white ${
 								showSidebar
 									? "w-full justify-start"
 									: "h-[50px] w-[50px] justify-center"
 							}`}
 						>
-							<Image alt="" src="/icons/settings.svg" width={20} height={20} />
+							{/* <Image alt="" src="/icons/settings.svg" width={20} height={20} /> */}
+							<GoGear className="h-[20px] w-[20px]" />
 							<span className={showSidebar ? "" : "hidden"}>Settings</span>
 						</div>
 					</Tooltip>
@@ -256,7 +274,7 @@ export const SideNav: FC<Props> = ({
 						}}
 					>
 						<div
-							className={`inline-flex gap-2 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-[#282c34] dark:hover:text-white ${
+							className={`inline-flex gap-2 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-darkMode-hover-bg dark:hover:text-white ${
 								showSidebar
 									? "w-full justify-start"
 									: "h-[50px] w-[50px] justify-center"
@@ -265,7 +283,8 @@ export const SideNav: FC<Props> = ({
 								toggleTheme();
 							}}
 						>
-							<Image alt="" src="/icons/moon.svg" width={20} height={20} />
+							{/* <Image alt="" src="/icons/moon.svg" width={20} height={20} /> */}
+							<IoMoonOutline className="h-[20px] w-[20px]" />
 							<span className={showSidebar ? "" : "hidden"}>Switch theme</span>
 						</div>
 					</Tooltip>
@@ -280,17 +299,18 @@ export const SideNav: FC<Props> = ({
 						}}
 					>
 						<div
-							className={`inline-flex gap-2 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-[#282c34] dark:hover:text-white ${
+							className={`inline-flex gap-2 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-darkMode-hover-bg dark:hover:text-white ${
 								showSidebar
 									? "w-full justify-start"
 									: "h-[50px] w-[50px] justify-center"
 							}`}
 						>
-							<Image alt="" src="/icons/Log-out.svg" width={20} height={20} />
+							{/* <Image alt="" src="/icons/Log-out.svg" width={20} height={20} /> */}
+							<TbLogout className="h-[20px] w-[20px] text-[#5441CB]" />
 							<span className={showSidebar ? "" : "hidden"}>Logout</span>
 						</div>
 					</Tooltip>
-					<div className="flex min-h-[5vh] justify-center rounded-lg bg-gray-400 align-middle dark:bg-[#282A32]">
+					<div className="flex min-h-[5vh] justify-center rounded-lg bg-gray-400 align-middle dark:bg-darkMode-hr">
 						<Image
 							alt="PlanIt"
 							src={theme == "light" ? "/black-logo.svg" : "/white-logo.svg"}
@@ -301,16 +321,23 @@ export const SideNav: FC<Props> = ({
 				</div>
 
 				{/* ARROW */}
-				<div className=" absolute -right-4 top-[calc(25px-0.5rem)] z-10 flex h-8 w-8 justify-center rounded-lg border-2 bg-gray-200 p-1 shadow-md dark:border-[#6A6A6A] dark:bg-[#161920]">
-					<Image
+				<div
+					className=" absolute -right-4 top-[calc(25px-0.5rem)] z-10 flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border-2 bg-gray-200 p-1 shadow-md dark:border-darkMode-text dark:bg-darkMode-background"
+					onClick={() => setShowSidebar(!showSidebar)}
+				>
+					{/* <Image
 						alt=""
 						src="/icons/arrow-left.svg"
 						width={10}
 						height={10}
-						onClick={() => setShowSidebar(!showSidebar)}
 						className={`${
 							showSidebar ? "" : "rotate-180"
 						} transform cursor-pointer transition duration-200 ease-in-out dark:invert`}
+                    /> */}
+					<SlArrowLeft
+						className={`${
+							showSidebar ? "rotate-0" : "rotate-180"
+						} transform cursor-pointer text-black transition duration-200 ease-in-out dark:text-white`}
 					/>
 				</div>
 			</div>

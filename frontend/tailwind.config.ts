@@ -18,8 +18,18 @@ const config: Config = {
 					"conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
 			},
 			colors: {
-				primary: "#0e0345",
-				secondary: "#1806a1",
+				"main-purple": "#0e0345",
+				lightMode: {
+					placeholder: "#E95420",
+				},
+				darkMode: {
+					background: "#161920",
+					border: "#14161D",
+					text: "#6A6A6A",
+					hr: "#282A3B",
+					"hover-bg": "#282c34",
+					"light-border": "#535353",
+				},
 			},
 			backgroundColor: {
 				"landing-light-purple": "rgba(94, 80, 255, 0.05)",

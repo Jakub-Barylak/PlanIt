@@ -1,5 +1,5 @@
 "use client";
-import { useState, createContext, useEffect } from "react";
+import { useState, createContext, useLayoutEffect } from "react";
 import { NextUIProvider } from "@nextui-org/system";
 import { Inter } from "next/font/google";
 
@@ -24,11 +24,11 @@ export default function ThemeProvider({
 		typeof window !== "undefined"
 			? localStorage.getItem("theme") != null
 				? (localStorage.getItem("theme") as string)
-				: "light"
-			: "light",
+				: "dark"
+			: "dark",
 	);
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (typeof window !== "undefined") {
 			localStorage.setItem("theme", theme);
 		}
