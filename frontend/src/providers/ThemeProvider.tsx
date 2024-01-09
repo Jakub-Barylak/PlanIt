@@ -1,18 +1,18 @@
 "use client";
 import { useState, createContext, useLayoutEffect } from "react";
-import { NextUIProvider } from "@nextui-org/system";
 import { Inter } from "next/font/google";
+import { getCookie, hasCookie, setCookie } from "cookies-next";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export type ThemeContextType = {
 	theme: string;
-	toggleTheme: () => void;
+	setTheme: (theme: string) => void;
 };
 
-export const ThemeContext = createContext<ThemeContextType| null >({
-	theme: "light",
-	toggleTheme: () => {},
+export const ThemeContext = createContext({
+	theme: "",
+	setTheme: (theme: string) => {},
 });
 
 export default function ThemeProvider({
@@ -20,30 +20,21 @@ export default function ThemeProvider({
 }: {
 	children: React.ReactNode;
 }) {
-	const [theme, setTheme] = useState<string>(
-		typeof window !== "undefined"
-			? localStorage.getItem("theme") != null
-				? (localStorage.getItem("theme") as string)
-				: "dark"
-			: "dark",
-	);
+	const isBrowserDefaultDark = () =>
+		window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-	useLayoutEffect(() => {
-		if (typeof window !== "undefined") {
-			localStorage.setItem("theme", theme);
-		}
-	}, [theme]);
-
-	function toggleTheme() {
-		if (theme === "light") {
-			setTheme("dark");
+	const getDefaultTheme = () => {
+		if (hasCookie("theme")) {
+			return getCookie("theme");
 		} else {
-			setTheme("light");
+			return isBrowserDefaultDark() ? "dark" : "light";
 		}
-	}
+	};
+
+	const [theme, setTheme] = useState<string>(getDefaultTheme() as string);
 
 	return (
-		<ThemeContext.Provider value={{ theme, toggleTheme }}>
+		<ThemeContext.Provider value={{ theme, setTheme }}>
 			<body className={`${inter.className} max-h-screen ${theme}`}>
 				{children}
 			</body>

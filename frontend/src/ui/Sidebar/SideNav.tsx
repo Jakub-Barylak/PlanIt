@@ -15,6 +15,7 @@ import { GoGear } from "react-icons/go";
 import { TbLogout } from "react-icons/tb";
 import { IoMoonOutline } from "react-icons/io5";
 import { SlArrowDown, SlArrowLeft } from "react-icons/sl";
+import { setCookie } from "cookies-next";
 
 interface Props {
 	imageSrc?: string;
@@ -27,10 +28,13 @@ export const SideNav: FC<Props> = ({
 }): JSX.Element => {
 	const [showSidebar, setShowSidebar] = useState<boolean>(true);
 	const { user } = useContext(AuthContext) as AuthContextType;
-	const { theme, toggleTheme } = useContext(ThemeContext) as ThemeContextType;
-	// console.log(calendars);
-	//r40 g42 b50 change to rgb #282c34
-	// r20 g22 b30 change to rgb #282c34
+	const { theme, setTheme } = useContext(ThemeContext) as ThemeContextType;
+
+	const toggleTheme = () => {
+		const isCurrentThemeDark = theme === "dark";
+		setTheme(isCurrentThemeDark ? "light" : "dark");
+		setCookie("theme", isCurrentThemeDark ? "light" : "dark");
+	};
 
 	return (
 		<>
@@ -279,9 +283,7 @@ export const SideNav: FC<Props> = ({
 									? "w-full justify-start"
 									: "h-[50px] w-[50px] justify-center"
 							}`}
-							onClick={() => {
-								toggleTheme();
-							}}
+							onClick={toggleTheme}
 						>
 							{/* <Image alt="" src="/icons/moon.svg" width={20} height={20} /> */}
 							<IoMoonOutline className="h-[20px] w-[20px]" />
