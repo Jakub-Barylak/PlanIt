@@ -1,5 +1,6 @@
 // components/AddTask.tsx
 import React, { useState } from 'react';
+import Image from 'next/image';
 
 interface AddTaskProps {
   onAdd: (newTask: string) => void;
@@ -28,7 +29,12 @@ const AddTask: React.FC<AddTaskProps> = ({ onAdd }) => {
   return (
     //<div>
     <div style={{ display: 'flex', gap: '8px' }}>
-      <button onClick={handleAddTask}>Add Task</button>
+      <img
+          src= "/icons/add.svg"
+          alt= "Add Task"
+          onClick= {handleAddTask}
+          style={{cursor: 'pointer', width: '20px', height: '20px'}}
+      />
       <input
         type="text"
         placeholder="Enter task"
@@ -36,6 +42,7 @@ const AddTask: React.FC<AddTaskProps> = ({ onAdd }) => {
         onChange={handleInputChange}
         onKeyPress={handleKeyPress}
       />
+      
     </div>
   );
 };

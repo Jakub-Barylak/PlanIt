@@ -6,9 +6,10 @@ interface MoveTaskProps {
 }
 
 const MoveTask: React.FC<MoveTaskProps> = ({ onMove }) => (
-  <span role="img" aria-label="Move" onClick={onMove}>
-    --
-  </span>
+  //<span role="img" aria-label="Move" onClick={onMove}>
+  //  --
+  //</span>
+  <span></span>
 );
 
 export default MoveTask;
