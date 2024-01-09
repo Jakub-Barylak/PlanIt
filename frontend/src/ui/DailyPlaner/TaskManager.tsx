@@ -1,13 +1,14 @@
 "use client";
 
 
-// components/DailyPlanner.tsx
-import React, { useState } from 'react';
+// components/TaskManager.tsx
+import React, { useState, useContext } from 'react';
 import Task from './Task';
 import AddTask from './AddTask';
 import RemoveTask from './RemoveTask';
 import MoveTask from './MoveTask';
 import Image from 'next/image';
+import { ThemeContext, ThemeContextType } from "@/providers/ThemeProvider";
 
 interface TaskManagerProps {
   initialTasks: { text: string; completed: boolean }[];
@@ -18,14 +19,14 @@ interface TaskManagerProps {
 const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
   const [tasks, setTasks] = useState(initialTasks);
   const [showTaskManager, setShowTaskManager] = useState<boolean>(true);
-  const [darkMode, setDarkMode] = useState<boolean>(false); //do sledzenia dark mode, pewnie nie potrzene??
+  
+  const themeContext = useContext(ThemeContext);
 
-
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-  };
-
-
+  if (!themeContext) {
+    return <div>Error: ThemeContext is null</div>;
+  }
+  const { theme, toggleTheme }: ThemeContextType = themeContext;
+  
   const handleToggle = (index: number) => {
     const newTasks = [...tasks];
     newTasks[index] = {
@@ -58,24 +59,16 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
   return (
     <div 
     style={{
+      minHeight: '100vh',  // Ustaw wysokość na co najmniej 100% widoku
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'flex-start',
       gap: '4px',
       padding: '4px',
-      background: darkMode ? '#333' : 'white', // Dostosuj kolor tła dla trybu ciemnego
-      color: darkMode ? 'white' : 'black', // Dostosuj kolor tekstu dla trybu ciemnego
+      background: theme === 'dark' ? '#333' : 'white',
+      color: theme === 'dark' ? 'white' : 'black',
     }}
     >
-    
-    
-    <div style={{ margin: '8px' }}>
-        <button onClick={toggleDarkMode}>
-          {darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-        </button>
-      </div>
-    
-    
        <span
         onClick={toggleTaskManager}
         style={{
@@ -84,6 +77,19 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
           marginRight: '5px',
         }}
       >
+        <div
+    style={{
+      width: '30px', // Ustaw szerokość równą wysokości dla uzyskania kwadratu
+      height: '30px', // Ustaw wysokość równą szerokości dla uzyskania kwadratu
+      padding: '5px',
+      background: theme === 'dark' ? '#333' : '#ddd', // kolor tła dla kwadratu
+      borderRadius: '4px', // zaokrąglone rogi
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      border: '2px solid #ddd',
+    }}
+  >
        
        <Image
         src="/icons/arrow-right.svg"
@@ -93,8 +99,10 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
         style={{
           transform: showTaskManager ? 'rotate(0deg)' : 'rotate(180deg)',
           transition: 'transform 0.3s ease-in-out',
+          borderRadius: '4px',
         }}
   />
+  </div>
 </span>
       {showTaskManager && (
       <>
@@ -102,8 +110,8 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
           style={{ 
             display: 'block',
             marginTop: '8px',
-            background: darkMode ? '#444' : 'white',
-            color: darkMode ? 'white' : 'black',
+            background: theme === 'dark' ? '#444' : 'white',
+            color: theme === 'dark' ? 'white' : 'black',
           }}
         >
           {tasks.map((task, index) => (
@@ -112,8 +120,8 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
               style={{ 
                 display: 'flex',
                 alignItems: 'center',
-                background: darkMode ? '#333' : 'white',
-                color: darkMode ? 'white' : 'black',
+                background: theme === 'dark' ? '#333' : 'white',
+                color: theme === 'dark' ? 'white' : 'black',
                 padding: '8px',
                 borderRadius: '4px',
                 marginBottom: '4px',
@@ -121,7 +129,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
             >
           
      
-    <Task task={task} onToggle={() => handleToggle(index)} darkMode={darkMode}/>
+    <Task task={task} onToggle={() => handleToggle(index)} darkMode={theme === 'dark'}/>
     <div
       style={{
         display: 'flex',
