@@ -28,7 +28,7 @@ const AddTask: React.FC<AddTaskProps> = ({ onAdd }) => {
 
   return (
     //<div>
-    <div style={{ display: 'flex', gap: '8px' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
       <img
           src= "/icons/add.svg"
           alt= "Add Task"

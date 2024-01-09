@@ -18,6 +18,13 @@ interface TaskManagerProps {
 const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
   const [tasks, setTasks] = useState(initialTasks);
   const [showTaskManager, setShowTaskManager] = useState<boolean>(true);
+  const [darkMode, setDarkMode] = useState<boolean>(false); //do sledzenia dark mode, pewnie nie potrzene??
+
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
+
 
   const handleToggle = (index: number) => {
     const newTasks = [...tasks];
@@ -56,10 +63,17 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
       alignItems: 'flex-start',
       gap: '4px',
       padding: '4px',
-      
+      background: darkMode ? '#333' : 'white', // Dostosuj kolor tła dla trybu ciemnego
+      color: darkMode ? 'white' : 'black', // Dostosuj kolor tekstu dla trybu ciemnego
     }}
     >
     
+    
+    <div style={{ margin: '8px' }}>
+        <button onClick={toggleDarkMode}>
+          {darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+        </button>
+      </div>
     
     
        <span
@@ -72,36 +86,68 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
       >
        
        <Image
-    src="/icons/arrow-right.svg"
-    alt=">"
-    width={10}
-    height={10}
-    style={{
-      transform: showTaskManager ? 'rotate(0deg)' : 'rotate(180deg)',
-      transition: 'transform 0.3s ease-in-out',
-    }}
+        src="/icons/arrow-right.svg"
+        alt=""
+        width={10}
+        height={10}
+        style={{
+          transform: showTaskManager ? 'rotate(0deg)' : 'rotate(180deg)',
+          transition: 'transform 0.3s ease-in-out',
+        }}
   />
-      </span>
+</span>
       {showTaskManager && (
       <>
-    <ul style={{ display: 'block', marginTop: '8px' }}>
-            {tasks.map((task, index) => (
-              <li key={index} style={{ display: 'flex', alignItems: 'center' }}>
-                <Task task={task} onToggle={() => handleToggle(index)} />
-                <div style={{ display: 'flex', alignItems: 'center', marginLeft: 'auto'  }}>
+        <ul 
+          style={{ 
+            display: 'block',
+            marginTop: '8px',
+            background: darkMode ? '#444' : 'white',
+            color: darkMode ? 'white' : 'black',
+          }}
+        >
+          {tasks.map((task, index) => (
+            <li 
+              key={index} 
+              style={{ 
+                display: 'flex',
+                alignItems: 'center',
+                background: darkMode ? '#333' : 'white',
+                color: darkMode ? 'white' : 'black',
+                padding: '8px',
+                borderRadius: '4px',
+                marginBottom: '4px',
+              }}
+            >
+          
+     
+    <Task task={task} onToggle={() => handleToggle(index)} darkMode={darkMode}/>
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        marginLeft: 'auto',
+      }}
+    >
+            
                   <RemoveTask onRemove={() => handleRemoveTask(index)} />
                   <MoveTask onMove={() => handleMoveTask(index)} />
-                  </div>
+                </div>
               </li>
             ))}
           </ul>
-          <div style={{ display: 'flex' }}>
+          <div style=
+                {{ 
+                  display: 'flex' 
+                }}
+            >
             <AddTask onAdd={handleAddTask} />
           </div>
         </>
       )}
     </div>
-  );
+
+   );
 };
 
 
