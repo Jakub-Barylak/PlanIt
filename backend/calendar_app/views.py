@@ -14,15 +14,16 @@ from rest_framework_simplejwt.views import TokenRefreshView
 from datetime import datetime, timedelta
 from dateutil.parser import parse
 from django.utils.dateparse import parse_datetime, parse_date
+from rest_framework.exceptions import NotFound
 from .models import (
     User, Event, Calendar, SharedCalendarUser,
-    SharedEventUser
+    SharedEventUser, TodoList
 )
 from .serializers import (
     UserSerializer, EventSerializer, CalendarSerializer,
     SharedCalendarUserSerializer,
     RegistrationSerializer, LoginSerializer,
-    UserCalendarsSerializer
+    UserCalendarsSerializer, TodoListSerializer
 )
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -260,3 +261,38 @@ class UserInformationView(APIView):
         user = request.user
         user_data = UserSerializer(user).data
         return Response(user_data, status=status.HTTP_200_OK)
+    
+class TodoListViewSet(viewsets.ModelViewSet):
+    queryset = TodoList.objects.all()
+    serializer_class = TodoListSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        # Method for creating a new event
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def get_queryset(self):
+        user = self.request.user
+        return TodoList.objects.filter(user=user)
+    
+    def destroy(self, request, *args, **pk):
+        try:
+            todo_item = self.get_object()
+            # Additional custom checks can be placed here (if needed)
+
+            # Ensure the todo item belongs to the user
+            if todo_item.user != request.user:
+                return Response({"error": "You do not have permission to delete this item."},
+                                status=status.HTTP_403_FORBIDDEN)
+
+            todo_item.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except NotFound:
+            # You can customize the NotFound error if you want
+            return Response({"error": "Todo item not found."},
+                            status=status.HTTP_404_NOT_FOUND)
