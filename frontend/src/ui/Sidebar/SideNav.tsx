@@ -40,7 +40,7 @@ export const SideNav: FC<Props> = ({
 		<>
 			{/* MAIN DIV */}
 			<div
-				className={`relative z-30 grid max-h-screen grid-cols-1 grid-rows-[max-content_max-content_max-content_max-content_1fr_max-content] rounded-r-lg border-r-2 bg-inherit p-2 text-black transition duration-200 ease-in-out dark:border-darkMode-border dark:bg-darkMode-background dark:text-darkMode-text
+				className={`bg-lightMode-background text-lightMode-text relative z-30 grid max-h-screen grid-cols-1 grid-rows-[max-content_max-content_max-content_max-content_1fr_max-content] rounded-r-lg border-r-2 p-2 transition duration-200 ease-in-out dark:border-darkMode-border dark:bg-darkMode-background dark:text-darkMode-text
 					${showSidebar ? "min-w-[15vw]" : "max-w-[calc(50px+1rem)]"}
                     `}
 			>
@@ -68,7 +68,7 @@ export const SideNav: FC<Props> = ({
 						}`}
 					>
 						{/* DATA FROM AUTH PROVIDER */}
-						<p className="dark:text-dakrMode-text text-xs text-gray-400">
+						<p className="text-lightMode-text text-xs dark:text-darkMode-text">
 							{user?.email}
 						</p>
 						<p className="text-sm font-semibold text-gray-800 dark:text-white ">
@@ -77,7 +77,7 @@ export const SideNav: FC<Props> = ({
 					</div>
 				</div>
 
-				<hr className=" border-t-2 dark:border-darkMode-hr" />
+				<hr className=" border-lightMode-hr border-t-2 dark:border-darkMode-hr" />
 				{/* DIV BODY -> INFO, CALENDARS, ABOUT US */}
 				<div className="grid max-w-full grid-cols-1 gap-3 py-4">
 					{/* INFO */}
@@ -92,7 +92,7 @@ export const SideNav: FC<Props> = ({
 						}}
 					>
 						<div
-							className={`inline-flex items-center gap-2 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-darkMode-hover-bg dark:hover:text-white ${
+							className={`hover:bg-lightMode-hover-bg inline-flex items-center gap-2 rounded-lg p-2 dark:hover:bg-darkMode-hover-bg dark:hover:text-white ${
 								showSidebar
 									? "w-full justify-start"
 									: "h-[50px] w-[50px] justify-center"
@@ -114,8 +114,8 @@ export const SideNav: FC<Props> = ({
 										<Disclosure.Button
 											className={`${
 												open
-													? "bg-gray-100 dark:bg-darkMode-hover-bg dark:text-white"
-													: "hover:bg-gray-100 dark:hover:bg-darkMode-hover-bg dark:hover:text-white"
+													? "bg-lightMode-hover-bg dark:bg-darkMode-hover-bg dark:text-white"
+													: "hover:bg-lightMode-hover-bg dark:hover:bg-darkMode-hover-bg dark:hover:text-white"
 											} z-10 flex w-full rounded-lg p-2`}
 										>
 											<div className="inline-flex w-full items-center justify-between">
@@ -180,8 +180,8 @@ export const SideNav: FC<Props> = ({
 											<Popover.Button
 												className={`${
 													open
-														? "bg-gray-100 dark:bg-darkMode-hover-bg dark:text-white"
-														: "hover:bg-gray-100 dark:hover:bg-darkMode-hover-bg dark:hover:text-white"
+														? "bg-lightMode-hover-bg dark:bg-darkMode-hover-bg dark:text-white"
+														: "hover:bg-lightMode-hover-bg dark:hover:bg-darkMode-hover-bg dark:hover:text-white"
 												} z-10 flex h-[50px] w-[50px] items-center justify-center rounded-lg p-2`}
 											>
 												{/* <Image
@@ -203,7 +203,7 @@ export const SideNav: FC<Props> = ({
 											leaveFrom="transform scale-100 opacity-100"
 											leaveTo="transform scale-95 opacity-0"
 										>
-											<Popover.Panel className="absolute -top-9 left-[calc(100%+0.25rem)] z-10 grid grid-cols-[max-content] rounded-lg border-2 bg-white p-2 shadow-md dark:border-darkMode-light-border dark:bg-darkMode-background dark:text-white">
+											<Popover.Panel className="bg-lightMode-background absolute -top-9 left-[calc(100%+0.25rem)] z-10 grid grid-cols-[max-content] rounded-lg border-2 p-2 shadow-md dark:border-darkMode-light-border dark:bg-darkMode-background dark:text-white">
 												<SidebarCalendarView calendars={calendars} />
 											</Popover.Panel>
 										</Transition>
@@ -224,7 +224,7 @@ export const SideNav: FC<Props> = ({
 						}}
 					>
 						<div
-							className={`inline-flex items-center gap-2 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-darkMode-hover-bg dark:hover:text-white ${
+							className={`hover:bg-lightMode-hover-bg inline-flex items-center gap-2 rounded-lg p-2 dark:hover:bg-darkMode-hover-bg dark:hover:text-white ${
 								showSidebar
 									? "w-full justify-start"
 									: "h-[50px] w-[50px] justify-center"
@@ -237,7 +237,7 @@ export const SideNav: FC<Props> = ({
 					</Tooltip>
 				</div>
 
-				<hr className="border-t-2 dark:border-darkMode-hr" />
+				<hr className="border-lightMode-hr border-t-2 dark:border-darkMode-hr" />
 
 				<div className="pt-4">
 					{/* SETTINGS */}
@@ -252,7 +252,7 @@ export const SideNav: FC<Props> = ({
 						}}
 					>
 						<div
-							className={`inline-flex items-center gap-2 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-darkMode-hover-bg dark:hover:text-white ${
+							className={`hover:bg-lightMode-hover-bg inline-flex items-center gap-2 rounded-lg p-2 dark:hover:bg-darkMode-hover-bg dark:hover:text-white ${
 								showSidebar
 									? "w-full justify-start"
 									: "h-[50px] w-[50px] justify-center"
@@ -278,7 +278,7 @@ export const SideNav: FC<Props> = ({
 						}}
 					>
 						<div
-							className={`inline-flex gap-2 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-darkMode-hover-bg dark:hover:text-white ${
+							className={`hover:bg-lightMode-hover-bg inline-flex items-center gap-2 rounded-lg p-2 dark:hover:bg-darkMode-hover-bg dark:hover:text-white ${
 								showSidebar
 									? "w-full justify-start"
 									: "h-[50px] w-[50px] justify-center"
@@ -301,18 +301,18 @@ export const SideNav: FC<Props> = ({
 						}}
 					>
 						<div
-							className={`inline-flex gap-2 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-darkMode-hover-bg dark:hover:text-white ${
+							className={`hover:bg-lightMode-hover-bg inline-flex items-center gap-2 rounded-lg p-2 dark:hover:bg-darkMode-hover-bg dark:hover:text-white ${
 								showSidebar
 									? "w-full justify-start"
 									: "h-[50px] w-[50px] justify-center"
 							}`}
 						>
 							{/* <Image alt="" src="/icons/Log-out.svg" width={20} height={20} /> */}
-							<TbLogout className="h-[20px] w-[20px] text-[#5441CB]" />
+							<TbLogout className="text-logout h-[20px] w-[20px]" />
 							<span className={showSidebar ? "" : "hidden"}>Logout</span>
 						</div>
 					</Tooltip>
-					<div className="flex min-h-[5vh] justify-center rounded-lg bg-gray-400 align-middle dark:bg-darkMode-hr">
+					<div className="bg-lightMode-logo-bg flex min-h-[5vh] justify-center rounded-lg align-middle dark:bg-darkMode-hr">
 						<Image
 							alt="PlanIt"
 							src={theme == "light" ? "/black-logo.svg" : "/white-logo.svg"}
