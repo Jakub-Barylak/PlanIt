@@ -30,7 +30,7 @@ const AddTask: React.FC<AddTaskProps> = ({ onAdd }) => {
     //<div>
     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
       <img
-          src= "/icons/add.svg"
+          src= "/icons/plus-todo.svg"
           alt= "Add Task"
           onClick= {handleAddTask}
           style={{cursor: 'pointer', width: '20px', height: '20px'}}

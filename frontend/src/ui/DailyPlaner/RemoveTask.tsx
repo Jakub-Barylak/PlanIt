@@ -24,7 +24,7 @@ const RemoveTask: React.FC<RemoveTaskProps> = ({ onRemove }) => (
     }}
   >
     <Image
-      src="/icons/bin.svg" // Sprawdź, czy ścieżka do obrazka jest poprawna
+      src="/icons/bin-todo.svg" // Sprawdź, czy ścieżka do obrazka jest poprawna
       alt="Delete"
       width={20} // Dostosuj szerokość obrazka
       height={20} // Dostosuj wysokość obrazka

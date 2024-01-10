@@ -25,7 +25,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
   if (!themeContext) {
     return <div>Error: ThemeContext is null</div>;
   }
-  const { theme, toggleTheme }: ThemeContextType = themeContext;
+  const { theme, setTheme}: ThemeContextType = themeContext;
   
   const handleToggle = (index: number) => {
     const newTasks = [...tasks];
@@ -75,6 +75,9 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
           cursor: 'pointer',
           display: 'inline-block',
           marginRight: '5px',
+          marginTop: '-40px',
+          marginLeft: '-15px',
+          zIndex: 1, 
         }}
       >
         <div
@@ -112,6 +115,9 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
             marginTop: '8px',
             background: theme === 'dark' ? '#444' : 'white',
             color: theme === 'dark' ? 'white' : 'black',
+            maxWidth: showTaskManager ? 'max-content' : '100px', // Dostosuj szerokość zwiniętego paska
+            overflow: 'hidden', // Ukryj treść, która nie mieści się w określonej szerokości
+            transition: 'width 0.3s ease-in-out', 
           }}
         >
           {tasks.map((task, index) => (
@@ -125,6 +131,8 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
                 padding: '8px',
                 borderRadius: '4px',
                 marginBottom: '4px',
+                width: '100%', 
+                boxSizing: 'border-box',
               }}
             >
           
