@@ -6,7 +6,8 @@ from calendar_app.views import (
     SharedCalendarUserViewSet, 
     RegistrationView, LoginView, UserCalendarsView,
     UserCalendarsEventsView, CustomTokenRefreshView,
-    DeleteCalendarView, UserInformationView
+    DeleteCalendarView, UserInformationView,
+    TodoListViewSet
 )
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -20,7 +21,7 @@ router.register(r'users', UserViewSet)
 router.register(r'calendars', CalendarViewSet, basename='calendars')
 router.register(r'shared_calendars', SharedCalendarUserViewSet, basename='shared_calendars')
 router.register(r'events', EventViewSet, basename='events')  # Registering EventViewSet
-
+router.register(r'todo_lists', TodoListViewSet, basename='todo_lists')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
