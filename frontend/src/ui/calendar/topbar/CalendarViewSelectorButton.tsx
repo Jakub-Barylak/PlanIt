@@ -6,16 +6,37 @@ import {
 	CalendarViewContext,
 	CalendarViewContextType,
 } from "@/app/calendar/page";
+import { DateTime } from "luxon";
+import { View } from "@/lib/types";
 
-type CalendarViewSelectorButtonProps = { viewName: string; children: string };
+type CalendarViewSelectorButtonProps = {
+	viewName: View;
+	children: string;
+};
 
 export default function CalendarViewSelectorButton(
 	props: CalendarViewSelectorButtonProps,
 ) {
+	const handleClick = () => {
+		context.setView(props.viewName);
+
+		switch (props.viewName) {
+			case "day":
+				context.setNumberOfDays(1);
+				break;
+			case "3day":
+				context.setNumberOfDays(3);
+				break;
+			case "week":
+				context.setNumberOfDays(7);
+				break;
+		}
+	};
+
 	const context = useContext(CalendarViewContext) as CalendarViewContextType;
 	return (
 		<div
-			onClick={() => context.setView(props.viewName)}
+			onClick={handleClick}
 			className={clsx({
 				"mx-2 cursor-pointer rounded-2xl px-4": true,
 				"bg-indigo-300 px-4": context.view === props.viewName,

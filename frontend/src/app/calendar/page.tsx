@@ -4,14 +4,16 @@ import TopBar from "@/ui/calendar/TopBar";
 import CalendarView from "@/ui/calendar/Calendar";
 import { createContext, useState, useEffect, useContext } from "react";
 import { DateTime } from "luxon";
-import { Calendar } from "@/lib/types";
+import { Calendar, View } from "@/lib/types";
 import { AuthContext, AuthContextType } from "@/providers/AuthProvider";
 
 export type CalendarViewContextType = {
-	view: string;
-	setView: (view: string) => void;
+	view: View;
+	setView: (view: View) => void;
 	startDate: DateTime;
 	setStartDate: (date: DateTime) => void;
+	numberOfDays: number;
+	setNumberOfDays: (days: number) => void;
 	calendars: Calendar[];
 };
 
@@ -19,9 +21,9 @@ export const CalendarViewContext =
 	createContext<CalendarViewContextType | null>(null);
 
 export default function Calendar() {
-	const [activeView, setActiveView] = useState("week");
-	const weekStart = DateTime.local().startOf("week");
-	const [startDate, setStartDate] = useState(DateTime.now());
+	const [activeView, setActiveView] = useState<View>("week");
+	const [startDate, setStartDate] = useState(DateTime.now().startOf("week"));
+	const [numberOfDays, setNumberOfDays] = useState(7);
 	const [calendars, setCalendars] = useState<Calendar[]>([]);
 
 	const { axios } = useContext(AuthContext) as AuthContextType;
@@ -47,6 +49,8 @@ export default function Calendar() {
 				setView: setActiveView,
 				startDate: startDate,
 				setStartDate: setStartDate,
+				numberOfDays: numberOfDays,
+				setNumberOfDays: setNumberOfDays,
 				calendars,
 			}}
 		>

@@ -31,3 +31,5 @@ export type Event = {
 	template: number | null;
 	categories: [];
 };
+
+export type View = "day" | "3day" | "week" | "month" | "year";
