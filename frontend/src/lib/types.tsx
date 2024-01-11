@@ -32,4 +32,9 @@ export type Event = {
 	categories: [];
 };
 
+export type EventColor = {
+	event: Event;
+	color?: string;
+};
+
 export type View = "day" | "3day" | "week" | "month" | "year";

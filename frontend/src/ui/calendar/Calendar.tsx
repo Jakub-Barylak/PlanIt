@@ -6,7 +6,7 @@ import {
 	CalendarViewContextType,
 } from "@/app/calendar/page";
 import DaysView from "./views/DaysView";
-import MonthView from "./views/MonthView";
+import MonthView from "./views/monthView/MonthView";
 
 export default function Calendar() {
 	const context = useContext(CalendarViewContext) as CalendarViewContextType;
@@ -36,10 +36,6 @@ export default function Calendar() {
 			</div>
 		);
 	} else if (context.view === "month") {
-		return (
-			<div className="m-10 flex-grow rounded-2xl bg-slate-300">
-				<MonthView />
-			</div>
-		);
+		return <MonthView />;
 	}
 }
