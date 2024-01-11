@@ -3,8 +3,6 @@
 
 // components/TaskManager.tsx
 import React, { useState, useContext } from 'react';
-import { useDrop, DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 import Task from './Task';
 import AddTask from './AddTask';
 import RemoveTask from './RemoveTask';
@@ -77,6 +75,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
   };
 
   return (
+    
     <div
       style={{
         minHeight: '100vh',
@@ -128,7 +127,12 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
   </div>
 </span>
       {showTaskManager && (
-      <>
+      <div
+      style={{
+        overflowY: 'auto', // Dodaj obszar przewijania tylko dla listy zadań
+        maxHeight: 'calc(100vh - 40px)', // Ustaw maksymalną wysokość, aby zmieścić się na stronie
+      }}
+    >
         <ul 
           style={{ 
             display: 'block',
@@ -150,6 +154,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
               style={{ 
                 display: 'flex',
                 alignItems: 'center',
+                justifyContent: 'space-between',
                 background: theme === 'dark' ? '#333' : 'white',
                 color: theme === 'dark' ? 'white' : 'black',
                 padding: '8px',
@@ -159,18 +164,15 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
                 boxSizing: 'border-box',
               }}
             >
-          
-          <MoveTask onMove={(dragIndex, hoverIndex) => handleMoveTask(dragIndex, hoverIndex)} index={index} />
-    <Task task={task} onToggle={() => handleToggle(index)} darkMode={theme === 'dark'}/>
-    <div
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        marginLeft: 'auto',
-      }}
-    >
-            
-                  <RemoveTask onRemove={() => handleRemoveTask(index)} />
+
+<Task task={task} onToggle={() => handleToggle(index)} darkMode={theme === 'dark'} />
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div style={{ marginRight: '120px' }}>
+        <RemoveTask onRemove={() => handleRemoveTask(index)} />
+      </div>
+      <div>
+        <MoveTask onMove={(dragIndex, hoverIndex) => handleMoveTask(dragIndex, hoverIndex)} index={index} />
+      </div>
                 </div>
               </li>
             ))}
@@ -182,7 +184,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
             >
             <AddTask onAdd={handleAddTask} />
           </div>
-        </>
+          </div>
       )}
     </div>
    );

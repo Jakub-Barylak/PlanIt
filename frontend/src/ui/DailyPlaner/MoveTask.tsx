@@ -1,6 +1,6 @@
 // MoveTask.tsx
 import React from 'react';
-import { useDrag } from 'react-dnd';
+import Image from 'next/image';
 
 
 interface MoveTaskProps {
@@ -15,15 +15,22 @@ const MoveTask: React.FC<MoveTaskProps> = ({ onMove, index }) => {
 
 
   return (
-    <span
+    <div
     draggable
     onDragStart={handleDragStart}
-    style={{ cursor: 'grab' }}
-    role="img"
-    aria-label="Move"
+    style={{
+      cursor: 'grab',
+      width: '18px', 
+      height: '18px', 
+    }}
   >
-    &#x2630;
-  </span>
+    <Image
+        src="/icons/drag-todo.svg" 
+        alt="Move"
+        width={15} 
+        height={10} 
+      />
+  </div>
   );
   };
 
