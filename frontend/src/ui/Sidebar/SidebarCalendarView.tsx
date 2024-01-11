@@ -41,23 +41,25 @@ export default function CalendarView({ calendars }: { calendars: Calendar[] }) {
 				};
 
 				return (
-					<label
-						key={index}
-						className="flex h-8 items-center justify-between rounded-lg px-2 hover:bg-gray-100 dark:hover:bg-[#282A32]"
-					>
-						{/* grid grid-cols-[max-content_auto] */}
-						<span>{calendar.name}</span>
-						<input
-							type="checkbox"
-							className="ml-2 h-4 w-4 bg-gray-200 text-gray-600 accent-slate-600"
-							checked={isChecked}
-							onChange={(e) => changeChecked(calendar.name, e.target.checked)}
-						/>
-					</label>
+					<>
+						<label
+							key={index}
+							className="grid h-8 grid-cols-[minmax(0,1fr)_min-content] items-center justify-between gap-2 rounded-lg px-2 hover:bg-gray-100 dark:hover:bg-[#282A32]"
+						>
+							{/* grid grid-cols-[max-content_auto] */}
+							<span className="truncate">{calendar.name}</span>
+							<input
+								type="checkbox"
+								className="ml-2 h-4 w-4 bg-gray-200 text-gray-600 accent-slate-600"
+								checked={isChecked}
+								onChange={(e) => changeChecked(calendar.name, e.target.checked)}
+							/>
+						</label>
+					</>
 				);
 			})}
 			<form
-				className="flex items-center justify-between rounded-lg p-2"
+				className="grid grid-cols-[minmax(0,1fr)_min-content] items-center gap-2 rounded-lg p-2"
 				// onSubmit={addCalendar}
 			>
 				<input

@@ -40,8 +40,8 @@ export const SideNav: FC<Props> = ({
 		<>
 			{/* MAIN DIV */}
 			<div
-				className={`bg-lightMode-background text-lightMode-secondary-text dark:text-darkMode-secondary-text relative z-30 grid max-h-screen grid-cols-1 grid-rows-[max-content_max-content_max-content_max-content_1fr_max-content] rounded-r-lg border-r-2 p-2 transition duration-200 ease-in-out dark:border-darkMode-border dark:bg-darkMode-background
-					${showSidebar ? "min-w-[15vw]" : "max-w-[calc(50px+1rem)]"}
+				className={`bg-lightMode-background text-lightMode-secondary-text dark:text-darkMode-secondary-text relative z-30 grid max-h-screen grid-cols-1 grid-rows-[min-content_min-content_min-content_min-content_1fr_min-content] rounded-r-lg border-r-2 p-2 transition duration-200 ease-in-out dark:border-darkMode-border dark:bg-darkMode-background
+					${showSidebar ? "w-[15vw]" : "max-w-[calc(50px+1rem)]"}
                     `}
 			>
 				{/* DIV HEADER -> IMAGE, EMAIL, NAME */}
@@ -155,7 +155,7 @@ export const SideNav: FC<Props> = ({
 											leaveFrom="transform scale-100 opacity-100"
 											leaveTo="transform scale-95 opacity-0"
 										>
-											<Disclosure.Panel className="ml-[calc(20px+0.5rem)] mt-1 grid grid-cols-1 gap-1">
+											<Disclosure.Panel className="ml-[calc(20px+0.5rem)] mt-1 flex w-auto flex-col">
 												{/* CALENDARS HERE */}
 												<SidebarCalendarView calendars={calendars} />
 											</Disclosure.Panel>
