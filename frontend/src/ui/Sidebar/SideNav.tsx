@@ -309,7 +309,9 @@ export const SideNav: FC<Props> = ({
 						>
 							{/* <Image alt="" src="/icons/Log-out.svg" width={20} height={20} /> */}
 							<TbLogout className="text-logout h-[20px] w-[20px]" />
-							<span className={showSidebar ? "" : "hidden"}>Logout</span>
+							<span className={`${showSidebar ? "" : "hidden"} text-logout`}>
+								Logout
+							</span>
 						</div>
 					</Tooltip>
 					<div className="bg-lightMode-logo-bg flex min-h-[5vh] justify-center rounded-lg align-middle dark:bg-darkMode-hr">
