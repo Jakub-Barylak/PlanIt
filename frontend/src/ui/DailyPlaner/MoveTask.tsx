@@ -1,15 +1,30 @@
 // MoveTask.tsx
 import React from 'react';
+import { useDrag } from 'react-dnd';
+
 
 interface MoveTaskProps {
-  onMove: () => void;
+  onMove: (dragIndex: number, hoverIndex: number) => void;
+  index: number;
 }
 
-const MoveTask: React.FC<MoveTaskProps> = ({ onMove }) => (
-  //<span role="img" aria-label="Move" onClick={onMove}>
-  //  --
-  //</span>
-  <span></span>
-);
+const MoveTask: React.FC<MoveTaskProps> = ({ onMove, index }) => {
+  const handleDragStart = (e: React.DragEvent<HTMLSpanElement>) => {
+    e.dataTransfer.setData('text/plain', index.toString());
+  };
+
+
+  return (
+    <span
+    draggable
+    onDragStart={handleDragStart}
+    style={{ cursor: 'grab' }}
+    role="img"
+    aria-label="Move"
+  >
+    &#x2630;
+  </span>
+  );
+  };
 
 export default MoveTask;

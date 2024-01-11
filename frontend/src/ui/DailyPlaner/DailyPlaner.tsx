@@ -3,6 +3,7 @@ import React, { useState, useContext } from 'react';
 import TaskManager from './TaskManager';
 import { ThemeContext, ThemeContextType } from "@/providers/ThemeProvider";
 
+
 const DailyPlaner: React.FC = () => {
   const initialTasks = [
     { text: 'Task 1', completed: false },

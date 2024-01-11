@@ -3,12 +3,15 @@
 
 // components/TaskManager.tsx
 import React, { useState, useContext } from 'react';
+import { useDrop, DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import Task from './Task';
 import AddTask from './AddTask';
 import RemoveTask from './RemoveTask';
 import MoveTask from './MoveTask';
 import Image from 'next/image';
 import { ThemeContext, ThemeContextType } from "@/providers/ThemeProvider";
+
 
 interface TaskManagerProps {
   initialTasks: { text: string; completed: boolean }[];
@@ -26,6 +29,8 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
     return <div>Error: ThemeContext is null</div>;
   }
   const { theme, setTheme}: ThemeContextType = themeContext;
+
+
   
   const handleToggle = (index: number) => {
     const newTasks = [...tasks];
@@ -47,9 +52,24 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
     setTasks(newTasks);
   };
 
-  const handleMoveTask = (index: number) => {
-    // Implementuj logikę przemieszczania zadania
-    console.log(`Move task at index ${index}`);
+  const handleMoveTask = (dragIndex: number, hoverIndex: number) => {
+    const draggedTask = tasks[dragIndex];
+    const newTasks = [...tasks];
+    newTasks.splice(dragIndex, 1);
+    newTasks.splice(hoverIndex, 0, draggedTask);
+    setTasks(newTasks);
+  };
+
+  const handleDragStart = (index: number, event: React.DragEvent<HTMLLIElement>) => {
+    event.dataTransfer.setData('text/plain', String(index));
+  };
+
+  const handleDrop = (index: number, event: React.DragEvent<HTMLLIElement>) => {
+    const draggedIndex = Number(event.dataTransfer.getData('text/plain'));
+    const newTasks = [...tasks];
+    const [removedTask] = newTasks.splice(draggedIndex, 1);
+    newTasks.splice(index, 0, removedTask);
+    setTasks(newTasks);
   };
 
   const toggleTaskManager = () => {
@@ -57,17 +77,17 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
   };
 
   return (
-    <div 
-    style={{
-      minHeight: '100vh',  // Ustaw wysokość na co najmniej 100% widoku
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'flex-start',
-      gap: '4px',
-      padding: '4px',
-      background: theme === 'dark' ? '#333' : 'white',
-      color: theme === 'dark' ? 'white' : 'black',
-    }}
+    <div
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        gap: '4px',
+        padding: '4px',
+        background: theme === 'dark' ? '#333' : 'white',
+        color: theme === 'dark' ? 'white' : 'black',
+      }}
     >
        <span
         onClick={toggleTaskManager}
@@ -122,7 +142,11 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
         >
           {tasks.map((task, index) => (
             <li 
-              key={index} 
+              key={index}
+              onDragStart={(event) => handleDragStart(index, event)}
+              onDragOver={(event) => event.preventDefault()}
+              onDrop={(event) => handleDrop(index, event)}
+              draggable 
               style={{ 
                 display: 'flex',
                 alignItems: 'center',
@@ -136,7 +160,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
               }}
             >
           
-     
+          <MoveTask onMove={(dragIndex, hoverIndex) => handleMoveTask(dragIndex, hoverIndex)} index={index} />
     <Task task={task} onToggle={() => handleToggle(index)} darkMode={theme === 'dark'}/>
     <div
       style={{
@@ -147,7 +171,6 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
     >
             
                   <RemoveTask onRemove={() => handleRemoveTask(index)} />
-                  <MoveTask onMove={() => handleMoveTask(index)} />
                 </div>
               </li>
             ))}
@@ -162,7 +185,6 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
         </>
       )}
     </div>
-
    );
 };
 
