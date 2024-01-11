@@ -9,6 +9,7 @@ interface Props {
 	showCheckbox?: boolean;
 	showStrengthBar?: boolean;
 	reference?: any;
+	error?: boolean;
 }
 
 export const PasswordField: FC<Props> = ({
@@ -18,6 +19,7 @@ export const PasswordField: FC<Props> = ({
 	showCheckbox = true,
 	showStrengthBar = false,
 	reference = null,
+	error = false,
 }): JSX.Element => {
 	const [visible, setVisible] = useState(false);
 	const [active, setActive] = useState(false);
@@ -31,7 +33,7 @@ export const PasswordField: FC<Props> = ({
 					value={password}
 					type={visible ? "text" : "password"}
 					name="password"
-					className="     text-md block w-full rounded-lg border-2 border-gray-300 bg-white px-5 py-2 placeholder-gray-600 shadow-md 
+					className={`text-md block w-full rounded-lg border-2 border-gray-300 bg-white px-5 py-2 placeholder-gray-600 shadow-md 
                                 focus:border-gray-600 
                                 focus:bg-white 
                                 focus:placeholder-gray-500  
@@ -40,7 +42,8 @@ export const PasswordField: FC<Props> = ({
                                 dark:focus:border-gray-500 
                                 dark:focus:bg-gray-700 
                                 dark:focus:placeholder-gray-400 
-                                dark:focus:outline-none"
+                                dark:focus:outline-none
+                                ${error ? "border-red-500" : ""}`}
 					onChange={(e) => setPassword(e.target.value)}
 					onFocus={() => setActive(true)}
 					onBlur={() => setActive(false)}

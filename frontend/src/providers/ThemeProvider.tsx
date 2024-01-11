@@ -20,13 +20,18 @@ export default function ThemeProvider({
 }: {
 	children: React.ReactNode;
 }) {
-	const isBrowserDefaultDark = () =>
-		window.matchMedia("(prefers-color-scheme: dark)").matches;
+	const isBrowserDefaultDark = () => {
+		if (typeof window !== "undefined")
+			return window.matchMedia("(prefers-color-scheme: dark)").matches;
+		return false;
+	};
 
 	const getDefaultTheme = () => {
 		if (hasCookie("theme")) {
+			// console.log("has cookie");
 			return getCookie("theme");
 		} else {
+			// console.log("no cookie");
 			return isBrowserDefaultDark() ? "dark" : "light";
 		}
 	};

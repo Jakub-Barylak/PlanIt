@@ -3,6 +3,8 @@ import { useState, useContext } from "react";
 import { NextPage } from "next";
 import { PasswordField } from "@/ui/Login/PasswordField";
 import { InputField } from "@/ui/Login/InputField";
+import { bouncy } from "ldrs";
+import { ThemeContext, ThemeContextType } from "@/providers/ThemeProvider";
 import Link from "next/link";
 import axios from "axios";
 
@@ -14,14 +16,21 @@ import { useRouter } from "next/navigation";
 const LoginPane: NextPage = () => {
 	const [username, setUsername] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
+	const [error, setError] = useState<boolean>(false);
+	const [loading, setLoading] = useState<boolean>(false);
+
+	const { theme, setTheme } = useContext(ThemeContext) as ThemeContextType;
 
 	const { updateTokens, setUserProfile } = useContext(
 		AuthContext,
 	) as AuthContextType;
 	const router = useRouter();
 
+	bouncy.register();
+
 	const submitLogin = async (e: React.FormEvent) => {
 		e.preventDefault();
+		setLoading(true);
 		axios
 			.post("http://" + "localhost:8000" + "/login/", {
 				username: username,
@@ -42,10 +51,14 @@ const LoginPane: NextPage = () => {
 					accessToken: data.access,
 					refreshToken: data.refresh,
 				});
+				setLoading(false);
 				router.push("/calendar");
 			})
-			.catch((error) => {
-				alert(error);
+			.catch((AxiosError) => {
+				console.log(AxiosError.response.status);
+				AxiosError.response.status == 400 ? setError(true) : setError(false);
+				// alert(AxiosError);
+				setLoading(false);
 			});
 	};
 
@@ -62,18 +75,27 @@ const LoginPane: NextPage = () => {
 			>
 				<h1 className="text-center text-3xl font-bold">Login</h1>
 				<form className="md-8" method="POST" onSubmit={submitLogin}>
+					<p
+						className={`mt-2 text-center font-bold text-red-500 drop-shadow-sm ${
+							error ? "block" : "hidden"
+						}`}
+					>
+						Invalid username or password!
+					</p>
 					<div className="mx-auto max-w-lg">
 						<InputField
 							value={username}
 							setValue={setUsername}
 							label="Username"
 							elementName="username"
+							error={error}
 						/>
 
 						<PasswordField
 							password={password}
 							setPassword={setPassword}
 							label="Password"
+							error={error}
 						/>
 
 						<div className="flex justify-between">
@@ -100,16 +122,25 @@ const LoginPane: NextPage = () => {
 								</a>
 							</label>
 						</div>
-						<input
-							type="submit"
-							className="mt-3 block w-full rounded-lg bg-gray-800 px-6 py-3 text-lg font-semibold
-                                text-white shadow-xl 
+						<div
+							className="mt-3 block w-full rounded-lg bg-gray-800 px-6 py-3 text-center text-lg
+                                font-semibold text-white shadow-xl
                                 hover:bg-black hover:text-white
                                 dark:bg-blue-500
                                 dark:hover:bg-secondary"
-							value="LOGIN"
-							onSubmit={submitLogin}
-						/>
+							onClick={loading ? () => {} : submitLogin}
+						>
+							{loading ? (
+								<div className="flex justify-center">
+									<l-bouncy
+										speed={0.5}
+										color={theme == "light" ? "white" : "black"}
+									></l-bouncy>
+								</div>
+							) : (
+								<span>LOGIN</span>
+							)}
+						</div>
 						<Link
 							className="     mt-2 block w-full rounded-xl border-4 border-gray-800 px-6 py-3 text-center text-lg font-semibold text-gray-800 shadow-xl
                                                 hover:border-black
@@ -119,6 +150,11 @@ const LoginPane: NextPage = () => {
 						>
 							REGISTER
 						</Link>
+						<input
+							type="submit"
+							onClick={loading ? () => {} : submitLogin}
+							className="hidden"
+						/>
 					</div>
 				</form>
 			</div>

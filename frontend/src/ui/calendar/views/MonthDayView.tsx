@@ -31,7 +31,7 @@ export default function MonthView(props: MonthDayViewProps) {
 							);
 						})
 						.map((event) => {
-							console.log(event);
+							// console.log(event);
 							return (
 								<div
 								// className="flex place-content-between text-xs"
