@@ -40,7 +40,7 @@ export const SideNav: FC<Props> = ({
 		<>
 			{/* MAIN DIV */}
 			<div
-				className={`bg-lightMode-background text-lightMode-text relative z-30 grid max-h-screen grid-cols-1 grid-rows-[max-content_max-content_max-content_max-content_1fr_max-content] rounded-r-lg border-r-2 p-2 transition duration-200 ease-in-out dark:border-darkMode-border dark:bg-darkMode-background dark:text-darkMode-text
+				className={`bg-lightMode-background text-lightMode-secondary-text dark:text-darkMode-secondary-text relative z-30 grid max-h-screen grid-cols-1 grid-rows-[max-content_max-content_max-content_max-content_1fr_max-content] rounded-r-lg border-r-2 p-2 transition duration-200 ease-in-out dark:border-darkMode-border dark:bg-darkMode-background
 					${showSidebar ? "min-w-[15vw]" : "max-w-[calc(50px+1rem)]"}
                     `}
 			>
@@ -68,7 +68,7 @@ export const SideNav: FC<Props> = ({
 						}`}
 					>
 						{/* DATA FROM AUTH PROVIDER */}
-						<p className="text-lightMode-text text-xs dark:text-darkMode-text">
+						<p className="text-lightMode-secondary-text dark:text-darkMode-secondary-text text-xs">
 							{user?.email}
 						</p>
 						<p className="text-sm font-semibold text-gray-800 dark:text-white ">
@@ -326,7 +326,7 @@ export const SideNav: FC<Props> = ({
 
 				{/* ARROW */}
 				<div
-					className=" absolute -right-4 top-[calc(25px-0.5rem)] z-10 flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border-2 bg-gray-200 p-1 shadow-md dark:border-darkMode-text dark:bg-darkMode-background"
+					className=" dark:border-darkMode-secondary-text absolute -right-4 top-[calc(25px-0.5rem)] z-10 flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border-2 bg-gray-200 p-1 shadow-md dark:bg-darkMode-background"
 					onClick={() => setShowSidebar(!showSidebar)}
 				>
 					{/* <Image

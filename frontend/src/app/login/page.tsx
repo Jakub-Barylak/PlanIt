@@ -1,9 +1,8 @@
 "use client";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { NextPage } from "next";
 import { PasswordField } from "@/ui/Login/PasswordField";
 import { InputField } from "@/ui/Login/InputField";
-import { bouncy } from "ldrs";
 import { ThemeContext, ThemeContextType } from "@/providers/ThemeProvider";
 import Link from "next/link";
 import axios from "axios";
@@ -14,22 +13,30 @@ import type { LoginResponse } from "@/lib/types";
 import { useRouter } from "next/navigation";
 
 const LoginPane: NextPage = () => {
+	const router = useRouter();
+
 	const [username, setUsername] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 	const [error, setError] = useState<boolean>(false);
 	const [loading, setLoading] = useState<boolean>(false);
 
 	const { theme, setTheme } = useContext(ThemeContext) as ThemeContextType;
-
 	const { updateTokens, setUserProfile } = useContext(
 		AuthContext,
 	) as AuthContextType;
-	const router = useRouter();
 
-	bouncy.register();
+	useEffect(() => {
+		// LDRS - Loading Spinner
+		async function getLoader() {
+			const { bouncy } = await import("ldrs");
+			bouncy.register();
+		}
+		getLoader();
+	}, []);
 
 	const submitLogin = async (e: React.FormEvent) => {
 		e.preventDefault();
+		if (loading) return;
 		setLoading(true);
 		axios
 			.post("http://" + "localhost:8000" + "/login/", {
@@ -51,7 +58,6 @@ const LoginPane: NextPage = () => {
 					accessToken: data.access,
 					refreshToken: data.refresh,
 				});
-				setLoading(false);
 				router.push("/calendar");
 			})
 			.catch((AxiosError) => {
@@ -133,7 +139,7 @@ const LoginPane: NextPage = () => {
 							{loading ? (
 								<div className="flex justify-center">
 									<l-bouncy
-										speed={0.5}
+										speed={1}
 										color={theme == "light" ? "white" : "black"}
 									></l-bouncy>
 								</div>
@@ -150,11 +156,7 @@ const LoginPane: NextPage = () => {
 						>
 							REGISTER
 						</Link>
-						<input
-							type="submit"
-							onClick={loading ? () => {} : submitLogin}
-							className="hidden"
-						/>
+						<input type="submit" onClick={submitLogin} className="hidden" />
 					</div>
 				</form>
 			</div>
