@@ -29,7 +29,7 @@ class EventTemplate(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField(blank=True, null=True)
     all_day = models.BooleanField(default=False)
-    every = models.CharField(max_length=50)  # Adjust choices as necessary
+    every = models.CharField(max_length=50)  # day, week, month, year
     begin_date = models.DateTimeField()
     end_date = models.DateTimeField()
     weekday = models.IntegerField(null=True, blank=True)
@@ -44,7 +44,7 @@ class EventTemplate(models.Model):
 # Calendar Model
 class Calendar(models.Model):
     name = models.CharField(max_length=50)
-    color = models.CharField(max_length=7)
+    color = models.CharField(max_length=7, null=True, blank=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='calendars')
 
     def __str__(self):
