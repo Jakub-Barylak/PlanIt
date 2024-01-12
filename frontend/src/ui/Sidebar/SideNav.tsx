@@ -7,6 +7,10 @@ import { Tooltip } from "@nextui-org/tooltip";
 import type { Calendar } from "@/lib/types";
 import { AuthContextType, AuthContext } from "@/providers/AuthProvider";
 import { ThemeContextType, ThemeContext } from "@/providers/ThemeProvider";
+import {
+	CalendarViewContext,
+	CalendarViewContextType,
+} from "@/providers/CalendarProvider";
 
 // ICONS
 import { FiCalendar, FiFileText } from "react-icons/fi";
@@ -19,16 +23,19 @@ import { setCookie } from "cookies-next";
 
 interface Props {
 	imageSrc?: string;
-	calendars: Calendar[];
+	// calendars: Calendar[];
 }
 
 export const SideNav: FC<Props> = ({
 	imageSrc = "/userImg.jpeg",
-	calendars,
+	// calendars,
 }): JSX.Element => {
 	const [showSidebar, setShowSidebar] = useState<boolean>(true);
 	const { user } = useContext(AuthContext) as AuthContextType;
 	const { theme, setTheme } = useContext(ThemeContext) as ThemeContextType;
+	const { calendars } = useContext(
+		CalendarViewContext,
+	) as CalendarViewContextType;
 
 	const toggleTheme = () => {
 		const isCurrentThemeDark = theme === "dark";
@@ -40,7 +47,7 @@ export const SideNav: FC<Props> = ({
 		<>
 			{/* MAIN DIV */}
 			<div
-				className={`bg-lightMode-background text-lightMode-secondary-text dark:text-darkMode-secondary-text relative z-30 grid max-h-screen grid-cols-1 grid-rows-[min-content_min-content_min-content_min-content_1fr_min-content] rounded-r-lg border-r-2 p-2 transition duration-200 ease-in-out dark:border-darkMode-border dark:bg-darkMode-background
+				className={`relative z-30 grid max-h-screen grid-cols-1 grid-rows-[min-content_min-content_min-content_min-content_1fr_min-content] rounded-r-lg border-r-2 bg-lightMode-background p-2 text-lightMode-secondary-text transition duration-200 ease-in-out dark:border-darkMode-border dark:bg-darkMode-background dark:text-darkMode-secondary-text
 					${showSidebar ? "w-[15vw]" : "max-w-[calc(50px+1rem)]"}
                     `}
 			>
@@ -68,7 +75,7 @@ export const SideNav: FC<Props> = ({
 						}`}
 					>
 						{/* DATA FROM AUTH PROVIDER */}
-						<p className="text-lightMode-secondary-text dark:text-darkMode-secondary-text text-xs">
+						<p className="text-xs text-lightMode-secondary-text dark:text-darkMode-secondary-text">
 							{user?.email}
 						</p>
 						<p className="text-sm font-semibold text-gray-800 dark:text-white ">
@@ -77,7 +84,7 @@ export const SideNav: FC<Props> = ({
 					</div>
 				</div>
 
-				<hr className=" border-lightMode-hr border-t-2 dark:border-darkMode-hr" />
+				<hr className=" border-t-2 border-lightMode-hr dark:border-darkMode-hr" />
 				{/* DIV BODY -> INFO, CALENDARS, ABOUT US */}
 				<div className="grid max-w-full grid-cols-1 gap-3 py-4">
 					{/* INFO */}
@@ -92,7 +99,7 @@ export const SideNav: FC<Props> = ({
 						}}
 					>
 						<div
-							className={`hover:bg-lightMode-hover-bg inline-flex items-center gap-2 rounded-lg p-2 dark:hover:bg-darkMode-hover-bg dark:hover:text-white ${
+							className={`inline-flex items-center gap-2 rounded-lg p-2 hover:bg-lightMode-hover-bg dark:hover:bg-darkMode-hover-bg dark:hover:text-white ${
 								showSidebar
 									? "w-full justify-start"
 									: "h-[50px] w-[50px] justify-center"
@@ -203,7 +210,7 @@ export const SideNav: FC<Props> = ({
 											leaveFrom="transform scale-100 opacity-100"
 											leaveTo="transform scale-95 opacity-0"
 										>
-											<Popover.Panel className="bg-lightMode-background absolute -top-9 left-[calc(100%+0.25rem)] z-10 grid grid-cols-[max-content] rounded-lg border-2 p-2 shadow-md dark:border-darkMode-light-border dark:bg-darkMode-background dark:text-white">
+											<Popover.Panel className="absolute -top-9 left-[calc(100%+0.25rem)] z-10 grid grid-cols-[max-content] rounded-lg border-2 bg-lightMode-background p-2 shadow-md dark:border-darkMode-light-border dark:bg-darkMode-background dark:text-white">
 												<SidebarCalendarView calendars={calendars} />
 											</Popover.Panel>
 										</Transition>
@@ -224,7 +231,7 @@ export const SideNav: FC<Props> = ({
 						}}
 					>
 						<div
-							className={`hover:bg-lightMode-hover-bg inline-flex items-center gap-2 rounded-lg p-2 dark:hover:bg-darkMode-hover-bg dark:hover:text-white ${
+							className={`inline-flex items-center gap-2 rounded-lg p-2 hover:bg-lightMode-hover-bg dark:hover:bg-darkMode-hover-bg dark:hover:text-white ${
 								showSidebar
 									? "w-full justify-start"
 									: "h-[50px] w-[50px] justify-center"
@@ -237,7 +244,7 @@ export const SideNav: FC<Props> = ({
 					</Tooltip>
 				</div>
 
-				<hr className="border-lightMode-hr border-t-2 dark:border-darkMode-hr" />
+				<hr className="border-t-2 border-lightMode-hr dark:border-darkMode-hr" />
 
 				<div className="pt-4">
 					{/* SETTINGS */}
@@ -252,7 +259,7 @@ export const SideNav: FC<Props> = ({
 						}}
 					>
 						<div
-							className={`hover:bg-lightMode-hover-bg inline-flex items-center gap-2 rounded-lg p-2 dark:hover:bg-darkMode-hover-bg dark:hover:text-white ${
+							className={`inline-flex items-center gap-2 rounded-lg p-2 hover:bg-lightMode-hover-bg dark:hover:bg-darkMode-hover-bg dark:hover:text-white ${
 								showSidebar
 									? "w-full justify-start"
 									: "h-[50px] w-[50px] justify-center"
@@ -278,7 +285,7 @@ export const SideNav: FC<Props> = ({
 						}}
 					>
 						<div
-							className={`hover:bg-lightMode-hover-bg inline-flex items-center gap-2 rounded-lg p-2 dark:hover:bg-darkMode-hover-bg dark:hover:text-white ${
+							className={`inline-flex items-center gap-2 rounded-lg p-2 hover:bg-lightMode-hover-bg dark:hover:bg-darkMode-hover-bg dark:hover:text-white ${
 								showSidebar
 									? "w-full justify-start"
 									: "h-[50px] w-[50px] justify-center"
@@ -301,20 +308,20 @@ export const SideNav: FC<Props> = ({
 						}}
 					>
 						<div
-							className={`hover:bg-lightMode-hover-bg inline-flex items-center gap-2 rounded-lg p-2 dark:hover:bg-darkMode-hover-bg dark:hover:text-white ${
+							className={`inline-flex items-center gap-2 rounded-lg p-2 hover:bg-lightMode-hover-bg dark:hover:bg-darkMode-hover-bg dark:hover:text-white ${
 								showSidebar
 									? "w-full justify-start"
 									: "h-[50px] w-[50px] justify-center"
 							}`}
 						>
 							{/* <Image alt="" src="/icons/Log-out.svg" width={20} height={20} /> */}
-							<TbLogout className="text-logout h-[20px] w-[20px]" />
+							<TbLogout className="h-[20px] w-[20px] text-logout" />
 							<span className={`${showSidebar ? "" : "hidden"} text-logout`}>
 								Logout
 							</span>
 						</div>
 					</Tooltip>
-					<div className="bg-lightMode-logo-bg flex min-h-[5vh] justify-center rounded-lg align-middle dark:bg-darkMode-hr">
+					<div className="flex min-h-[5vh] justify-center rounded-lg bg-lightMode-logo-bg align-middle dark:bg-darkMode-hr">
 						<Image
 							alt="PlanIt"
 							src={theme == "light" ? "/black-logo.svg" : "/white-logo.svg"}
@@ -326,7 +333,7 @@ export const SideNav: FC<Props> = ({
 
 				{/* ARROW */}
 				<div
-					className=" dark:border-darkMode-secondary-text absolute -right-4 top-[calc(25px-0.5rem)] z-10 flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border-2 bg-gray-200 p-1 shadow-md dark:bg-darkMode-background"
+					className=" absolute -right-4 top-[calc(25px-0.5rem)] z-10 flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border-2 bg-gray-200 p-1 shadow-md dark:border-darkMode-secondary-text dark:bg-darkMode-background"
 					onClick={() => setShowSidebar(!showSidebar)}
 				>
 					{/* <Image

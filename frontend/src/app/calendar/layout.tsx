@@ -7,7 +7,6 @@ import { AuthContext, AuthContextType } from "@/providers/AuthProvider";
 import { useContext, useEffect, useState } from "react";
 import { Calendar } from "@/lib/types";
 
-
 export default function CalendarLayout({
 	children,
 }: {
@@ -33,7 +32,7 @@ export default function CalendarLayout({
 	return (
 		<NextUIProvider>
 			<div className="flex h-screen w-full">
-				<SideNav calendars={calendars} />
+				<SideNav />
 				{children}
 				<DailyPlanner />
 			</div>
