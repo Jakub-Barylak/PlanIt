@@ -9,7 +9,7 @@ interface TaskProps {
 }
 
 const Task: React.FC<TaskProps> = ({ task, onToggle, darkMode }) => (
-  <li style={{ display: 'flex', alignItems: 'center', listStyle: 'none' }}>
+  <div style={{ display: 'flex', alignItems: 'center', listStyle: 'none' }}>
     <label
       style={{
         display: 'flex',
@@ -46,7 +46,7 @@ const Task: React.FC<TaskProps> = ({ task, onToggle, darkMode }) => (
       />
       {task.text}
     </label>
-  </li>
+  </div>
 );
 
 export default Task;
