@@ -4,7 +4,7 @@ import { useContext } from "react";
 import {
 	CalendarViewContext,
 	CalendarViewContextType,
-} from "@/app/calendar/page";
+} from "@/providers/CalendarProvider";
 import DaysView from "./views/DaysView";
 import MonthView from "./views/monthView/MonthView";
 

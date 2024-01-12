@@ -4,6 +4,7 @@ import "./globals.css";
 
 import AuthProvider from "@/providers/AuthProvider";
 import ThemeProvider from "@/providers/ThemeProvider";
+import CalendarProvider from "@/providers/CalendarProvider";
 
 export const metadata: Metadata = {
 	title: "PlanIt",
@@ -18,7 +19,9 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<AuthProvider>
-				<ThemeProvider>{children}</ThemeProvider>
+				<CalendarProvider>
+					<ThemeProvider>{children}</ThemeProvider>
+				</CalendarProvider>
 			</AuthProvider>
 		</html>
 	);

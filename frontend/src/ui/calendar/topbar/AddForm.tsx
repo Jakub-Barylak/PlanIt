@@ -5,7 +5,7 @@ import { AuthContext, AuthContextType } from "@/providers/AuthProvider";
 import {
 	CalendarViewContext,
 	CalendarViewContextType,
-} from "@/app/calendar/page";
+} from "@/providers/CalendarProvider";
 import { Calendar } from "@/lib/types";
 
 export default function AddForm() {

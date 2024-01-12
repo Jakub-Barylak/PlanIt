@@ -3,7 +3,7 @@ import { useContext } from "react";
 import {
 	CalendarViewContext,
 	CalendarViewContextType,
-} from "@/app/calendar/page";
+} from "@/providers/CalendarProvider";
 import { DateTime } from "luxon";
 import type { EventColor } from "@/lib/types";
 
@@ -82,7 +82,7 @@ export default function MonthView() {
 				})}
 				<div className=" col-span-7 flex-grow overflow-hidden rounded-2xl">
 					<div
-						className={`bg-lightMode-light-border grid-ro grid h-full w-full grid-cols-7 gap-[1px] overflow-hidden ${
+						className={`grid-ro grid h-full w-full grid-cols-7 gap-[1px] overflow-hidden bg-lightMode-light-border ${
 							daysToAddInFront + daysInMonth + daysToAddInBack > 35
 								? "grid-rows-6"
 								: "grid-rows-5"

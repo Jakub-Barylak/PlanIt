@@ -5,7 +5,7 @@ import { useContext } from "react";
 import {
 	CalendarViewContext,
 	CalendarViewContextType,
-} from "@/app/calendar/page";
+} from "@/providers/CalendarProvider";
 import { DateTime } from "luxon";
 import { View } from "@/lib/types";
 
