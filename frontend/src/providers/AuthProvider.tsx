@@ -62,9 +62,10 @@ export default function AuthProvider({
 	axiosInstance.interceptors.request.use(
 		// Include access token to every request
 		(config) => {
-			if (accessToken !== null) {
+			if (accessToken !== null && config.headers.Authorization === undefined) {
 				config.headers.Authorization = `Bearer ${accessToken}`;
 			}
+
 			return config;
 		},
 		// Return error if request fails
