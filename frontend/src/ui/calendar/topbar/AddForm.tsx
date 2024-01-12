@@ -46,7 +46,7 @@ export default function AddForm() {
 	};
 
 	return (
-		<div>
+		<div className="absolute -right-2 top-6">
 			<form
 				onSubmit={handleSubmit}
 				className="flex flex-col flex-nowrap bg-red-500 p-2"

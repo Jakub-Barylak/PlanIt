@@ -1,5 +1,6 @@
 import { View } from "@/lib/types";
 import { DateTime } from "luxon";
+import parse from "html-react-parser";
 
 type DisplayDateProps = {
 	start: DateTime;
@@ -17,7 +18,7 @@ export default function DisplayDate(props: DisplayDateProps) {
 		const endString = props.end.toLocaleString(DateTime.DATE_FULL, {
 			locale: "pl",
 		});
-		return `${startString} - ${endString}`;
+		return parse(`${startString}<br>${endString}`);
 		// return `${props.start.day} ${props.start.monthLong} ${props.start.year} - ${props.end.day} ${props.end.monthLong} ${props.end.year}`;
 	} else if (props.view === "month") {
 		return props.start.monthLong + " " + props.start.year;
