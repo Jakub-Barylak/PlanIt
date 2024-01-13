@@ -6,7 +6,6 @@ import {
 	CalendarViewContext,
 	CalendarViewContextType,
 } from "@/providers/CalendarProvider";
-import { DateTime } from "luxon";
 import { View } from "@/lib/types";
 
 type CalendarViewSelectorButtonProps = {
@@ -39,7 +38,7 @@ export default function CalendarViewSelectorButton(
 			onClick={handleClick}
 			className={clsx({
 				"mx-2 cursor-pointer rounded-2xl px-4": true,
-				"bg-indigo-300 px-4": context.view === props.viewName,
+				"bg-[#BEC0F2] px-4": context.view === props.viewName,
 			})}
 		>
 			{props.children}

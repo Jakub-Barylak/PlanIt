@@ -1,9 +1,14 @@
 "use client";
 import { Event } from "@/lib/types";
-import clsx from "clsx";
 import { DateTime } from "luxon";
 
-export default function EventDisplay({ event }: { event: Event }) {
+export default function EventDisplay({
+	event,
+	color,
+}: {
+	event: Event;
+	color: string;
+}) {
 	const startDate = DateTime.fromISO(event.begin_date);
 	const endDate = DateTime.fromISO(event.end_date);
 	const duration = endDate.diff(startDate);
@@ -14,21 +19,24 @@ export default function EventDisplay({ event }: { event: Event }) {
 	// const tailwindRowSpan = `row-[${rowStart}_/_span_${rowSpan}]`;
 	// const tailwindStyles = clsx(tailwindRowStart, tailwindRowSpan, "bg-red-500");
 	// console.log(tailwindStyles);
-
+	const startTime = DateTime.fromISO(event.begin_date)
+		.minus({ hour: 1 })
+		.toLocaleString(DateTime.TIME_24_SIMPLE);
+	const endTime = DateTime.fromISO(event.end_date)
+		.minus({ hour: 1 })
+		.toLocaleString(DateTime.TIME_24_SIMPLE);
 	return (
 		<div
-			className="bg-red-600"
+			className="rounded-xl px-3"
 			style={{
 				gridRow: `${rowStart} / span ${rowSpan}`,
+				backgroundColor: color === "#000000" ? "#150F6366" : color,
 			}}
 		>
-			{event.name}
-			<br />
-			{/* {event.begin_date}
-			<br />
-			{event.end_date}
-			<br /> */}
+			<div className="h-6 w-28 truncate whitespace-nowrap">{event.name}</div>
+			<div>
+				{startTime} - {endTime}
+			</div>
 		</div>
 	);
-	// return <div className={tailwindStyles}>{event.name}</div>;
 }
