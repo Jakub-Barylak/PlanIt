@@ -29,21 +29,24 @@ export default function CalendarProvider({
 	const [numberOfDays, setNumberOfDays] = useState(7);
 	const [calendars, setCalendars] = useState<Calendar[]>([]);
 
-	const { axios } = useContext(AuthContext) as AuthContextType;
+	const { axios, accessToken, refreshToken } = useContext(
+		AuthContext,
+	) as AuthContextType;
 
 	useEffect(() => {
-		axios
-			.post("/user_calendars_events/", {
-				begin_date: "2023-12-01",
-				end_date: "2023-12-31",
-			})
-			.then((response) => {
-				const data = response.data as Calendar[];
-				// console.log(data);
-				setCalendars(data);
-			})
-			.catch((error) => console.log(error));
-	}, []);
+		if (accessToken !== null) {
+			axios
+				.post("/user_calendars_events/", {
+					begin_date: "2023-12-01",
+					end_date: "2023-12-31",
+				})
+				.then((response) => {
+					const data = response.data as Calendar[];
+					setCalendars(data);
+				})
+				.catch((error) => console.log(error));
+		}
+	}, [accessToken, refreshToken]);
 
 	function fetchCalendarsInRange(begin_date: DateTime, end_date: DateTime) {
 		axios

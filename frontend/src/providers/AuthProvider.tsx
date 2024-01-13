@@ -128,6 +128,7 @@ export default function AuthProvider({
 			}
 		} else if (typeof window !== "undefined") {
 			// TODO odkomentować jak będzie działać logowanie i rejestracja
+			console.log("redirect to login");
 			// redirect("/login");
 		}
 	}
