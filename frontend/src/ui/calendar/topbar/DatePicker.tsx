@@ -26,7 +26,14 @@ export default function DatePicker() {
 		<div className="grid grid-cols-[min-content_auto_min-content] items-center">
 			<FaChevronLeft
 				className="cursor-pointer text-2xl"
-				onClick={() => context.setStartDate(context.startDate.minus(offset))}
+				onClick={() => {
+					if (context.view === "month")
+						context.setStartDate(
+							context.startDate.startOf("month").minus(offset),
+						);
+					else context.setStartDate(context.startDate.minus(offset));
+					// context.fetchCalendars();
+				}}
 			/>
 			{/* <div>
 				{context.startDate.day} {context.startDate.monthLong}{" "}
@@ -42,7 +49,14 @@ export default function DatePicker() {
 			</p>
 			<FaChevronRight
 				className="cursor-pointer text-2xl"
-				onClick={() => context.setStartDate(context.startDate.plus(offset))}
+				onClick={() => {
+					if (context.view === "month")
+						context.setStartDate(
+							context.startDate.startOf("month").plus({ months: 1 }),
+						);
+					else context.setStartDate(context.startDate.plus(offset));
+					// context.fetchCalendars();
+				}}
 			/>
 		</div>
 	);

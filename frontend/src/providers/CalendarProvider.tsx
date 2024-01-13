@@ -13,6 +13,7 @@ export type CalendarViewContextType = {
 	numberOfDays: number;
 	setNumberOfDays: (days: number) => void;
 	calendars: Calendar[];
+	fetchCalendarsInRange: (begin_date: DateTime, end_date: DateTime) => void;
 };
 
 export const CalendarViewContext =
@@ -44,6 +45,20 @@ export default function CalendarProvider({
 			.catch((error) => console.log(error));
 	}, []);
 
+	function fetchCalendarsInRange(begin_date: DateTime, end_date: DateTime) {
+		axios
+			.post("/user_calendars_events/", {
+				begin_date: begin_date.toISODate(),
+				end_date: end_date.toISODate(),
+			})
+			.then((response) => {
+				const data = response.data as Calendar[];
+				// console.log(data);
+				setCalendars(data);
+			})
+			.catch((error) => console.log(error));
+	}
+
 	return (
 		<CalendarViewContext.Provider
 			value={{
@@ -54,6 +69,7 @@ export default function CalendarProvider({
 				numberOfDays: numberOfDays,
 				setNumberOfDays: setNumberOfDays,
 				calendars,
+				fetchCalendarsInRange,
 			}}
 		>
 			{children}
