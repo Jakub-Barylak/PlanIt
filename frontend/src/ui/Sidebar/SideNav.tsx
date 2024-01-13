@@ -324,12 +324,21 @@ export const SideNav: FC<Props> = ({
 							</span>
 						</div>
 					</Tooltip>
-					<div className="flex min-h-[5vh] justify-center rounded-lg bg-lightMode-logo-bg align-middle dark:bg-darkMode-hr">
+					<div className="flex min-h-[5vh] items-center justify-center rounded-lg bg-lightMode-logo-bg dark:bg-darkMode-hr">
 						<Image
 							alt="PlanIt"
-							src={theme == "light" ? "/black-logo.svg" : "/white-logo.svg"}
-							width={100}
-							height={90}
+							src={
+								showSidebar
+									? theme == "light"
+										? "/black-logo.svg"
+										: "/white-logo.svg"
+									: theme == "light"
+										? "/dark-no-background.svg"
+										: "/light-no-background.svg"
+							}
+							width={showSidebar ? 50 : 50}
+							height={showSidebar ? 40 : 50}
+							className={showSidebar ? "h-[60%] w-auto" : "h-auto w-auto p-0.5"}
 						/>
 					</div>
 				</div>
