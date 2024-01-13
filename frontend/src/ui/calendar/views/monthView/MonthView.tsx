@@ -35,19 +35,19 @@ export default function MonthView() {
 	const daysToAddInFront = firstDayInMonth === 0 ? 6 : firstDayInMonth - 1; // replace with (firstDayInMonth - 1) % 7
 	const daysToAddInBack = lastDayInMonth === 0 ? 0 : 7 - lastDayInMonth; // replace with (7 - lastDayInMonth) % 7
 
-	useLayoutEffect(() => {
-		console.log(
-			calendarContext.startDate.minus({ days: daysToAddInFront }).toISODate(),
-			calendarContext.startDate
-				.plus({ days: daysToAddInBack - 1, months: 1 })
-				.toISODate(),
-		);
+	// useLayoutEffect(() => {
+	// 	console.log(
+	// 		calendarContext.startDate.minus({ days: daysToAddInFront }).toISODate(),
+	// 		calendarContext.startDate
+	// 			.plus({ days: daysToAddInBack - 1, months: 1 })
+	// 			.toISODate(),
+	// 	);
 
-		calendarContext.fetchCalendarsInRange(
-			calendarContext.startDate.minus({ days: daysToAddInFront }),
-			calendarContext.startDate.plus({ days: daysToAddInBack - 1, months: 1 }),
-		);
-	}, [calendarContext.startDate]);
+	// 	calendarContext.fetchCalendarsInRange(
+	// 		calendarContext.startDate.minus({ days: daysToAddInFront }),
+	// 		calendarContext.startDate.plus({ days: daysToAddInBack - 1, months: 1 }),
+	// 	);
+	// }, [calendarContext.startDate]);
 
 	// EVENT FILTERING
 

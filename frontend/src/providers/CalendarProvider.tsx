@@ -4,6 +4,7 @@ import { createContext, useState, useEffect, useContext } from "react";
 import { DateTime } from "luxon";
 import { Calendar, View } from "@/lib/types";
 import { AuthContext, AuthContextType } from "@/providers/AuthProvider";
+import { AxiosError } from "axios";
 
 export type CalendarViewContextType = {
 	view: View;
@@ -13,7 +14,7 @@ export type CalendarViewContextType = {
 	numberOfDays: number;
 	setNumberOfDays: (days: number) => void;
 	calendars: Calendar[];
-	fetchCalendarsInRange: (begin_date: DateTime, end_date: DateTime) => void;
+	// fetchCalendarsInRange: (begin_date: DateTime, end_date: DateTime) => void;
 };
 
 export const CalendarViewContext =
@@ -29,6 +30,14 @@ export default function CalendarProvider({
 	const [numberOfDays, setNumberOfDays] = useState(7);
 	const [calendars, setCalendars] = useState<Calendar[]>([]);
 
+	const currentDate = DateTime.now();
+	const [startFetch, setStartFetch] = useState(
+		currentDate.startOf("month").minus({ months: 1 }),
+	);
+	const [endFetch, setEndFetch] = useState(
+		currentDate.endOf("month").plus({ months: 1 }),
+	);
+
 	const { axios, accessToken, refreshToken } = useContext(
 		AuthContext,
 	) as AuthContextType;
@@ -37,18 +46,71 @@ export default function CalendarProvider({
 		if (accessToken !== null) {
 			axios
 				.post("/user_calendars_events/", {
-					begin_date: "2023-12-01",
-					end_date: "2023-12-31",
+					begin_date: startFetch.toISODate(),
+					end_date: endFetch.toISODate(),
 				})
 				.then((response) => {
 					const data = response.data as Calendar[];
 					setCalendars(data);
 				})
-				.catch((error) => console.log(error));
+				.catch((error: AxiosError) => {
+					if (error?.response?.status !== 401) console.log(error);
+				});
 		}
 	}, [accessToken, refreshToken]);
 
-	function fetchCalendarsInRange(begin_date: DateTime, end_date: DateTime) {
+	const calendarCallback = (data: Calendar[]) => {
+		const calendarsCopy = structuredClone(calendars);
+		data.forEach((calendar) => {
+			calendarsCopy
+				.find((c) => c.id === calendar.id)
+				?.events?.push(...calendar.events);
+		});
+		setCalendars(calendarsCopy);
+	};
+
+	useEffect(() => {
+		const durationToStart = startDate.diff(startFetch, "days").days;
+		const durationToEnd = endFetch.diff(startDate, "days").days;
+		if (durationToEnd < 31) {
+			setEndFetch(endFetch.plus({ months: 1 }));
+			_fetchCalendarsInRange(
+				endFetch,
+				endFetch.plus({ months: 1 }),
+				calendarCallback,
+			);
+		}
+		if (durationToStart < 31) {
+			setStartFetch(startFetch.minus({ months: 1 }));
+			_fetchCalendarsInRange(
+				startFetch.minus({ months: 1 }),
+				startFetch,
+				calendarCallback,
+			);
+		}
+	}, [startDate]);
+
+	// function fetchCalendarsInRange(begin_date: DateTime, end_date: DateTime) {
+	// 	axios
+	// 		.post("/user_calendars_events/", {
+	// 			begin_date: begin_date.toISODate(),
+	// 			end_date: end_date.toISODate(),
+	// 		})
+	// 		.then((response) => {
+	// 			const data = response.data as Calendar[];
+	// 			// console.log(data);
+	// 			setCalendars(data);
+	// 		})
+	// 		.catch((error: AxiosError) => {
+	// 			if (error.response?.status !== 401) console.log(error);
+	// 		});
+	// }
+
+	function _fetchCalendarsInRange(
+		begin_date: DateTime,
+		end_date: DateTime,
+		callback: (data: Calendar[]) => void,
+	) {
 		axios
 			.post("/user_calendars_events/", {
 				begin_date: begin_date.toISODate(),
@@ -56,10 +118,11 @@ export default function CalendarProvider({
 			})
 			.then((response) => {
 				const data = response.data as Calendar[];
-				// console.log(data);
-				setCalendars(data);
+				callback(data);
 			})
-			.catch((error) => console.log(error));
+			.catch((error: AxiosError) => {
+				if (error?.response?.status !== 401) console.log(error);
+			});
 	}
 
 	return (
@@ -72,7 +135,7 @@ export default function CalendarProvider({
 				numberOfDays: numberOfDays,
 				setNumberOfDays: setNumberOfDays,
 				calendars,
-				fetchCalendarsInRange,
+				// fetchCalendarsInRange,
 			}}
 		>
 			{children}

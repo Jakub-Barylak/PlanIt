@@ -17,7 +17,7 @@ export type Calendar = {
 	color: string;
 	owner: number;
 	shared_users?: [];
-	events?: Event[];
+	events: Event[];
 };
 
 export type Event = {
