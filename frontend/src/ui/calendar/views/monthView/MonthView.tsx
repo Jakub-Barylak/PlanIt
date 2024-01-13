@@ -75,7 +75,7 @@ export default function MonthView() {
 				{/* show days of week */}
 				{[...Array(7)].map((_, i) => {
 					return (
-						<div className="px-3 text-right">
+						<div className="px-3 text-right" key={i}>
 							{DateTime.fromISO(`2024-01-0${i + 1}T13:07:04.054`).toFormat(
 								"ccc",
 							)}
@@ -97,7 +97,7 @@ export default function MonthView() {
 									<MonthDayView
 										date={date}
 										month={month}
-										key={i}
+										key={crypto.randomUUID()}
 										className={`${
 											date.getMonth() + 1 !== month
 												? "bg-slate-500"
