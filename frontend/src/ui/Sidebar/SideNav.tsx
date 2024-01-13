@@ -31,7 +31,7 @@ export const SideNav: FC<Props> = ({
 	// calendars,
 }): JSX.Element => {
 	const [showSidebar, setShowSidebar] = useState<boolean>(true);
-	const { user } = useContext(AuthContext) as AuthContextType;
+	const { user, resetTokens } = useContext(AuthContext) as AuthContextType;
 	const { theme, setTheme } = useContext(ThemeContext) as ThemeContextType;
 	const { calendars } = useContext(
 		CalendarViewContext,
@@ -308,11 +308,14 @@ export const SideNav: FC<Props> = ({
 						}}
 					>
 						<div
-							className={`inline-flex items-center gap-2 rounded-lg p-2 hover:bg-lightMode-hover-bg dark:hover:bg-darkMode-hover-bg dark:hover:text-white ${
+							className={`inline-flex cursor-pointer items-center gap-2 rounded-lg p-2 hover:bg-lightMode-hover-bg dark:hover:bg-darkMode-hover-bg dark:hover:text-white ${
 								showSidebar
 									? "w-full justify-start"
 									: "h-[50px] w-[50px] justify-center"
 							}`}
+							onClick={() => {
+								resetTokens();
+							}}
 						>
 							{/* <Image alt="" src="/icons/Log-out.svg" width={20} height={20} /> */}
 							<TbLogout className="h-[20px] w-[20px] text-logout" />

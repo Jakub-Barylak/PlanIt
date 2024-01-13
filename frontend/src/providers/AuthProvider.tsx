@@ -1,8 +1,8 @@
 "use client";
 
 import { createContext, useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
-import { getCookie, setCookie, hasCookie } from "cookies-next";
+import { usePathname, useRouter } from "next/navigation";
+import { getCookie, setCookie, hasCookie, deleteCookie } from "cookies-next";
 import { UserProfile } from "@/lib/types";
 import axios, {
 	AxiosError,
@@ -19,6 +19,7 @@ export type AuthContextType = {
 	RefreshCookieString: string;
 	updateTokens: (tokens: { accessToken: string; refreshToken: string }) => void;
 	setUserProfile: (user: UserProfile) => void;
+	resetTokens: () => void;
 	axios: AxiosInstance;
 };
 
@@ -35,6 +36,7 @@ export default function AuthProvider({
 	const [accessToken, setAccessToken] = useState<string | null>(null);
 	const [refreshToken, setRefreshToken] = useState<string | null>(null);
 	const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+	const router = useRouter();
 
 	useEffect(() => {
 		if (accessToken !== null && refreshToken !== null) {
@@ -42,6 +44,7 @@ export default function AuthProvider({
 			setCookie(RefreshCookieString, refreshToken);
 		}
 	}, [accessToken, refreshToken]);
+
 	function updateTokens({
 		accessToken,
 		refreshToken,
@@ -51,6 +54,14 @@ export default function AuthProvider({
 	}): void {
 		setCookie(AccessCookieString, accessToken);
 		setCookie(RefreshCookieString, refreshToken);
+	}
+
+	function resetTokens(): void {
+		deleteCookie(AccessCookieString);
+		deleteCookie(RefreshCookieString);
+		setAccessToken(null);
+		setRefreshToken(null);
+		router.push("/login");
 	}
 
 	// Create Axios instance
@@ -131,6 +142,7 @@ export default function AuthProvider({
 				RefreshCookieString,
 				updateTokens,
 				setUserProfile,
+				resetTokens,
 				axios: axiosInstance,
 			}}
 		>
