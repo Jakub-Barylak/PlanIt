@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useLayoutEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { getCookie, setCookie, hasCookie, deleteCookie } from "cookies-next";
 import { UserProfile } from "@/lib/types";
@@ -132,6 +132,22 @@ export default function AuthProvider({
 			// redirect("/login");
 		}
 	}
+
+	useLayoutEffect(() => {
+		if (userProfile === null && accessToken !== null && refreshToken !== null) {
+			axiosInstance
+				.get("http://localhost:8000/user_information/")
+				.then((response) => {
+					setUserProfile(response.data as UserProfile);
+				})
+				.catch((error) => {
+					if (error?.response?.status !== 401) {
+						console.log(error);
+					}
+					console.log(error);
+				});
+		}
+	}, [setUserProfile]);
 
 	return (
 		<AuthContext.Provider
