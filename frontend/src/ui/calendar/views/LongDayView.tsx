@@ -24,8 +24,8 @@ export default function LongDayView(props: LongDayViewProps) {
 		.replace(".", "");
 
 	return (
-		<div className="flex flex-1 flex-col bg-gray-200 outline outline-1 outline-black">
-			<div className="flex h-16 flex-col justify-center border-b-2 border-dashed border-b-black">
+		<div className="flex flex-1 flex-col bg-[#f6f7f999]">
+			<div className="flex h-16 flex-col justify-center border-b-1 border-dashed border-b-[#EEEEEF]">
 				<div className="text-center text-[#848585]">
 					{localizedWeekday[0].toUpperCase() + localizedWeekday.slice(1)}
 				</div>
@@ -33,7 +33,7 @@ export default function LongDayView(props: LongDayViewProps) {
 					{props.n.toLocaleString({ day: "numeric" }, { locale: "pl" })}
 				</div>
 			</div>
-			<div className="grid flex-1 grid-rows-288">
+			<div className="grid flex-1 grid-rows-288 border-l-2 border-solid border-l-[#EEEEEF]">
 				<div
 					style={{
 						gridRowStart: 0,
