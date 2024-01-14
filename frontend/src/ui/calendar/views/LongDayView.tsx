@@ -53,6 +53,7 @@ export default function LongDayView(props: LongDayViewProps) {
 										event={event}
 										key={event.id}
 										color={calendar.color}
+										calendarId={calendar.id.toString()}
 									/>
 								);
 							}

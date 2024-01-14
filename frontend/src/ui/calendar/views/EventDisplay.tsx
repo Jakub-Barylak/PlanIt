@@ -1,13 +1,16 @@
 "use client";
 import { Event } from "@/lib/types";
 import { DateTime } from "luxon";
+import Link from "next/link";
 
 export default function EventDisplay({
 	event,
 	color,
+	calendarId,
 }: {
 	event: Event;
 	color: string;
+	calendarId: string;
 }) {
 	const startDate = DateTime.fromISO(event.begin_date);
 	const endDate = DateTime.fromISO(event.end_date);
@@ -33,10 +36,12 @@ export default function EventDisplay({
 				backgroundColor: color === "#000000" ? "#150F6366" : color,
 			}}
 		>
-			<div className="h-6 w-28 truncate whitespace-nowrap">{event.name}</div>
-			<div>
-				{startTime} - {endTime}
-			</div>
+			<Link href={`/calendar/${calendarId}/${event.id}`}>
+				<div className="h-6 w-28 truncate whitespace-nowrap">{event.name}</div>
+				<div>
+					{startTime} - {endTime}
+				</div>
+			</Link>
 		</div>
 	);
 }
