@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import (
-    User, Event, Calendar, SharedCalendarUser, TodoList
+    User, Event, Calendar, SharedCalendarUser, TodoList,
+    EventTemplate
     
 )
 from django.contrib.auth.hashers import make_password
@@ -65,4 +66,9 @@ class TodoListSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta:
         model = TodoList
+        fields = '__all__'
+    
+class EventTemplateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EventTemplate
         fields = '__all__'

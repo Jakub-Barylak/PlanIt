@@ -25,18 +25,24 @@ class EventsCategory(models.Model):
 
 # EventTemplate Model
 class EventTemplate(models.Model):
+    EVERY_CHOICES = [
+        ('day', 'Daily'),
+        ('week', 'Weekly'),
+        ('month', 'Monthly'),
+        ('year', 'Yearly')
+    ]
     calendar = models.ForeignKey('Calendar', on_delete=models.CASCADE, related_name='event_templates')
     name = models.CharField(max_length=50)
     description = models.TextField(blank=True, null=True)
     all_day = models.BooleanField(default=False)
-    every = models.CharField(max_length=50)  # day, week, month, year
+    every = models.CharField(max_length=50, choices=EVERY_CHOICES)  # day, week, month, year
     begin_date = models.DateTimeField()
     end_date = models.DateTimeField()
     weekday = models.IntegerField(null=True, blank=True)
     month_day = models.IntegerField(null=True, blank=True)
     month = models.IntegerField(null=True, blank=True)
     categories = models.ManyToManyField(EventsCategory, through='JoinTemplateCategory', related_name='templates')
-    generation_date = models.DateField(null=False, default=timezone.now)
+    generation_date = models.DateTimeField(null=False, default=timezone.now)
 
     def __str__(self):
         return self.name
@@ -58,7 +64,7 @@ class Event(models.Model):
     end_date = models.DateTimeField()
     description = models.TextField(blank=True, null=True)
     all_day = models.BooleanField(default=False)
-    template = models.ForeignKey(EventTemplate, on_delete=models.SET_NULL, null=True, blank=True, related_name='events')
+    template = models.ForeignKey(EventTemplate, on_delete=models.CASCADE, null=True, blank=True, related_name='events')
     categories = models.ManyToManyField(EventsCategory, through='JoinEventCategory', related_name='events')
 
     def __str__(self):
