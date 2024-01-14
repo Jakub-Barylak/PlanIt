@@ -7,37 +7,63 @@ import {
 	CalendarViewContextType,
 } from "@/providers/CalendarProvider";
 import { Calendar } from "@/lib/types";
+import AddFormRepeat from "./AddFormRepeat";
 
 export default function AddForm() {
 	const { calendars } = useContext(
 		CalendarViewContext,
 	) as CalendarViewContextType;
+	const { axios } = useContext(AuthContext) as AuthContextType;
 
 	const [formState, setFormState] = useState({
 		name: "",
 		begin_date: "",
 		end_date: "",
-		calendar: "",
+		calendar: calendars[0]?.id ?? "",
+		description: "",
+		repeated: false,
 	});
+	const [activeAddButton, setActiveAddButton] = useState(false);
+	const [repeatedValues, setRepeatedValues] = useState({});
 
 	const handleChange = (
 		event:
 			| React.ChangeEvent<HTMLInputElement>
-			| React.ChangeEvent<HTMLSelectElement>,
+			| React.ChangeEvent<HTMLSelectElement>
+			| React.ChangeEvent<HTMLTextAreaElement>,
 	) => {
 		const name = event.target.name;
 		const value = event.target.value;
-		setFormState({ ...formState, [name]: value });
-	};
+		if (
+			event.target instanceof HTMLInputElement &&
+			event.target.type === "checkbox"
+		) {
+			setFormState({ ...formState, [name]: event.target.checked });
+		} else {
+			setFormState({ ...formState, [name]: value });
+		}
 
-	const { axios } = useContext(AuthContext) as AuthContextType;
+		if (
+			formState.name &&
+			formState.begin_date &&
+			formState.end_date &&
+			formState.calendar
+		) {
+			setActiveAddButton(true);
+		}
+	};
 
 	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		console.log(formState);
+		let formData = { ...formState };
+		if (formState.repeated) {
+			formData = { ...formData, ...repeatedValues };
+		}
+		console.log(formData);
 		axios
 			.post("/events/", { ...formState })
 			.then((response) => {
+				// TODO : update calendar
 				alert("Event added");
 			})
 			.catch((error) => {
@@ -56,7 +82,6 @@ export default function AddForm() {
 				<label htmlFor="begin_date">Begin date</label>
 				<input
 					type="datetime-local"
-					// type="date"
 					name="begin_date"
 					id="begin_date"
 					onChange={handleChange}
@@ -64,7 +89,6 @@ export default function AddForm() {
 				<label htmlFor="end_date">End date</label>
 				<input
 					type="datetime-local"
-					// type="date"
 					name="end_date"
 					id="end_date"
 					onChange={handleChange}
@@ -79,7 +103,28 @@ export default function AddForm() {
 						);
 					})}
 				</select>
-				<button type="submit">Add</button>
+				<label htmlFor="description">Description</label>
+				<textarea name="description" id="description" onChange={handleChange} />
+				<label htmlFor="repeated">
+					Repeated{" "}
+					<input
+						type="checkbox"
+						name="repeated"
+						id="repeated"
+						onChange={handleChange}
+					/>{" "}
+				</label>
+				<AddFormRepeat
+					visible={formState.repeated}
+					setRepeatedValues={setRepeatedValues}
+				/>
+				<button
+					type="submit"
+					disabled={!activeAddButton}
+					className="disabled:text-gray-500"
+				>
+					Add
+				</button>
 			</form>
 		</div>
 	);
