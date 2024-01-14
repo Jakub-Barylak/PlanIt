@@ -216,6 +216,45 @@ class EventViewSet(viewsets.ModelViewSet):
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+    @action(detail=False, methods=['post'], url_path='get-all-user-events')
+    def get_all_user_events(self, request, *args, **kwargs):
+        user = request.user
+        start_date_str = request.data.get('begin_date')
+        end_date_str = request.data.get('end_date')
+
+        if not start_date_str or not end_date_str:
+            return Response(
+                {"error": "Both 'begin_date' and 'end_date' are required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            start_date = parse(start_date_str)
+            end_date = parse(end_date_str)
+            if timezone.is_naive(start_date):
+                start_date = timezone.make_aware(start_date)
+            if timezone.is_naive(end_date):
+                end_date = timezone.make_aware(end_date)
+        except ValueError:
+            return Response({"error": "Invalid date format."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Generate events for repeated events
+        self.check_and_generate_events(user, end_date)
+
+        calendars = Calendar.objects.filter(owner=user)
+        serialized_calendars = CalendarSerializer(calendars, many=True).data
+
+        for calendar in serialized_calendars:
+            events = Event.objects.filter(
+                calendar_id=calendar['id'],
+                begin_date__gte=start_date,
+                end_date__lte=end_date
+            )
+            serialized_events = EventSerializer(events, many=True).data
+            calendar['events'] = serialized_events
+
+        return Response(serialized_calendars)
+    
     
     def update(self, request, pk=None, *args, **kwargs):
         try:
@@ -392,8 +431,6 @@ class EventViewSet(viewsets.ModelViewSet):
         return events
 
 
-
-
     def create_repeated_event(self, request):
         template_serializer = EventTemplateSerializer(data=request.data)
         if template_serializer.is_valid():
@@ -430,7 +467,7 @@ class UserCalendarsEventsView(APIView):
                 {"error": "Both 'begin_date' and 'end_date' are required."},
                 status=status.HTTP_400_BAD_REQUEST
             )
-
+        
         calendars = Calendar.objects.filter(owner=user)
         serialized_calendars = CalendarSerializer(calendars, many=True).data
 
@@ -440,6 +477,7 @@ class UserCalendarsEventsView(APIView):
             calendar['events'] = serialized_events
 
         return Response(serialized_calendars)
+    
     
 
 ### Custom token refresh view ###
