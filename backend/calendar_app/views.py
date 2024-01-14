@@ -17,6 +17,8 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenRefreshView
+from django.db.models import Q
+from rest_framework.exceptions import PermissionDenied
 
 from .models import (
     User, Event, Calendar, SharedCalendarUser,
@@ -43,6 +45,35 @@ class CalendarViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         user = self.request.user
         return Calendar.objects.filter(owner=user)
+    
+    @action(detail=True, methods=['post'], url_path='share-calendar')
+    def share_calendar(self, request, pk=None, *args, **kwargs):
+        try:
+            calendar = Calendar.objects.get(pk=pk, owner=request.user)
+        except Calendar.DoesNotExist:
+            return Response({"error": "Calendar not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        user_email = request.data.get('user_email')
+        coworked = request.data.get('coworked', False)
+
+        if not user_email:
+            return Response({"error": "User email is required to share a calendar."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user_to_share_with = User.objects.get(email=user_email)
+        except User.DoesNotExist:
+            return Response({"error": "User with the provided email does not exist."}, status=status.HTTP_404_NOT_FOUND)
+
+        shared_user, created = SharedCalendarUser.objects.get_or_create(
+            user=user_to_share_with,
+            calendar=calendar,
+            defaults={'coworked': coworked}
+        )
+
+        if not created:
+            return Response({"message": "Calendar already shared with this user."}, status=status.HTTP_200_OK)
+
+        return Response({"message": "Calendar shared successfully."}, status=status.HTTP_201_CREATED)
 
 class SharedCalendarUserViewSet(viewsets.ModelViewSet):
     queryset = SharedCalendarUser.objects.all()
@@ -114,7 +145,7 @@ class UserCalendarsView(APIView):
 
     def get(self, request, *args, **kwargs):
         user_id = request.user.id
-        calendars = Calendar.objects.filter(owner_id=user_id).prefetch_related('shared_users')
+        calendars = Calendar.objects.filter(Q(owner=request.user) | Q(shared_users__user=request.user)).distinct()
         serializer = UserCalendarsSerializer(calendars, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -135,6 +166,17 @@ class EventViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         repeated = request.data.get('repeated')
+
+        calendar_id = request.data.get('calendar')
+        
+        try:
+            calendar = Calendar.objects.get(pk=calendar_id)
+        except Calendar.DoesNotExist:
+            return Response({"error": "Calendar not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Check if the user has permission to add an event to the calendar
+        if calendar.owner != request.user and not SharedCalendarUser.objects.filter(calendar=calendar, user=request.user, coworked=True).exists():
+            raise PermissionDenied("You do not have permission to add an event to this calendar.")
         if repeated:
             return self.create_repeated_event(request)
         else:
@@ -185,6 +227,7 @@ class EventViewSet(viewsets.ModelViewSet):
         response_data = self.get_serializer(events, many=True).data
         return Response(response_data)
 
+
     @action(methods=['delete'], detail=False, url_path='delete-event')
     def delete_event(self, request, *args, **kwargs):
         event_id = request.data.get('eventId')
@@ -194,19 +237,22 @@ class EventViewSet(viewsets.ModelViewSet):
             return Response({"error": "Missing 'eventId' in request."}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
+            event = Event.objects.get(id=event_id)
+
+            # Check if the user has permission to delete the event
+            if event.calendar.owner != request.user and not SharedCalendarUser.objects.filter(calendar=event.calendar, user=request.user, coworked=True).exists():
+                raise PermissionDenied("You do not have permission to delete this event.")
+
             if repeated:
-                # Find the event and get its associated template
-                event = Event.objects.get(id=event_id, calendar__owner=request.user)
+                # Handle deletion for repeated events
                 event_template = event.template
                 if event_template:
-                    # Delete the template and all future events generated from this template
                     event_template.delete()
                     message = "Recurring event and associated template deleted successfully."
                 else:
                     return Response({"error": "Event template not found for the given event."}, status=status.HTTP_404_NOT_FOUND)
             else:
-                # Delete single event instance
-                event = Event.objects.get(id=event_id, calendar__owner=request.user)
+                # Handle deletion for single event instance
                 event.delete()
                 message = "Event instance deleted successfully."
 
@@ -215,6 +261,7 @@ class EventViewSet(viewsets.ModelViewSet):
             return Response({"error": "Event not found."}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
     @action(detail=False, methods=['post'], url_path='get-all-user-events')
     def get_all_user_events(self, request, *args, **kwargs):
@@ -241,7 +288,7 @@ class EventViewSet(viewsets.ModelViewSet):
         # Generate events for repeated events
         self.check_and_generate_events(user, end_date)
 
-        calendars = Calendar.objects.filter(owner=user)
+        calendars = Calendar.objects.filter(Q(owner=user) | Q(shared_users__user=user)).distinct()
         serialized_calendars = CalendarSerializer(calendars, many=True).data
 
         for calendar in serialized_calendars:
@@ -255,12 +302,16 @@ class EventViewSet(viewsets.ModelViewSet):
 
         return Response(serialized_calendars)
     
-    
+
     def update(self, request, pk=None, *args, **kwargs):
         try:
             event = Event.objects.get(pk=pk, calendar__owner=request.user)
         except Event.DoesNotExist:
             return Response({"error": "Event not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        if event.calendar.owner != request.user and not SharedCalendarUser.objects.filter(calendar=event.calendar, user=request.user, coworked=True).exists():
+            raise PermissionDenied("You do not have permission to edit this event.")
+
 
         repeated = request.data.get('repeated')
         if repeated and event.template:
@@ -468,7 +519,7 @@ class UserCalendarsEventsView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
         
-        calendars = Calendar.objects.filter(owner=user)
+        calendars = Calendar.objects.filter(Q(owner=user) | Q(shared_users__user=user)).distinct()
         serialized_calendars = CalendarSerializer(calendars, many=True).data
 
         for calendar in serialized_calendars:
