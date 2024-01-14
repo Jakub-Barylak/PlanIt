@@ -7,16 +7,27 @@ export default function EventDisplay({
 	event,
 	color,
 	calendarId,
+	date,
 }: {
 	event: Event;
 	color: string;
 	calendarId: string;
+	date: DateTime;
 }) {
 	const startDate = DateTime.fromISO(event.begin_date);
 	const endDate = DateTime.fromISO(event.end_date);
 	const duration = endDate.diff(startDate);
-	const rowStart = 1 + (startDate.hour - 1) * 12 + startDate.minute / 5;
-	const rowSpan = duration.as("minutes") / 5;
+	let rowStart = 1 + (startDate.hour - 1) * 12 + startDate.minute / 5;
+	let rowSpan = duration.as("minutes") / 5;
+
+	if (startDate.day !== date.day) {
+		rowStart = 1;
+		if (endDate.day !== date.day) {
+			rowSpan = 288;
+		} else {
+			rowSpan = 1 + (endDate.hour - 1) * 12 + endDate.minute / 5;
+		}
+	}
 
 	// const tailwindRowStart = `row-start-[${rowStart}]`;
 	// const tailwindRowSpan = `row-[${rowStart}_/_span_${rowSpan}]`;

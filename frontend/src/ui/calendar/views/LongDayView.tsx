@@ -47,9 +47,15 @@ export default function LongDayView(props: LongDayViewProps) {
 							// 	begin_date: event.begin_date,
 							// 	n: props.n.toISODate(),
 							// });
-							if (event.begin_date.includes(props.n.toISODate() as string)) {
+							if (
+								event.begin_date.includes(props.n.toISODate() as string) ||
+								event.end_date.includes(props.n.toISODate() as string) ||
+								(DateTime.fromISO(event.begin_date) < props.n &&
+									DateTime.fromISO(event.end_date) > props.n)
+							) {
 								return (
 									<EventDisplay
+										date={props.n}
 										event={event}
 										key={event.id}
 										color={calendar.color}
