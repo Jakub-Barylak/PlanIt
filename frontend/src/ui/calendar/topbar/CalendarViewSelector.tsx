@@ -1,10 +1,4 @@
 import CVSButton from "./CalendarViewSelectorButton";
-import { DateTime } from "luxon";
-
-type CalendarViewSelectorProps = {
-	setStartDate: (date: DateTime) => void;
-	setNumberOfDays: (days: number) => void;
-};
 
 export default function CalendarViewSelector() {
 	return (
