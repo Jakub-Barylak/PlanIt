@@ -55,13 +55,14 @@ export default function AddForm() {
 
 	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
+		console.log("Tutaj");
 		let formData = { ...formState };
 		if (formState.repeated) {
 			formData = { ...formData, ...repeatedValues };
 		}
 		console.log(formData);
 		axios
-			.post("/events/", { ...formState })
+			.post("/events/", { ...formData })
 			.then((response) => {
 				// TODO : update calendar
 				alert("Event added");
