@@ -1,14 +1,19 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { AuthContextType, AuthContext } from "@/providers/AuthProvider";
+import {
+	CalendarViewContext,
+	CalendarViewContextType,
+} from "@/providers/CalendarProvider";
 import { FaRegPlusSquare } from "react-icons/fa";
 
 import type { Calendar } from "@/lib/types";
 
-export default function CalendarView({ calendars }: { calendars: Calendar[] }) {
-	// let calendars = ["Calendar 1", "Calendar 2"];
-
+export default function CalendarView() {
 	const [newCalendarName, setNewCalendarName] = useState<string>("");
 	const { axios } = useContext(AuthContext) as AuthContextType;
+	const calendarContext = useContext(
+		CalendarViewContext,
+	) as CalendarViewContextType;
 
 	let addCalendar = (e: React.FormEvent) => {
 		e.preventDefault();
@@ -30,29 +35,25 @@ export default function CalendarView({ calendars }: { calendars: Calendar[] }) {
 
 	return (
 		<>
-			{calendars.map((calendar, index) => {
-				const [isChecked, setIsChecked] = useState(
-					sessionStorage.getItem(calendar.name) !== "true",
-				);
-
-				const changeChecked = (key: string, value: boolean) => {
-					sessionStorage.setItem(key, value.toString());
-					setIsChecked(value);
-				};
-
+			{calendarContext.calendars.map((calendar, _) => {
 				return (
 					// <>
 					<label
-						key={index}
+						key={calendar.id}
 						className="grid h-8 grid-cols-[minmax(0,1fr)_min-content] items-center justify-between gap-2 rounded-lg px-2 hover:bg-gray-100 dark:hover:bg-[#282A32]"
+						onContextMenu={(e) => {
+							e.preventDefault();
+						}}
 					>
 						{/* grid grid-cols-[max-content_auto] */}
 						<span className="truncate">{calendar.name}</span>
 						<input
 							type="checkbox"
 							className="ml-2 h-4 w-4 bg-gray-200 text-gray-600 accent-slate-600"
-							checked={isChecked}
-							onChange={(e) => changeChecked(calendar.name, e.target.checked)}
+							checked={calendar.isVisible}
+							onChange={(e) => {
+								calendarContext.toggleCalendarVisibility(calendar.id);
+							}}
 						/>
 					</label>
 					// </>

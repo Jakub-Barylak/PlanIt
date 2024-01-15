@@ -53,21 +53,23 @@ export default function MonthView() {
 
 	const dayMap = new Map();
 
-	calendarContext.calendars.forEach((calendar) => {
-		calendar?.events?.forEach((event) => {
-			const date = new Date(event.begin_date);
-			const day = date.toLocaleDateString();
-			if (dayMap.has(day)) {
-				dayMap
-					.get(day)
-					.push({ event: event, color: calendar.color } as EventColor);
-			} else {
-				dayMap.set(day, [
-					{ event: event, color: calendar.color } as EventColor,
-				]);
-			}
+	calendarContext.calendars
+		.filter((calendar) => calendar.isVisible)
+		.forEach((calendar) => {
+			calendar?.events?.forEach((event) => {
+				const date = new Date(event.begin_date);
+				const day = date.toLocaleDateString();
+				if (dayMap.has(day)) {
+					dayMap
+						.get(day)
+						.push({ event: event, color: calendar.color } as EventColor);
+				} else {
+					dayMap.set(day, [
+						{ event: event, color: calendar.color } as EventColor,
+					]);
+				}
+			});
 		});
-	});
 
 	return (
 		<>

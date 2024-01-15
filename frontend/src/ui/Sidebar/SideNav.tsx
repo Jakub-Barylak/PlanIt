@@ -164,7 +164,7 @@ export const SideNav: FC<Props> = ({
 										>
 											<Disclosure.Panel className="ml-[calc(20px+0.5rem)] mt-1 flex w-auto flex-col">
 												{/* CALENDARS HERE */}
-												<SidebarCalendarView calendars={calendars} />
+												<SidebarCalendarView />
 											</Disclosure.Panel>
 										</Transition>
 									</>
@@ -211,7 +211,7 @@ export const SideNav: FC<Props> = ({
 											leaveTo="transform scale-95 opacity-0"
 										>
 											<Popover.Panel className="absolute -top-9 left-[calc(100%+0.25rem)] z-10 grid grid-cols-[max-content] rounded-lg border-2 bg-lightMode-background p-2 shadow-md dark:border-darkMode-light-border dark:bg-darkMode-background dark:text-white">
-												<SidebarCalendarView calendars={calendars} />
+												<SidebarCalendarView />
 											</Popover.Panel>
 										</Transition>
 									</>

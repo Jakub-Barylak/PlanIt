@@ -14,6 +14,7 @@ export type CalendarViewContextType = {
 	numberOfDays: number;
 	setNumberOfDays: (days: number) => void;
 	calendars: Calendar[];
+	toggleCalendarVisibility: (calendarId: number) => void;
 	// fetchCalendarsInRange: (begin_date: DateTime, end_date: DateTime) => void;
 };
 
@@ -51,6 +52,9 @@ export default function CalendarProvider({
 				})
 				.then((response) => {
 					const data = response.data as Calendar[];
+					data.forEach((calendar) => {
+						calendar.isVisible = calendar.isVisible ?? true;
+					});
 					setCalendars(data);
 				})
 				.catch((error: AxiosError) => {
@@ -125,6 +129,13 @@ export default function CalendarProvider({
 			});
 	}
 
+	function toggleCalendarVisibility(calendarId: number) {
+		const calendarsCopy = structuredClone(calendars);
+		const calendar = calendarsCopy.find((c) => c.id === calendarId);
+		calendar!.isVisible = !calendar?.isVisible ?? false;
+		setCalendars(calendarsCopy);
+	}
+
 	return (
 		<CalendarViewContext.Provider
 			value={{
@@ -135,6 +146,7 @@ export default function CalendarProvider({
 				numberOfDays: numberOfDays,
 				setNumberOfDays: setNumberOfDays,
 				calendars,
+				toggleCalendarVisibility,
 				// fetchCalendarsInRange,
 			}}
 		>

@@ -18,6 +18,7 @@ export type Calendar = {
 	owner: number;
 	shared_users?: [];
 	events: Event[];
+	isVisible?: boolean;
 };
 
 export type Event = {
