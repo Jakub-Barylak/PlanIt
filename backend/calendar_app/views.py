@@ -375,16 +375,18 @@ class EventViewSet(viewsets.ModelViewSet):
         future_events.delete()
 
     def check_and_generate_events(self, user, until_date):
-        # Ensure until_date is timezone-aware
         if timezone.is_naive(until_date):
             until_date = timezone.make_aware(until_date)
 
-        # Fetch all event templates for the calendars owned by the given user that need to generate more events
         event_templates = EventTemplate.objects.filter(calendar__owner=user, generation_date__lt=until_date)
         for template in event_templates:
-            if template.generation_date <= until_date:
-                # Generate events from the template if needed
+            # Check if the last generated event date is before the until_date
+            last_generated_event = template.events.order_by('-begin_date').first()
+            last_generated_date = last_generated_event.begin_date if last_generated_event else template.begin_date
+
+            if last_generated_date < until_date:
                 self.generate_events_from_template(template, until_date)
+
 
 
 
@@ -450,57 +452,53 @@ class EventViewSet(viewsets.ModelViewSet):
         return False
 
     def generate_events_from_template(self, event_template, until_date):
-        # Ensure current_date is timezone-aware
-        current_date = event_template.generation_date
-        if timezone.is_naive(current_date):
-            current_date = timezone.make_aware(current_date)
-
-        # Ensure until_date is also timezone-aware
-        if timezone.is_naive(until_date):
-            until_date = timezone.make_aware(until_date)
-
-        # Debugging: Print current_date and until_date with timezone info
-        print("current_date:", current_date, "Timezone:", current_date.tzinfo)
-        print("until_date:", until_date, "Timezone:", until_date.tzinfo)
+        # Ensure current_date and until_date are timezone-aware
+        current_date = timezone.make_aware(event_template.begin_date) if timezone.is_naive(event_template.begin_date) else event_template.begin_date
+        until_date = timezone.make_aware(until_date) if timezone.is_naive(until_date) else until_date
 
         events = []
 
         while current_date <= until_date:
-            # Additional Debugging: Check values in each iteration
-            print("Loop current_date:", current_date, "Timezone:", current_date.tzinfo)
-            print("Loop until_date:", until_date, "Timezone:", until_date.tzinfo)
-
             if self.is_event_day(event_template, current_date):
                 event = self.create_event(event_template, current_date)
                 events.append(event)
             current_date = self.increment_date(event_template.every, current_date, event_template)
 
-        # Update the generation_date of the event_template to avoid regenerating these events
-        event_template.generation_date = until_date
-        event_template.save()
+        # Update generation_date only if the new until_date is later
+        if until_date > event_template.generation_date:
+            event_template.generation_date = until_date
+            event_template.save()
 
         return events
 
 
+
     def create_repeated_event(self, request):
         template_serializer = EventTemplateSerializer(data=request.data)
+
+        end_date = None
+        if request.data.get('end_date'):
+            end_date = parse_datetime(request.data.get('end_date'))
+            end_date = timezone.make_aware(end_date) if timezone.is_naive(end_date) else end_date
+
         if template_serializer.is_valid():
             template = template_serializer.save()
 
-            # Determine the until_date based on the frequency
-            if template.every == 'month':
-                # Set until_date to one year from now
-                until_date = template.generation_date + relativedelta(years=1)  # Corrected to datetime.now()
-            elif template.every == 'year':
-                # Set until_date to two years from now
-                until_date = template.generation_date + relativedelta(years=2)  # Corrected to datetime.now()
-            else:
-                # Default to 30 days for other frequencies
-                until_date = template.generation_date + timedelta(days=30)  # Corrected to datetime.now()
+            # Default until_date based on frequency
+            default_until_date = template.generation_date + {
+                'month': relativedelta(years=1),
+                'year': relativedelta(years=2)
+            }.get(template.every, timedelta(days=180))
+
+            # Use end_date from request if it's valid and later than generation_date
+            until_date = end_date if end_date and end_date > template.generation_date else default_until_date
 
             self.generate_events_from_template(template, until_date)
             return Response(template_serializer.data, status=status.HTTP_201_CREATED)
+
         return Response(template_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 
 ### User Calendars Events ###

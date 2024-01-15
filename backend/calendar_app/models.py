@@ -23,6 +23,14 @@ class EventsCategory(models.Model):
     def __str__(self):
         return self.name
 
+class Calendar(models.Model):
+    name = models.CharField(max_length=50)
+    color = models.CharField(max_length=7, null=True, blank=True)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='calendars')
+
+    def __str__(self):
+        return self.name
+    
 # EventTemplate Model
 class EventTemplate(models.Model):
     EVERY_CHOICES = [
@@ -47,15 +55,6 @@ class EventTemplate(models.Model):
     def __str__(self):
         return self.name
 
-# Calendar Model
-class Calendar(models.Model):
-    name = models.CharField(max_length=50)
-    color = models.CharField(max_length=7, null=True, blank=True)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='calendars')
-
-    def __str__(self):
-        return self.name
-
 # Event Model
 class Event(models.Model):
     calendar = models.ForeignKey(Calendar, on_delete=models.CASCADE, related_name='events')
@@ -69,6 +68,8 @@ class Event(models.Model):
 
     def __str__(self):
         return self.name
+# Calendar Model
+
 
 # SharedCalendarUser Model
 class SharedCalendarUser(models.Model):
