@@ -7,6 +7,7 @@ import {
 } from "@/providers/CalendarProvider";
 import DaysView from "./views/DaysView";
 import MonthView from "./views/monthView/MonthView";
+import YearView from "./views/YearView/YearView";
 
 export default function Calendar() {
 	const context = useContext(CalendarViewContext) as CalendarViewContextType;
@@ -37,5 +38,7 @@ export default function Calendar() {
 		);
 	} else if (context.view === "month") {
 		return <MonthView />;
+	} else {
+		return <YearView />;
 	}
 }

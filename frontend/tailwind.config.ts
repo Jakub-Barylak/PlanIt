@@ -19,6 +19,7 @@ const config: Config = {
 			},
 			colors: {
 				"main-purple": "#0e0345",
+				"light-purple": "#BEC0F2",
 				logout: "#5441CB",
 				lightMode: {
 					placeholder: "#E95420",
