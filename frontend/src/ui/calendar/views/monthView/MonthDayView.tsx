@@ -38,7 +38,7 @@ export default function MonthView(props: MonthDayViewProps) {
 								<EventView
 									event={e.event}
 									color={e.color === "#000000" ? null : e.color}
-									key={e.event.id}
+									key={crypto.randomUUID()}
 								/>
 							);
 						})}
