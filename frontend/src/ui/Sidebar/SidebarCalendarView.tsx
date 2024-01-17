@@ -5,8 +5,7 @@ import {
 	CalendarViewContextType,
 } from "@/providers/CalendarProvider";
 import { FaRegPlusSquare } from "react-icons/fa";
-
-import type { Calendar } from "@/lib/types";
+import { SidebarCalendarComponent } from "./SidebarCalendarComponent";
 
 export default function CalendarView() {
 	const [newCalendarName, setNewCalendarName] = useState<string>("");
@@ -17,20 +16,8 @@ export default function CalendarView() {
 
 	let addCalendar = (e: React.FormEvent) => {
 		e.preventDefault();
-		axios
-			.post("/user_calendars/", {
-				name: newCalendarName,
-				color: "#000000",
-			})
-			.then((response) => {
-				console.log(response);
-				// calendars.push(response.data as Calendar);
-				setNewCalendarName("");
-			})
-			.catch((error) => {
-				alert("Error creating calendar!");
-				console.log(error);
-			});
+		calendarContext.addCalendar(newCalendarName);
+		setNewCalendarName("");
 	};
 
 	return (
@@ -38,24 +25,10 @@ export default function CalendarView() {
 			{calendarContext.calendars.map((calendar, _) => {
 				return (
 					// <>
-					<label
-						key={calendar.id}
-						className="grid h-8 grid-cols-[minmax(0,1fr)_min-content] items-center justify-between gap-2 rounded-lg px-2 hover:bg-gray-100 dark:hover:bg-[#282A32]"
-						onContextMenu={(e) => {
-							e.preventDefault();
-						}}
-					>
-						{/* grid grid-cols-[max-content_auto] */}
-						<span className="truncate">{calendar.name}</span>
-						<input
-							type="checkbox"
-							className="ml-2 h-4 w-4 bg-gray-200 text-gray-600 accent-slate-600"
-							checked={calendar.isVisible}
-							onChange={(e) => {
-								calendarContext.toggleCalendarVisibility(calendar.id);
-							}}
-						/>
-					</label>
+					<SidebarCalendarComponent
+						calendar={calendar}
+						key={crypto.randomUUID()}
+					/>
 					// </>
 				);
 			})}

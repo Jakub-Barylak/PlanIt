@@ -15,6 +15,8 @@ export type CalendarViewContextType = {
 	setNumberOfDays: (days: number) => void;
 	calendars: Calendar[];
 	toggleCalendarVisibility: (calendarId: number) => void;
+	addCalendar: (name: string) => void;
+	deleteCalendar: (calendarId: number) => void;
 	// fetchCalendarsInRange: (begin_date: DateTime, end_date: DateTime) => void;
 };
 
@@ -136,6 +138,46 @@ export default function CalendarProvider({
 		setCalendars(calendarsCopy);
 	}
 
+	function addCalendar(name: string) {
+		axios
+			.post("/user_calendars/", {
+				name: name,
+				color: "#000000",
+			})
+			.then((response) => {
+				const calendar = response.data as Calendar;
+				calendar.isVisible = true;
+				setCalendars([...calendars, calendar]);
+				// calendars.push(response.data as Calendar);
+			})
+			.catch((error) => {
+				alert("Error creating calendar!");
+				console.log(error);
+			});
+	}
+
+	function deleteCalendar(calendarId: number) {
+		axios
+			.delete(`/delete_calendar/`, {
+				data: {
+					calendarId: calendarId,
+				},
+			})
+			.then((response) => {
+				console.log(response);
+				console.log("calendar " + calendarId + " deleted");
+				const calendarsCopy = structuredClone(calendars);
+				calendarsCopy.splice(
+					calendarsCopy.findIndex((c) => c.id === calendarId),
+					1,
+				);
+				setCalendars(calendarsCopy);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}
+
 	return (
 		<CalendarViewContext.Provider
 			value={{
@@ -147,7 +189,8 @@ export default function CalendarProvider({
 				setNumberOfDays: setNumberOfDays,
 				calendars,
 				toggleCalendarVisibility,
-				// fetchCalendarsInRange,
+				addCalendar,
+				deleteCalendar,
 			}}
 		>
 			{children}
