@@ -36,12 +36,15 @@ export default function CalendarViewSelectorButton(
 	return (
 		<div
 			onClick={handleClick}
-			className={clsx({
-				"mx-2 cursor-pointer rounded-2xl px-4": true,
-				"bg-[#BEC0F2] px-4": context.view === props.viewName,
-			})}
+			className={
+				" flex items-center justify-center " +
+				clsx({
+					"mx-2 cursor-pointer rounded-2xl px-4": true,
+					"bg-[#BEC0F2] px-4": context.view === props.viewName,
+				})
+			}
 		>
-			{props.children}
+			<span>{props.children}</span>
 		</div>
 	);
 }
