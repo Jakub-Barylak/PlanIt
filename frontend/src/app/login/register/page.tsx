@@ -3,7 +3,7 @@ import { useState, useContext, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { NextPage } from "next";
 import { PasswordField } from "@/ui/Login/PasswordField";
-import { InputField } from "@/ui/Login/InputField";
+import { InputField } from "@/ui/InputField";
 import Link from "next/link";
 import axios from "axios";
 

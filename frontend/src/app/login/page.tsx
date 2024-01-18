@@ -2,7 +2,7 @@
 import { useState, useContext, useEffect } from "react";
 import { NextPage } from "next";
 import { PasswordField } from "@/ui/Login/PasswordField";
-import { InputField } from "@/ui/Login/InputField";
+import { InputField } from "@/ui/InputField";
 import { ThemeContext, ThemeContextType } from "@/providers/ThemeProvider";
 import Link from "next/link";
 import axios from "axios";

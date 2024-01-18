@@ -5,6 +5,7 @@ import { DateTime } from "luxon";
 import { Calendar, View } from "@/lib/types";
 import { AuthContext, AuthContextType } from "@/providers/AuthProvider";
 import { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 export type CalendarViewContextType = {
 	view: View;
@@ -17,6 +18,8 @@ export type CalendarViewContextType = {
 	toggleCalendarVisibility: (calendarId: number) => void;
 	addCalendar: (name: string) => void;
 	deleteCalendar: (calendarId: number) => void;
+	updateCalendar: (calendarId: number, name?: string, color?: string) => void;
+	shareCalendar: (calendarId: number, email: string, coworked: boolean) => void;
 	// fetchCalendarsInRange: (begin_date: DateTime, end_date: DateTime) => void;
 };
 
@@ -180,6 +183,50 @@ export default function CalendarProvider({
 			});
 	}
 
+	function updateCalendar(calendarId: number, name?: string, color?: string) {
+		const calendarsCopy = structuredClone(calendars);
+		const calendar = calendarsCopy.find((c) => c.id === calendarId);
+		if (calendar === undefined) {
+			console.log("calendar not found");
+			return;
+		}
+		axios
+			.patch("/delete_calendar/", {
+				calendarId: calendarId,
+				name: name ?? calendar.name,
+				color: color ?? calendar.color,
+			})
+			.then((response) => {
+				console.log(response);
+				console.log("calendar " + calendarId + " updated");
+				calendar.name = name ?? calendar.name;
+				calendar.color = color ?? calendar.color;
+				toast.success("Calendar updated");
+				setCalendars(calendarsCopy);
+				toast.success("Calendar successfully updated");
+			})
+			.catch((error) => {
+				console.log(error);
+				toast.error("Error updating calendar");
+			});
+	}
+
+	function shareCalendar(calendarId: number, email: string, coworked: boolean) {
+		axios
+			.post(`/calendars/${calendarId}/share-calendar/`, {
+				user_email: email,
+				coworked: coworked,
+			})
+			.then((response) => {
+				console.log(response);
+				toast.success("Calendar shared with " + email);
+			})
+			.catch((error) => {
+				console.log(error);
+				toast.error("Error sharing calendar");
+			});
+	}
+
 	return (
 		<CalendarViewContext.Provider
 			value={{
@@ -193,6 +240,8 @@ export default function CalendarProvider({
 				toggleCalendarVisibility,
 				addCalendar,
 				deleteCalendar,
+				shareCalendar,
+				updateCalendar,
 			}}
 		>
 			{children}

@@ -7,6 +7,8 @@ import { Menu, Item, useContextMenu, Separator } from "react-contexify";
 import { useContext, useState } from "react";
 
 import "react-contexify/dist/ReactContexify.css";
+import { SidebarCalendarViewShareDialog } from "./SidebarCalendarViewShareDialog";
+import { SidebarCalendarViewEditCalendarDialog } from "./SidebarCalendarViewEditCalendarDialog";
 
 export const SidebarCalendarComponent = ({
 	calendar,
@@ -16,6 +18,8 @@ export const SidebarCalendarComponent = ({
 	const MENU_ID = ("calendar-menu-" + calendar.id) as string;
 
 	const [menuVisible, setMenuVisible] = useState(false);
+	const [shareDialogOpen, setShareDialogOpen] = useState(false);
+	const [editDialogOpen, setEditDialogOpen] = useState(false);
 
 	const calendarContext = useContext(
 		CalendarViewContext,
@@ -54,6 +58,18 @@ export const SidebarCalendarComponent = ({
 					}}
 				/>
 
+				<SidebarCalendarViewShareDialog
+					isOpen={shareDialogOpen}
+					setOpen={setShareDialogOpen}
+					calendar={calendar}
+				/>
+
+				<SidebarCalendarViewEditCalendarDialog
+					isOpen={editDialogOpen}
+					setOpen={setEditDialogOpen}
+					calendar={calendar}
+				/>
+
 				<Menu
 					id={MENU_ID}
 					style={{ position: "absolute" }}
@@ -61,6 +77,20 @@ export const SidebarCalendarComponent = ({
 				>
 					<Item disabled>{calendar.name}</Item>
 					<Separator />
+					<Item
+						onClick={() => {
+							setShareDialogOpen(true);
+						}}
+					>
+						Share
+					</Item>
+					<Item
+						onClick={() => {
+							setEditDialogOpen(true);
+						}}
+					>
+						Edit
+					</Item>
 					<Item
 						onClick={() => {
 							calendarContext.deleteCalendar(calendar.id);
