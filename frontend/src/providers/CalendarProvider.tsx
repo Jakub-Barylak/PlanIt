@@ -45,10 +45,11 @@ export default function CalendarProvider({
 		AuthContext,
 	) as AuthContextType;
 
+	// Refetch calendars when one of the tokens is updated
 	useEffect(() => {
 		if (accessToken !== null) {
 			axios
-				.post("/user_calendars_events/", {
+				.post("/events/get-all-user-events/", {
 					begin_date: startFetch.toISODate(),
 					end_date: endFetch.toISODate(),
 				})
@@ -75,6 +76,7 @@ export default function CalendarProvider({
 		setCalendars(calendarsCopy);
 	};
 
+	// Fetch more calendars when the start date is changed
 	useEffect(() => {
 		const durationToStart = startDate.diff(startFetch, "days").days;
 		const durationToEnd = endFetch.diff(startDate, "days").days;
@@ -98,7 +100,7 @@ export default function CalendarProvider({
 
 	// function fetchCalendarsInRange(begin_date: DateTime, end_date: DateTime) {
 	// 	axios
-	// 		.post("/user_calendars_events/", {
+	// 		.post("/events/get-all-user-events/", {
 	// 			begin_date: begin_date.toISODate(),
 	// 			end_date: end_date.toISODate(),
 	// 		})
@@ -118,7 +120,7 @@ export default function CalendarProvider({
 		callback: (data: Calendar[]) => void,
 	) {
 		axios
-			.post("/user_calendars_events/", {
+			.post("/events/get-all-user-events/", {
 				begin_date: begin_date.toISODate(),
 				end_date: end_date.toISODate(),
 			})
