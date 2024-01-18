@@ -5,6 +5,7 @@ import {
 } from "@/providers/CalendarProvider";
 import EventDisplay from "./EventDisplay";
 import { DateTime } from "luxon";
+import { Calendar } from "@/lib/types";
 
 type LongDayViewProps = {
 	n: DateTime;
@@ -15,9 +16,28 @@ export default function LongDayView(props: LongDayViewProps) {
 		CalendarViewContext,
 	) as CalendarViewContextType;
 
-	// let filteredEvents = calendars[0]?.events?.filter((event) => {
-	// 	return event.begin_date.includes("2023-12-20");
-	// });
+	function filterCalendars(calendar: Calendar) {
+		if (calendar?.isVisible !== false) {
+			return calendar.events?.map((event) => {
+				if (
+					event.begin_date.includes(props.n.toISODate() as string) ||
+					event.end_date.includes(props.n.toISODate() as string) ||
+					(DateTime.fromISO(event.begin_date) < props.n &&
+						DateTime.fromISO(event.end_date) > props.n)
+				) {
+					return (
+						<EventDisplay
+							date={props.n}
+							event={event}
+							key={event.id}
+							color={calendar.color}
+							calendarId={calendar.id.toString()}
+						/>
+					);
+				}
+			});
+		}
+	}
 
 	const localizedWeekday = props.n
 		.toLocaleString({ weekday: "short" }, { locale: "pl" })
@@ -40,31 +60,7 @@ export default function LongDayView(props: LongDayViewProps) {
 						gridRowEnd: "288",
 					}}
 				></div>
-				{calendars.map(
-					(calendar) =>
-						calendar.events?.map((event) => {
-							// console.log({
-							// 	begin_date: event.begin_date,
-							// 	n: props.n.toISODate(),
-							// });
-							if (
-								event.begin_date.includes(props.n.toISODate() as string) ||
-								event.end_date.includes(props.n.toISODate() as string) ||
-								(DateTime.fromISO(event.begin_date) < props.n &&
-									DateTime.fromISO(event.end_date) > props.n)
-							) {
-								return (
-									<EventDisplay
-										date={props.n}
-										event={event}
-										key={event.id}
-										color={calendar.color}
-										calendarId={calendar.id.toString()}
-									/>
-								);
-							}
-						}),
-				)}
+				{calendars.map(filterCalendars)}
 			</div>
 		</div>
 	);
