@@ -24,7 +24,7 @@ const DailyPlaner: React.FC = () => {
 				textAlign: "center",
 				paddingTop: "20px",
 				color: theme === "dark" ? "white" : "black",
-				background: theme === "dark" ? "#333" : "white",
+				background: theme === "dark" ? '#161920' : '#FFFFFF',//"#333" : "white",
 			}}
 		>
 			<h2

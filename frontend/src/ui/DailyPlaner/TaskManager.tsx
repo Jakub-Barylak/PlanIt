@@ -60,6 +60,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
 
   const handleDragStart = (index: number, event: React.DragEvent<HTMLLIElement>) => {
     event.dataTransfer.setData('text/plain', String(index));
+    //event.currentTarget.classList.add('dragging');
   };
 
   const handleDrop = (index: number, event: React.DragEvent<HTMLLIElement>) => {
@@ -77,16 +78,18 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
   return (
     
     <div
-      style={{
+      /*style={{
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-start',
         gap: '4px',
         padding: '4px',
-        background: theme === 'dark' ? '#333' : 'white',
+        background: theme === 'dark' ? '#161920' : '#FFFFFF',//'#333' : 'white',
         color: theme === 'dark' ? 'white' : 'black',
-      }}
+      }}*/
+      className={`min-h-screen flex flex-col items-start gap-4 p-4 bg-${theme === 'dark' ? 'dark' : 'white'}`}
+    
     >
        <span
         onClick={toggleTaskManager}
@@ -98,19 +101,22 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
           marginLeft: '-15px',
           zIndex: 1, 
         }}
+        //className="cursor-pointer inline-block mr-5 mt-40 ml-15 z-10"
       >
         <div
-    style={{
+    /*style={{
       width: '30px', // Ustaw szerokość równą wysokości dla uzyskania kwadratu
       height: '30px', // Ustaw wysokość równą szerokości dla uzyskania kwadratu
       padding: '5px',
-      background: theme === 'dark' ? '#333' : '#ddd', // kolor tła dla kwadratu
+      background: theme === 'dark' ? '#161920' : '#FFFFFF',//'#333' : '#ddd', // kolor tła dla kwadratu
       borderRadius: '4px', // zaokrąglone rogi
       display: 'inline-flex',
       alignItems: 'center',
       justifyContent: 'center',
       border: '2px solid #ddd',
-    }}
+    }}*/
+    className={`w-30 h-30 p-5 bg-myCustomBackground rounded-4 flex items-center justify-center border-2 border-myCustomColor`}
+
   >
        
        <Image
@@ -134,35 +140,25 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
       }}
     >
         <ul 
-          style={{ 
+          /*style={{ 
             display: 'block',
             marginTop: '8px',
-            background: theme === 'dark' ? '#444' : 'white',
+            background: theme === 'dark' ? '#161920' : '#FFFFFF',//'#333' : 'white',
             color: theme === 'dark' ? 'white' : 'black',
             maxWidth: showTaskManager ? 'max-content' : '100px', // Dostosuj szerokość zwiniętego paska
             overflow: 'hidden', // Ukryj treść, która nie mieści się w określonej szerokości
             transition: 'width 0.3s ease-in-out', 
-          }}
+          }}*/
+          className={`block mt-[-20%] bg-myCustomBackground text-myCustomColor max-w-content overflow-hidden transition-width duration-300 ease-in-out`}
         >
           {tasks.map((task, index) => (
             <li 
-              key={index}
-              onDragStart={(event) => handleDragStart(index, event)}
-              onDragOver={(event) => event.preventDefault()}
-              onDrop={(event) => handleDrop(index, event)}
-              draggable 
-              style={{ 
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                background: theme === 'dark' ? '#333' : 'white',
-                color: theme === 'dark' ? 'white' : 'black',
-                padding: '8px',
-                borderRadius: '4px',
-                marginBottom: '4px',
-                width: '100%', 
-                boxSizing: 'border-box',
-              }}
+            key={index}
+            draggable 
+            onDragStart={(event) => handleDragStart(index, event)}
+            onDragOver={(event) => event.preventDefault()}
+            onDrop={(event) => handleDrop(index, event)}
+            className={`flex items-center justify-between bg-myCustomBackground text-myCustomColor p-1 rounded-2 mb-1 w-full box-border`}
             >
 
 <Task task={task} onToggle={() => handleToggle(index)} darkMode={theme === 'dark'} />
