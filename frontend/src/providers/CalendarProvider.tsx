@@ -147,7 +147,7 @@ export default function CalendarProvider({
 		axios
 			.post("/user_calendars/", {
 				name: name,
-				color: "#000000",
+				color: "#BEC0F2",
 			})
 			.then((response) => {
 				const calendar = response.data as Calendar;
