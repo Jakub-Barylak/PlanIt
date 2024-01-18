@@ -36,6 +36,7 @@ export type Event = {
 export type EventColor = {
 	event: Event;
 	color?: string;
+	day: number | null;
 };
 
 export type View = "day" | "3day" | "week" | "month" | "year";

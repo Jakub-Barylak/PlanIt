@@ -58,18 +58,36 @@ export default function MonthView() {
 		.forEach((calendar) => {
 			calendar?.events?.forEach((event) => {
 				const date = new Date(event.begin_date);
-				const day = date.toLocaleDateString();
-				if (dayMap.has(day)) {
-					dayMap
-						.get(day)
-						.push({ event: event, color: calendar.color } as EventColor);
-				} else {
-					dayMap.set(day, [
-						{ event: event, color: calendar.color } as EventColor,
-					]);
+				const day = DateTime.fromJSDate(date);
+				const eventLength = DateTime.fromISO(event.end_date).diff(
+					DateTime.fromISO(event.begin_date),
+					"days",
+				).days;
+
+				let dayIndex = eventLength >= 1 ? 1 : null;
+
+				for (let i = 0; i < eventLength; i++, dayIndex!++) {
+					const mDay = day.plus({ days: i }).toISODate();
+					if (dayMap.has(mDay)) {
+						dayMap.get(mDay).push({
+							event: event,
+							color: calendar.color,
+							day: dayIndex,
+						} as EventColor);
+					} else {
+						dayMap.set(mDay, [
+							{
+								event: event,
+								color: calendar.color,
+								day: dayIndex,
+							} as EventColor,
+						]);
+					}
 				}
 			});
 		});
+
+	// console.log(dayMap);
 
 	return (
 		<>
@@ -94,20 +112,23 @@ export default function MonthView() {
 					>
 						{[...Array(daysToAddInFront + daysInMonth + daysToAddInBack)].map(
 							(_, i) => {
-								let date = new Date(year, month - 1, 1 - daysToAddInFront + i);
+								const jsDate = new Date(
+									year,
+									month - 1,
+									1 - daysToAddInFront + i,
+								);
+								const date = DateTime.fromJSDate(jsDate);
 								return (
 									<MonthDayView
-										date={date}
+										date={jsDate}
 										month={month}
 										key={crypto.randomUUID()}
 										className={`${
-											date.getMonth() + 1 !== month
-												? "bg-slate-500"
-												: "bg-slate-200"
+											date.month + 1 !== month ? "bg-slate-500" : "bg-slate-200"
 										}`}
 										events={
-											dayMap.has(date.toLocaleDateString())
-												? dayMap.get(date.toLocaleDateString())
+											dayMap.has(date.toISODate())
+												? dayMap.get(date.toISODate())
 												: []
 										}
 									/>

@@ -31,6 +31,7 @@ const config: Config = {
 					"hover-bg": "#F6F6F6",
 					"light-border": "#CECECE",
 					"logo-bg": "#8c8d91",
+					"calendar-bg": "#f6f7f9",
 				},
 				darkMode: {
 					background: "#161920",
