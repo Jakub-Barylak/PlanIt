@@ -5,7 +5,7 @@ import {
 	CalendarViewContext,
 	CalendarViewContextType,
 } from "@/providers/CalendarProvider";
-import DaysView from "./views/DaysView";
+import DaysView from "./views/daysView/DaysView";
 import MonthView from "./views/monthView/MonthView";
 import YearView from "./views/YearView/YearView";
 
