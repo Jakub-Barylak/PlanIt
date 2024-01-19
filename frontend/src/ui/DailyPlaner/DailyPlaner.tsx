@@ -33,8 +33,6 @@ const DailyPlaner: React.FC = () => {
 					toast("Hello, World!");
 				}}
 			>
-				{" "}
-				To Do{" "}
 			</h2>
 			<TaskManager initialTasks={initialTasks} />
 		</div>

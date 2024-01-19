@@ -13,7 +13,7 @@ interface TaskProps {
 const Task: React.FC<TaskProps> = ({ task, onToggle, darkMode }) => (
 <div className="flex items-center list-none">
 <label
-      className={`flex items-center p-3 rounded-md 
+      className={`flex items-center p-2 rounded-md 
                   ${task.completed ? (darkMode ? 'bg-transparent' : 'bg-transparent') : 'bg-transparent'}
                   ${task.completed ? 'border-none' : 'border-none'}
                   ${task.completed ? 'cursor-not-allowed' : 'cursor-pointer'}
@@ -29,8 +29,8 @@ const Task: React.FC<TaskProps> = ({ task, onToggle, darkMode }) => (
                     transition-background duration-300 ease-in-out`}
       />
       <span
-        style={{ textDecoration: task.completed ? 'line-through' : 'none', marginLeft: '0.5rem', }}
-        className={`${darkMode ? 'text-gray-500' : ''}`}
+        style={{ textDecoration: task.completed ? 'line-through' : 'none' }}
+        className={`${darkMode ? 'text-gray-500' : 'text-gray-500' }`}
       >
       {task.text}
       </span>

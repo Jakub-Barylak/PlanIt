@@ -28,7 +28,9 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
   }
   const { theme, setTheme}: ThemeContextType = themeContext;
 
-
+  const arrowStyle = {
+    marginTop: showTaskManager ? '-8%' : '-15px',
+  };
   
   const handleToggle = (index: number) => {
     const newTasks = [...tasks];
@@ -76,47 +78,18 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
   };
 
   return (
-    
-    <div
-      /*style={{
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-        gap: '4px',
-        padding: '4px',
-        background: theme === 'dark' ? '#161920' : '#FFFFFF',//'#333' : 'white',
-        color: theme === 'dark' ? 'white' : 'black',
-      }}*/
-      className={`h-auto lg:h-4/5 flex flex-col items-start gap-4 p-4 bg-${theme === 'dark' ? 'dark' : 'white'}`}
-    
-    >
-       <span
-        onClick={toggleTaskManager}
-        style={{
-          cursor: 'pointer',
-          display: 'inline-block',
-          marginRight: '5px',
-          marginTop: '-40px',
-          marginLeft: '-15px',
-          zIndex: 1, 
-        }}
-        //className="cursor-pointer inline-block mr-5 mt-40 ml-15 z-10"
-      >
-        <div
-    /*style={{
-      width: '30px', // Ustaw szerokość równą wysokości dla uzyskania kwadratu
-      height: '30px', // Ustaw wysokość równą szerokości dla uzyskania kwadratu
-      padding: '5px',
-      background: theme === 'dark' ? '#161920' : '#FFFFFF',//'#333' : '#ddd', // kolor tła dla kwadratu
-      borderRadius: '4px', // zaokrąglone rogi
-      display: 'inline-flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      border: '2px solid #ddd',
-    }}*/
-    className={`w-30 h-30 p-5 bg-myCustomBackground rounded-4 flex items-center justify-center border-2 border-myCustomColor`}
 
+    <div className={`h-auto flex flex-col items-start gap-4 p-4 bg-${theme === 'dark' ? 'dark' : 'white'}`} >
+    <div className={`h-full w-0.5 bg-${theme === 'dark' ? 'gray-600' : 'gray-200'} absolute left-[${showTaskManager ? '79.5%' : '100%'}]  top-0 bottom-4 transition-all duration-300`}></div>  
+    <div className={`h-1 bg-${theme === 'dark' ? 'gray-600' : 'gray-200'} w-full mb-[-10%] h-0.5`}></div>
+
+    <span
+    onClick={toggleTaskManager}
+    className={`cursor-pointer inline-block mr-5 ${showTaskManager ? 'ml-[-13%] mt-[-8%]' : 'ml-[-65%] mt-[-65%]'}  z-10`} >
+
+        <div
+    //className={`w-30 h-30 p-5 bg-myCustomBackground rounded-4 flex items-center justify-center border-2 border-myCustomColor`}
+    className={`w-8 h-8 p-2 bg-myCustomBackground rounded flex items-center justify-center border-2 border-myCustomColor`}
   >
        
        <Image
@@ -132,23 +105,17 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
   />
   </div>
 </span>
+<h2 className={`text-xl mb-2 mt-[-50px] mx-auto ${showTaskManager ? '' : 'mb-8'}`} style={{ color: theme === 'dark' ? 'text-gray' : '' }}>  To Do</h2>
+
       {showTaskManager && (
       <div
       style={{
-        overflowY: 'auto', // Dodaj obszar przewijania tylko dla listy zadań
-        maxHeight: 'calc(100vh - 40px)', // Ustaw maksymalną wysokość, aby zmieścić się na stronie
+        overflowY: 'auto',
+        maxHeight: 'auto',//'calc(100vh - 60px)', 
       }}
     >
         <ul 
-          /*style={{ 
-            display: 'block',
-            marginTop: '8px',
-            background: theme === 'dark' ? '#161920' : '#FFFFFF',//'#333' : 'white',
-            color: theme === 'dark' ? 'white' : 'black',
-            maxWidth: showTaskManager ? 'max-content' : '100px', // Dostosuj szerokość zwiniętego paska
-            overflow: 'hidden', // Ukryj treść, która nie mieści się w określonej szerokości
-            transition: 'width 0.3s ease-in-out', 
-          }}*/
+          
           className={`block mt-[-5%] bg-myCustomBackground text-myCustomColor max-w-content overflow-hidden transition-width duration-300 ease-in-out`}
         >
           {tasks.map((task, index) => (
