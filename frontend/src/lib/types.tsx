@@ -26,7 +26,7 @@ export type Event = {
 	name: string;
 	begin_date: string;
 	end_date: string;
-	description: string | null;
+	description: string;
 	all_day: boolean;
 	calendar: number;
 	template: number | null;
