@@ -4,6 +4,7 @@ import { SideNav } from "@/ui/Sidebar/SideNav";
 import DailyPlanner from "@/ui/DailyPlaner/DailyPlaner";
 import { NextUIProvider } from "@nextui-org/system";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function CalendarLayout({
 	children,

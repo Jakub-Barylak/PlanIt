@@ -2,7 +2,6 @@
 
 import TopBar from "@/ui/calendar/TopBar";
 import CalendarView from "@/ui/calendar/Calendar";
-import "react-toastify/dist/ReactToastify.css";
 
 export default function Calendar() {
 	return (
