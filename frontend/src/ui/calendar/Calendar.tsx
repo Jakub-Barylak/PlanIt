@@ -8,6 +8,7 @@ import {
 import DaysView from "./views/daysView/DaysView";
 import MonthView from "./views/monthView/MonthView";
 import YearView from "./views/YearView/YearView";
+import clsx from "clsx";
 
 export default function Calendar() {
 	const context = useContext(CalendarViewContext) as CalendarViewContextType;

@@ -5,13 +5,18 @@ import { useContext, useLayoutEffect, useState } from "react";
 
 type EventViewProps = {
 	event: Event;
-	color?: string | null;
+	color?: string | null | undefined;
 	day: number | null;
 };
 
 export default function EventView(props: EventViewProps) {
-	const color = props.color ?? "#ffffff";
+	let color = props.color ?? "#BEC0F2";
+	if (!new RegExp(`^#(?:[0-9a-fA-F]{3}){1,2}$`).test(color)) {
+		color = "#BEC0F2";
+	}
 	const [textColor, setTextColor] = useState("#000000");
+
+	//console.log(color);
 
 	useLayoutEffect(() => {
 		const textColor = () => {

@@ -91,7 +91,7 @@ export default function MonthView() {
 
 	return (
 		<>
-			<div className="m-10 grid h-full grid-cols-7 grid-rows-[auto_1fr]">
+			<div className="grid h-full grid-cols-7 grid-rows-[auto_1fr] p-10">
 				{/* show days of week */}
 				{[...Array(7)].map((_, i) => {
 					return (
@@ -104,10 +104,10 @@ export default function MonthView() {
 				})}
 				<div className=" col-span-7 flex-grow overflow-hidden rounded-2xl">
 					<div
-						className={`grid h-full w-full grid-cols-7 gap-[1px] overflow-hidden bg-lightMode-light-border ${
+						className={`grid h-full w-full grid-cols-7 gap-[1px] overflow-y-auto bg-lightMode-light-border ${
 							daysToAddInFront + daysInMonth + daysToAddInBack > 35
-								? "grid-rows-6"
-								: "grid-rows-5"
+								? "grid-rows-[repeat(6,minmax(0,1fr))]"
+								: "grid-rows-[repeat(5,minmax(0,1fr))]"
 						}`}
 					>
 						{[...Array(daysToAddInFront + daysInMonth + daysToAddInBack)].map(

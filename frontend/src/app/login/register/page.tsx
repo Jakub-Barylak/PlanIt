@@ -65,7 +65,7 @@ const RegisterPane: NextPage = () => {
 				alert(error);
 			});
 
-		console.log(a);
+		//console.log(a);
 	};
 
 	return (
