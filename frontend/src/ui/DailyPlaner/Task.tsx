@@ -1,5 +1,7 @@
 // components/Task.tsx
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
 
 interface TaskProps {
   task: { text: string; completed: boolean };
@@ -9,43 +11,31 @@ interface TaskProps {
 }
 
 const Task: React.FC<TaskProps> = ({ task, onToggle, darkMode }) => (
-  <div style={{ display: 'flex', alignItems: 'center', listStyle: 'none' }}>
-    <label
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        padding: '8px',
-        borderRadius: '4px',
-        background: task.completed ? (darkMode ? '#333' : 'transparent') : 'transparent',
-        color: task.completed
-        ? darkMode
-          ? '#888' // Tekst jasnoszary w darkMode, gdy zadanie jest wykonane
-          : 'gray' // Tekst ciemnoszary w not darkMode, gdy zadanie jest wykonane
-        : darkMode
-        ? '#ddd' // Tekst jasnoszary w darkMode, gdy zadanie nie jest wykonane
-        : 'black', // Kolor tekstu dla niewykonanego zadania w not darkMode
-        boxShadow: task.completed ? 'none' : '0 1px 2px rgba(0, 0, 0, 0.1)',
-        userSelect: 'none',
-      }}
+<div className="flex items-center list-none">
+<label
+      className={`flex items-center p-3 rounded-md 
+                  ${task.completed ? (darkMode ? 'bg-transparent' : 'bg-transparent') : 'bg-transparent'}
+                  ${task.completed ? 'border-none' : 'border-none'}
+                  ${task.completed ? 'cursor-not-allowed' : 'cursor-pointer'}
+                  ${!darkMode ? 'first:border-gray-300' : ''}`}
     >
       <input
         type="checkbox"
         checked={task.completed}
         onChange={onToggle}
-        style={{
-          marginRight: '8px',
-          cursor: 'pointer',
-          borderRadius: '4px',
-          width: '16px',
-          height: '16px',
-          border: '2px solid #ccc',
-          appearance: 'none',
-          background: task.completed ? (darkMode ? '#555' : 'gray') : 'white',
-          transition: 'background 0.3s ease-in-out',
-        }}
+        className={`mr-8 cursor-pointer rounded-md w-4 h-4
+                    ${task.completed ? (darkMode ? 'bg-gray-700' : 'bg-gray-400') : 'bg-white'}
+                    ${task.completed ? 'appearance-none' : 'border border-gray-300'}
+                    transition-background duration-300 ease-in-out`}
       />
+      <span
+        style={{ textDecoration: task.completed ? 'line-through' : 'none', marginLeft: '0.5rem', }}
+        className={`${darkMode ? 'text-gray-500' : ''}`}
+      >
       {task.text}
+      </span>
     </label>
+    
   </div>
 );
 

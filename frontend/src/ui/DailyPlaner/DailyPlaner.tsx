@@ -6,8 +6,8 @@ import { toast } from "react-toastify";
 
 const DailyPlaner: React.FC = () => {
 	const initialTasks = [
-		{ text: "Task 1", completed: false },
-		{ text: "Task 2", completed: true },
+		{ text: "...", completed: false },
+		{ text: "...", completed: false },
 	];
 
 	const themeContext = useContext(ThemeContext);

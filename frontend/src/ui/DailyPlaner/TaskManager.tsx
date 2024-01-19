@@ -88,7 +88,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
         background: theme === 'dark' ? '#161920' : '#FFFFFF',//'#333' : 'white',
         color: theme === 'dark' ? 'white' : 'black',
       }}*/
-      className={`min-h-screen flex flex-col items-start gap-4 p-4 bg-${theme === 'dark' ? 'dark' : 'white'}`}
+      className={`h-auto lg:h-4/5 flex flex-col items-start gap-4 p-4 bg-${theme === 'dark' ? 'dark' : 'white'}`}
     
     >
        <span
@@ -149,7 +149,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
             overflow: 'hidden', // Ukryj treść, która nie mieści się w określonej szerokości
             transition: 'width 0.3s ease-in-out', 
           }}*/
-          className={`block mt-[-20%] bg-myCustomBackground text-myCustomColor max-w-content overflow-hidden transition-width duration-300 ease-in-out`}
+          className={`block mt-[-5%] bg-myCustomBackground text-myCustomColor max-w-content overflow-hidden transition-width duration-300 ease-in-out`}
         >
           {tasks.map((task, index) => (
             <li 
@@ -158,16 +158,18 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
             onDragStart={(event) => handleDragStart(index, event)}
             onDragOver={(event) => event.preventDefault()}
             onDrop={(event) => handleDrop(index, event)}
-            className={`flex items-center justify-between bg-myCustomBackground text-myCustomColor p-1 rounded-2 mb-1 w-full box-border`}
+            className={`flex items-center justify-between bg-myCustomBackground text-${theme === 'dark' ? 'white' : 'black'} p-1 rounded-2 w-full box-border mb-0`}
             >
 
 <Task task={task} onToggle={() => handleToggle(index)} darkMode={theme === 'dark'} />
-    <div style={{ display: 'flex', alignItems: 'center' }}>
-      <div style={{ marginRight: '120px' }}>
-        <RemoveTask onRemove={() => handleRemoveTask(index)} />
+      <div className="flex items-center" >
+      <div className="mr-2">
+      <RemoveTask onRemove={() => handleRemoveTask(index)} />
+     
       </div>
-      <div>
-        <MoveTask onMove={(dragIndex, hoverIndex) => handleMoveTask(dragIndex, hoverIndex)} index={index} />
+      <div style={{ marginTop: '10px' }}>
+      <MoveTask onMove={(dragIndex, hoverIndex) => handleMoveTask(dragIndex, hoverIndex)} index={index} />
+        
       </div>
                 </div>
               </li>
