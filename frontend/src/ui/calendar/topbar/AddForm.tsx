@@ -60,7 +60,7 @@ export default function AddForm() {
 		if (formState.repeated) {
 			formData = { ...formData, ...repeatedValues };
 		}
-		console.log(formData);
+		//console.log(formData);
 		axios
 			.post("/events/", { ...formData })
 			.then((response) => {
