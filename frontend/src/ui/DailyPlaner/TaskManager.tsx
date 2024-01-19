@@ -80,12 +80,12 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
   return (
 
     <div className={`h-auto flex flex-col items-start gap-4 p-4 bg-${theme === 'dark' ? 'dark' : 'white'}`} >
-    <div className={`h-full w-0.5 bg-${theme === 'dark' ? 'gray-600' : 'gray-200'} absolute left-[${showTaskManager ? '70.5%' : '100%'}]  top-0 bottom-4 transition-all duration-300`}></div>  
+    <div className={`h-full w-0.5 bg-${theme === 'dark' ? 'gray-600' : 'gray-200'} absolute ${showTaskManager ? 'left-[79.7%]' : 'left-[93.8%]'}  top-0 bottom-4 transition-all duration-300`}></div>  
     <div className={`h-1 bg-${theme === 'dark' ? 'gray-600' : 'gray-200'} w-full mb-[-10%] h-0.5`}></div>
 
     <span
     onClick={toggleTaskManager}
-    className={`cursor-pointer inline-block mr-5 ${showTaskManager ? 'ml-[-7%] mt-[-8%]' : 'ml-[-40%] mt-[-75%]'}  z-10`} >
+    className={`cursor-pointer inline-block mr-5 ${showTaskManager ? 'ml-[-14%] mt-[-9%]' : 'ml-[-60%] mt-[-75%]'}  z-10`} >
 
         <div
     //className={`w-30 h-30 p-5 bg-myCustomBackground rounded-4 flex items-center justify-center border-2 border-myCustomColor`}
@@ -105,7 +105,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
   />
   </div>
 </span>
-<h2 className={`text-xl mb-2 mt-[-50px] mx-auto ${showTaskManager ? '' : 'mb-8'}`} style={{ color: theme === 'dark' ? 'text-gray' : '' }}>  To Do</h2>
+<h2 className={`text-xl mb-2 mt-[-50px] mx-auto ${showTaskManager ? '' : 'mb-8'} ${showTaskManager ? 'text-left' : 'text-right'}`} style={{ color: theme === 'dark' ? 'text-gray' : '' }}>  To Do</h2>
 
       {showTaskManager && (
       <div
