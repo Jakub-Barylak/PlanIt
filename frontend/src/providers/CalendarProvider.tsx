@@ -144,6 +144,7 @@ export default function CalendarProvider({
 	}
 
 	function addCalendar(name: string) {
+		const t = toast.loading("Creating calendar...");
 		axios
 			.post("/user_calendars/", {
 				name: name,
@@ -153,15 +154,27 @@ export default function CalendarProvider({
 				const calendar = response.data as Calendar;
 				calendar.isVisible = true;
 				setCalendars([...calendars, calendar]);
-				// calendars.push(response.data as Calendar);
+				toast.update(t, {
+					render: `Calendar ${calendar.name} successfully created`,
+					type: "success",
+					isLoading: false,
+					autoClose: 3000,
+				});
+				// toast.success(`Calendar ${calendar.name} successfully created`);
 			})
 			.catch((error) => {
-				alert("Error creating calendar!");
+				toast.update(t, {
+					render: "Error when creating calendar",
+					type: "error",
+					isLoading: false,
+					autoClose: 3000,
+				});
 				console.log(error);
 			});
 	}
 
 	function deleteCalendar(calendarId: number) {
+		const t = toast.loading("Deleting calendar...");
 		axios
 			.delete(`/delete_calendar/`, {
 				data: {
@@ -177,9 +190,21 @@ export default function CalendarProvider({
 					1,
 				);
 				setCalendars(calendarsCopy);
+				toast.update(t, {
+					render: `Calendar successfully deleted`,
+					type: "success",
+					isLoading: false,
+					autoClose: 3000,
+				});
 			})
 			.catch((error) => {
 				console.log(error);
+				toast.update(t, {
+					render: "Error when deleting calendar",
+					type: "error",
+					isLoading: false,
+					autoClose: 3000,
+				});
 			});
 	}
 
@@ -190,6 +215,7 @@ export default function CalendarProvider({
 			console.log("calendar not found");
 			return;
 		}
+		const t = toast.loading("Updating calendar...");
 		axios
 			.patch("/delete_calendar/", {
 				calendarId: calendarId,
@@ -201,17 +227,27 @@ export default function CalendarProvider({
 				console.log("calendar " + calendarId + " updated");
 				calendar.name = name ?? calendar.name;
 				calendar.color = color ?? calendar.color;
-				toast.success("Calendar updated");
 				setCalendars(calendarsCopy);
-				toast.success("Calendar successfully updated");
+				toast.update(t, {
+					render: `Calendar successfully updated`,
+					type: "success",
+					isLoading: false,
+					autoClose: 3000,
+				});
 			})
 			.catch((error) => {
 				console.log(error);
-				toast.error("Error updating calendar");
+				toast.update(t, {
+					render: "Error when updating calendar",
+					type: "error",
+					isLoading: false,
+					autoClose: 3000,
+				});
 			});
 	}
 
 	function shareCalendar(calendarId: number, email: string, coworked: boolean) {
+		const t = toast.loading("Sharing calendar...");
 		axios
 			.post(`/calendars/${calendarId}/share-calendar/`, {
 				user_email: email,
@@ -219,11 +255,21 @@ export default function CalendarProvider({
 			})
 			.then((response) => {
 				console.log(response);
-				toast.success("Calendar shared with " + email);
+				toast.update(t, {
+					render: `Calendar successfully shared with ${email}`,
+					type: "success",
+					isLoading: false,
+					autoClose: 3000,
+				});
 			})
 			.catch((error) => {
 				console.log(error);
-				toast.error("Error sharing calendar");
+				toast.update(t, {
+					render: "Error when sharing calendar",
+					type: "error",
+					isLoading: false,
+					autoClose: 3000,
+				});
 			});
 	}
 
