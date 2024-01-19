@@ -1,15 +1,19 @@
 "use client";
 
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import { DateTime } from "luxon";
+import { useRouter } from "next/navigation";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { toast } from "react-toastify";
 
 import {
 	CalendarViewContext,
 	CalendarViewContextType,
 } from "@/providers/CalendarProvider";
+import { AuthContext, AuthContextType } from "@/providers/AuthProvider";
 import EditableCell from "@/ui/EventDetails/EditableCell";
+import { AxiosError, AxiosResponse } from "axios";
 
 type EventDetailsProps = {
 	params: {
@@ -19,13 +23,23 @@ type EventDetailsProps = {
 };
 
 export default function EventDetails(props: EventDetailsProps) {
-	const { calendars } = useContext(
+	const { calendars, deleteEvent } = useContext(
 		CalendarViewContext,
 	) as CalendarViewContextType;
+	const { axios } = useContext(AuthContext) as AuthContextType;
+
+	const router = useRouter();
 
 	const event = calendars
 		.find((cal) => cal.id === Number(props.params.calendarId))
 		?.events?.find((event) => event.id === Number(props.params.eventId));
+
+	useEffect(() => {
+		const event = calendars
+			.find((cal) => cal.id === Number(props.params.calendarId))
+			?.events?.find((event) => event.id === Number(props.params.eventId));
+		setEventDetails(event);
+	}, [calendars]);
 
 	const [eventDetails, setEventDetails] = useState(event);
 
@@ -52,6 +66,32 @@ export default function EventDetails(props: EventDetailsProps) {
 		}
 	};
 
+	const handleDeleteEvent = () => {
+		const result = confirm("Are you sure you want to delete this event?");
+		if (result === false) return;
+		toast.info("Deleting event...");
+		axios
+			.delete("/events/delete-event/", {
+				data: {
+					eventId: event!.id,
+					repeated: event!.template !== null,
+				},
+			})
+			.then((res: AxiosResponse) => {
+				if (res.status === 204) {
+					toast.success("Event deleted successfully");
+					deleteEvent(
+						parseInt(props.params.calendarId),
+						parseInt(props.params.eventId),
+					);
+					router.push("/calendar");
+				}
+			})
+			.catch((error: AxiosError) => {
+				toast.error("Something went wrong while deleting event :(");
+			});
+	};
+
 	if (calendars.length === 0) {
 		return "Loading...";
 	} else if (event === undefined || eventDetails === undefined) {
@@ -66,19 +106,23 @@ export default function EventDetails(props: EventDetailsProps) {
 	);
 
 	return (
-		<div className="m-10 flex-grow">
+		<div className="m-10 h-screen flex-grow">
 			<div className="mx-20 grid grid-cols-4 grid-rows-[repeat(5,auto)] gap-8 rounded-2xl border-2 border-solid border-[#757575] p-2">
-				<h1 className="col-start-1 col-end-3 text-4xl">Event details</h1>
+				<h1
+					className="col-start-1 col-end-3 text-4xl"
+					onClick={() => {
+						toast.info("Test");
+					}}
+				>
+					Event details
+				</h1>
 				<div className="col-start-3 col-end-5 flex items-center justify-end">
-					<div className="cursor-pointer text-4xl">
+					<div className="cursor-pointer text-4xl" onClick={handleDeleteEvent}>
 						<RiDeleteBin6Line />
 					</div>
 				</div>
 				<div className="col-start-1 col-end-3">
 					<h2 className="my-3 text-xl">Name</h2>
-					{/* <p className="rounded-2xl border-2 border-solid border-[#C4C4C4] p-2 text-[#A0A0A0]">
-						{event?.name}
-					</p> */}
 					<EditableCell
 						value={eventDetails.name}
 						name="name"
@@ -86,13 +130,16 @@ export default function EventDetails(props: EventDetailsProps) {
 						onChange={onChangeHandler}
 					/>
 				</div>
+				<div className="col-start-3 col-end-5">
+					<h2 className="my-3 text-xl">Repeated</h2>
+					<p className="rounded-2xl border-2 border-solid border-[#C4C4C4] p-2 text-[#A0A0A0]">
+						TODO
+					</p>
+				</div>
 				<div className="col-start-1 col-end-5 row-start-3 row-end-4">
 					<h2 className="my-3 text-xl">Description</h2>
-					{/* <p className="rounded-2xl border-2 border-solid border-[#C4C4C4] p-2 text-[#A0A0A0]">
-						{event?.description || "No description"}
-					</p> */}
 					<EditableCell
-						value={eventDetails.description}
+						value={eventDetails.description || ""}
 						name="description"
 						type="text"
 						onChange={onChangeHandler}
@@ -100,9 +147,6 @@ export default function EventDetails(props: EventDetailsProps) {
 				</div>
 				<div className="col-start-1 col-end-3 row-start-4 row-end-5">
 					<h2 className="my-3 text-xl">Begin Date</h2>
-					{/* <p className="rounded-2xl border-2 border-solid border-[#C4C4C4] p-2 text-[#A0A0A0]">
-						{event?.begin_date}
-					</p> */}
 					<EditableCell
 						value={eventDetails.begin_date}
 						name="begin_date"
@@ -112,9 +156,6 @@ export default function EventDetails(props: EventDetailsProps) {
 				</div>
 				<div className="col-start-3 col-end-5 row-start-4 row-end-5">
 					<h2 className="my-3 text-xl">End Date</h2>
-					{/* <p className="rounded-2xl border-2 border-solid border-[#C4C4C4] p-2 text-[#A0A0A0]">
-						{event?.end_date}
-					</p> */}
 					<EditableCell
 						value={eventDetails.end_date}
 						name="end_date"

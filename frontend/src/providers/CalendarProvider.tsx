@@ -20,6 +20,7 @@ export type CalendarViewContextType = {
 	deleteCalendar: (calendarId: number) => void;
 	updateCalendar: (calendarId: number, name?: string, color?: string) => void;
 	shareCalendar: (calendarId: number, email: string, coworked: boolean) => void;
+	deleteEvent: (calendarId: number, eventId: number) => void;
 	// fetchCalendarsInRange: (begin_date: DateTime, end_date: DateTime) => void;
 };
 
@@ -273,6 +274,24 @@ export default function CalendarProvider({
 			});
 	}
 
+	function deleteEvent(calendarId: number, eventId: number) {
+		const calendarsCopy = structuredClone(calendars);
+		const newCalendars = calendarsCopy.map((calendar) => {
+			if (calendar.id === calendarId) {
+				const eventIndex = calendar.events.findIndex(
+					(event) => event.id === eventId,
+				);
+				if (eventIndex !== -1) {
+					calendar.events.splice(eventIndex, 1);
+				}
+				return calendar;
+			} else {
+				return calendar;
+			}
+		});
+		setCalendars(newCalendars);
+	}
+
 	return (
 		<CalendarViewContext.Provider
 			value={{
@@ -288,6 +307,7 @@ export default function CalendarProvider({
 				deleteCalendar,
 				shareCalendar,
 				updateCalendar,
+				deleteEvent,
 			}}
 		>
 			{children}
