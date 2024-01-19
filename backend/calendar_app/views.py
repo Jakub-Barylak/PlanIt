@@ -554,11 +554,48 @@ class DeleteCalendarView(APIView):
             return Response({"error": "Calendar ID is required"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            calendar = Calendar.objects.get(id=calendar_id, owner=request.user)
+            # Fetch the calendar, considering shared access as well
+            calendar = Calendar.objects.filter(id=calendar_id).first()
+            if not calendar:
+                return Response({"message": "Calendar not found"}, status=status.HTTP_404_NOT_FOUND)
+
+            # Check if the user is the owner or has shared access with coworked=True
+            if calendar.owner != request.user and not SharedCalendarUser.objects.filter(user=request.user, calendar=calendar, coworked=True).exists():
+                return Response({"message": "You do not have permission to delete this calendar"}, status=status.HTTP_403_FORBIDDEN)
+
+            # Delete the calendar
             calendar.delete()
             return Response({"message": "Calendar deleted successfully"}, status=status.HTTP_200_OK)
-        except Calendar.DoesNotExist:
-            return Response({"message": "Calendar not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        except Exception as e:
+            return Response({"message": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    
+    def patch(self, request, *args, **kwargs):
+        calendar_id = request.data.get('calendarId')
+        new_name = request.data.get('name')
+        new_color = request.data.get('color')
+
+        if not calendar_id:
+            return Response({"error": "Calendar ID is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            calendar = Calendar.objects.filter(id=calendar_id).first()
+            if not calendar:
+                return Response({"message": "Calendar not found"}, status=status.HTTP_404_NOT_FOUND)
+
+            # Check if the user is the owner or has shared access with coworked=True
+            if calendar.owner != request.user and not SharedCalendarUser.objects.filter(user=request.user, calendar=calendar, coworked=True).exists():
+                return Response({"message": "You do not have permission to update this calendar"}, status=status.HTTP_403_FORBIDDEN)
+
+            # Update fields if provided
+            if new_name is not None:
+                calendar.name = new_name
+            if new_color is not None:
+                calendar.color = new_color
+
+            calendar.save()
+            return Response({"message": "Calendar updated successfully"}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"message": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
