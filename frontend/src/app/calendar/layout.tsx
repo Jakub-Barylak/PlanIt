@@ -3,6 +3,7 @@
 import { SideNav } from "@/ui/Sidebar/SideNav";
 import DailyPlanner from "@/ui/DailyPlaner/DailyPlaner";
 import { NextUIProvider } from "@nextui-org/system";
+import { ToastContainer } from "react-toastify";
 
 export default function CalendarLayout({
 	children,
@@ -16,6 +17,18 @@ export default function CalendarLayout({
 				{children}
 				<DailyPlanner />
 			</div>
+			<ToastContainer
+				position="bottom-right"
+				autoClose={5000}
+				hideProgressBar={false}
+				newestOnTop={false}
+				closeOnClick
+				rtl={false}
+				pauseOnFocusLoss={false}
+				draggable
+				pauseOnHover={false}
+				theme="colored"
+			/>
 		</NextUIProvider>
 	);
 }
