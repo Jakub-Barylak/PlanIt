@@ -2,7 +2,7 @@
 
 import { createContext, useState, useEffect, useContext } from "react";
 import { DateTime } from "luxon";
-import { Calendar, View } from "@/lib/types";
+import { Calendar, View, Event } from "@/lib/types";
 import { AuthContext, AuthContextType } from "@/providers/AuthProvider";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
@@ -21,6 +21,7 @@ export type CalendarViewContextType = {
 	updateCalendar: (calendarId: number, name?: string, color?: string) => void;
 	shareCalendar: (calendarId: number, email: string, coworked: boolean) => void;
 	deleteEvent: (calendarId: number, eventId: number) => void;
+	editEvent: (calendarId: number, updatedEvent: Event) => void;
 	// fetchCalendarsInRange: (begin_date: DateTime, end_date: DateTime) => void;
 };
 
@@ -292,6 +293,24 @@ export default function CalendarProvider({
 		setCalendars(newCalendars);
 	}
 
+	function editEvent(calendarId: number, updatedEvent: Event) {
+		const calendarsCopy = structuredClone(calendars);
+		const newCalendars = calendarsCopy.map((calendar) => {
+			if (calendar.id === calendarId) {
+				const eventIndex = calendar.events.findIndex(
+					(event) => event.id === updatedEvent.id,
+				);
+				if (eventIndex !== -1) {
+					calendar.events[eventIndex] = updatedEvent;
+				}
+				return calendar;
+			} else {
+				return calendar;
+			}
+		});
+		setCalendars(newCalendars);
+	}
+
 	return (
 		<CalendarViewContext.Provider
 			value={{
@@ -308,6 +327,7 @@ export default function CalendarProvider({
 				shareCalendar,
 				updateCalendar,
 				deleteEvent,
+				editEvent,
 			}}
 		>
 			{children}
