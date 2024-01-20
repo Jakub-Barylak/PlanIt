@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { AuthContext, AuthContextType } from "@/providers/AuthProvider";
 import {
 	CalendarViewContext,
@@ -42,7 +42,10 @@ export default function AddForm() {
 		} else {
 			setFormState({ ...formState, [name]: value });
 		}
+		console.log(formState);
+	};
 
+	useEffect(() => {
 		if (
 			formState.name &&
 			formState.begin_date &&
@@ -51,7 +54,7 @@ export default function AddForm() {
 		) {
 			setActiveAddButton(true);
 		}
-	};
+	}, [formState]);
 
 	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();

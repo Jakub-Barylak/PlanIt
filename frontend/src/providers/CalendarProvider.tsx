@@ -146,11 +146,28 @@ export default function CalendarProvider({
 	}
 
 	function addCalendar(name: string) {
+		const randomColors = [
+			"#37afa0",
+			"#746086",
+			"#fd8459",
+			"#f0a361",
+			"#892753",
+			"#ddd8e9",
+			"#3b475c",
+			"#f4e3f6",
+			"#acf23f",
+			"#f4f380",
+			"#328d9e",
+			"#e8b8b8",
+		];
+		const randomIndex = Math.floor(Math.random() * randomColors.length);
+
 		const t = toast.loading("Creating calendar...");
 		axios
 			.post("/user_calendars/", {
 				name: name,
-				color: "#BEC0F2",
+				// color: "#BEC0F2",
+				color: randomColors[randomIndex],
 			})
 			.then((response) => {
 				const calendar = response.data as Calendar;
