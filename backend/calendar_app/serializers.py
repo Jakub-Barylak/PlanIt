@@ -20,13 +20,32 @@ class EventSerializer(serializers.ModelSerializer):
 class CalendarSerializer(serializers.ModelSerializer):
     events = EventSerializer(many=True, read_only=True)
     owner = serializers.PrimaryKeyRelatedField(read_only=True)
+    shared = serializers.SerializerMethodField()
+    coworked = serializers.SerializerMethodField()
     class Meta:
         model = Calendar
-        fields = ['id', 'name', 'color', 'owner', 'events']
-    
+        fields = ['id', 'name', 'color', 'owner', 'events', 'shared', 'coworked']
+
     def create(self, validated_data):
         validated_data['owner'] = self.context['request'].user
         return Calendar.objects.create(**validated_data)
+    
+    def get_shared(self, obj):
+        # Check if the calendar is shared with the current user (and not owned by them)
+        request = self.context.get('request')
+        if request and request.user != obj.owner:
+            return SharedCalendarUser.objects.filter(calendar=obj, user=request.user).exists()
+        return False
+
+    def get_coworked(self, obj):
+        # Check coworked status for the current user
+        request = self.context.get('request')
+        if request:
+            shared_calendar_user = SharedCalendarUser.objects.filter(calendar=obj, user=request.user).first()
+            return shared_calendar_user.coworked if shared_calendar_user else False
+        return False
+    
+
 
 class SharedCalendarUserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username')

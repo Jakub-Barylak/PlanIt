@@ -285,22 +285,33 @@ class EventViewSet(viewsets.ModelViewSet):
         except ValueError:
             return Response({"error": "Invalid date format."}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Generate events for repeated events
         self.check_and_generate_events(user, end_date)
 
         calendars = Calendar.objects.filter(Q(owner=user) | Q(shared_users__user=user)).distinct()
-        serialized_calendars = CalendarSerializer(calendars, many=True).data
+        calendar_data = []
 
-        for calendar in serialized_calendars:
-            events = Event.objects.filter(
-                calendar_id=calendar['id'],
-                begin_date__gte=start_date,
-                end_date__lte=end_date
-            )
+        for calendar in calendars:
+            serialized_calendar = CalendarSerializer(calendar).data
+
+            # Determine if the calendar is shared (not owned by the user)
+            is_shared = calendar.owner != user
+            serialized_calendar['shared'] = is_shared
+
+            # Determine coworked status for shared calendars
+            if is_shared:
+                is_coworked = SharedCalendarUser.objects.filter(calendar=calendar, user=user, coworked=True).exists()
+                serialized_calendar['coworked'] = is_coworked
+            else:
+                serialized_calendar['coworked'] = False
+
+            # Fetch and serialize events for the calendar
+            events = Event.objects.filter(calendar=calendar, begin_date__gte=start_date, end_date__lte=end_date)
             serialized_events = EventSerializer(events, many=True).data
-            calendar['events'] = serialized_events
+            serialized_calendar['events'] = serialized_events
 
-        return Response(serialized_calendars)
+            calendar_data.append(serialized_calendar)
+
+        return Response(calendar_data)
     
 
     def update(self, request, pk=None, *args, **kwargs):
@@ -697,4 +708,43 @@ class TodoListViewSet(viewsets.ModelViewSet):
             return Response(template_serializer.data)
         else:
             return Response(template_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['post'], url_path='get-all-user-events')
+    def get_all_user_events(self, request, *args, **kwargs):
+        user = request.user
+        start_date_str = request.data.get('begin_date')
+        end_date_str = request.data.get('end_date')
+
+        if not start_date_str or not end_date_str:
+            return Response(
+                {"error": "Both 'begin_date' and 'end_date' are required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            start_date = parse(start_date_str)
+            end_date = parse(end_date_str)
+            if timezone.is_naive(start_date):
+                start_date = timezone.make_aware(start_date)
+            if timezone.is_naive(end_date):
+                end_date = timezone.make_aware(end_date)
+        except ValueError:
+            return Response({"error": "Invalid date format."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Generate events for repeated events
+        self.check_and_generate_events(user, end_date)
+
+        calendars = Calendar.objects.filter(Q(owner=user) | Q(shared_users__user=user)).distinct()
+        serialized_calendars = CalendarSerializer(calendars, many=True).data
+
+        for calendar in serialized_calendars:
+            events = Event.objects.filter(
+                calendar_id=calendar['id'],
+                begin_date__gte=start_date,
+                end_date__lte=end_date
+            )
+            serialized_events = EventSerializer(events, many=True).data
+            calendar['events'] = serialized_events
+
+        return Response(serialized_calendars)
 """
