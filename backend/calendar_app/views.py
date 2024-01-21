@@ -327,10 +327,32 @@ class EventViewSet(viewsets.ModelViewSet):
 
     def update_repeated_event(self, request, event, *args, **kwargs):
         event_template = event.template
-        template_serializer = EventTemplateSerializer(event_template, data=request.data)
-        
+        # Use existing template data as the default
+        default_data = {
+            'name': event_template.name,
+            'description': event_template.description,
+            'all_day': event_template.all_day,
+            'every': event_template.every,
+            'begin_date': event_template.begin_date,
+            'end_date': event_template.end_date,
+            'weekday': event_template.weekday,
+            'month_day': event_template.month_day,
+            'month': event_template.month,
+            # Categories will be handled separately as it's a many-to-many field
+            'generation_date': event_template.generation_date,
+        }
+        # Update the default data with the provided request data
+        update_data = {**default_data, **request.data}
+        # Now use this combined data for serialization
+        template_serializer = EventTemplateSerializer(event_template, data=update_data, partial=True)
+
         if template_serializer.is_valid():
             updated_template = template_serializer.save()
+
+            # Handle categories if provided in the request
+            if 'categories' in request.data:
+                category_ids = request.data['categories']
+                updated_template.categories.set(category_ids)
 
             # Delete all future events associated with this template
             self.delete_future_events(updated_template)
@@ -353,6 +375,8 @@ class EventViewSet(viewsets.ModelViewSet):
             return Response(template_serializer.data)
         else:
             return Response(template_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 
 
@@ -642,3 +666,35 @@ class TodoListViewSet(viewsets.ModelViewSet):
             # You can customize the NotFound error if you want
             return Response({"error": "Todo item not found."},
                             status=status.HTTP_404_NOT_FOUND)
+
+
+"""
+    def update_repeated_event(self, request, event, *args, **kwargs):
+        event_template = event.template
+        template_serializer = EventTemplateSerializer(event_template, data=request.data)
+        
+        if template_serializer.is_valid():
+            updated_template = template_serializer.save()
+
+            # Delete all future events associated with this template
+            self.delete_future_events(updated_template)
+
+            # Reset the generation_date to now
+            updated_template.generation_date = timezone.now()
+            updated_template.save()
+
+            # Determine the until_date based on the template frequency
+            if updated_template.every == 'month':
+                until_date = updated_template.generation_date + relativedelta(years=1)
+            elif updated_template.every == 'year':
+                until_date = updated_template.generation_date + relativedelta(years=2)
+            else:
+                until_date = updated_template.generation_date + timedelta(days=30)
+
+            # Generate new events from the updated template
+            self.generate_events_from_template(updated_template, until_date)
+
+            return Response(template_serializer.data)
+        else:
+            return Response(template_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+"""
