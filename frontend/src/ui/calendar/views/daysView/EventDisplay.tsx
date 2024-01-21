@@ -2,6 +2,8 @@
 import { Event } from "@/lib/types";
 import { DateTime } from "luxon";
 import Link from "next/link";
+import { useLayoutEffect } from "react";
+import W3CtextColor from "../W3CtextColor";
 
 export default function EventDisplay({
 	event,
@@ -29,6 +31,8 @@ export default function EventDisplay({
 		}
 	}
 
+	const textColor: string = W3CtextColor(color);
+
 	// const tailwindRowStart = `row-start-[${rowStart}]`;
 	// const tailwindRowSpan = `row-[${rowStart}_/_span_${rowSpan}]`;
 	// const tailwindStyles = clsx(tailwindRowStart, tailwindRowSpan, "bg-red-500");
@@ -45,6 +49,7 @@ export default function EventDisplay({
 			style={{
 				gridRow: `${rowStart} / span ${rowSpan}`,
 				backgroundColor: color === "#000000" ? "#150F6366" : color,
+				color: textColor,
 			}}
 		>
 			<Link href={`/calendar/${calendarId}/${event.id}`}>
