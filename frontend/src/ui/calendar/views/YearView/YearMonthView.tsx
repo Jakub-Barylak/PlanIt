@@ -24,7 +24,7 @@ export default function YearMonthView({
 
 	return (
 		<div
-			className="grid cursor-pointer grid-cols-1 grid-rows-[auto_1fr] gap-2 rounded-xl border-1 p-2 text-lg transition-background hover:bg-[#f6f7f9]"
+			className="grid cursor-pointer grid-cols-1 grid-rows-[auto_1fr] gap-2 rounded-xl border-1 p-2 text-lg transition-background hover:bg-[#f6f7f9] light:border-lightMode-border dark:border-darkMode-border dark:hover:bg-darkMode-hover-bg"
 			onClick={() => {
 				calendarContext.setStartDate(date);
 				calendarContext.setView("month");

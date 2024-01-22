@@ -91,7 +91,7 @@ export default function MonthView() {
 
 	return (
 		<>
-			<div className="grid h-full grid-cols-7 grid-rows-[auto_1fr] p-10">
+			<div className="grid h-full grid-cols-7 grid-rows-[auto_1fr] p-10 dark:bg-none">
 				{/* show days of week */}
 				{[...Array(7)].map((_, i) => {
 					return (
@@ -102,9 +102,9 @@ export default function MonthView() {
 						</div>
 					);
 				})}
-				<div className=" col-span-7 flex-grow overflow-hidden rounded-2xl">
+				<div className="col-span-7 flex-grow overflow-hidden rounded-2xl dark:border-1 dark:border-darkMode-border dark:bg-darkMode-border">
 					<div
-						className={`grid h-full w-full grid-cols-7 gap-[1px] overflow-y-auto bg-lightMode-light-border ${
+						className={`grid h-full w-full grid-cols-7 gap-[1px] overflow-y-auto ${
 							daysToAddInFront + daysInMonth + daysToAddInBack > 35
 								? "grid-rows-[repeat(6,minmax(0,1fr))]"
 								: "grid-rows-[repeat(5,minmax(0,1fr))]"
@@ -123,9 +123,6 @@ export default function MonthView() {
 										date={jsDate}
 										month={month}
 										key={crypto.randomUUID()}
-										className={`${
-											date.month + 1 !== month ? "bg-slate-500" : "bg-slate-200"
-										}`}
 										events={
 											dayMap.has(date.toISODate())
 												? dayMap.get(date.toISODate())

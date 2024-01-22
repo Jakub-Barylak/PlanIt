@@ -13,7 +13,7 @@ export default function CalendarLayout({
 }) {
 	return (
 		<NextUIProvider>
-			<div className="grid max-h-screen w-full grid-cols-[auto_minmax(0,1fr)_auto]">
+			<div className="grid max-h-screen w-full grid-cols-[auto_minmax(0,1fr)_auto] bg-lightMode-background dark:bg-darkMode-background">
 				<SideNav />
 				{children}
 				<DailyPlanner />
