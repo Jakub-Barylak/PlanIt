@@ -6,6 +6,7 @@ import { DateTime } from "luxon";
 import { useRouter } from "next/navigation";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { toast } from "react-toastify";
+import { AxiosError, AxiosResponse } from "axios";
 
 import {
 	CalendarViewContext,
@@ -13,7 +14,7 @@ import {
 } from "@/providers/CalendarProvider";
 import { AuthContext, AuthContextType } from "@/providers/AuthProvider";
 import EditableCell from "@/ui/EventDetails/EditableCell";
-import { AxiosError, AxiosResponse } from "axios";
+import EditAllRepeatedEventsDialog from "@/ui/EventDetails/EditAllRepeatedEventsDialog";
 
 type EventDetailsProps = {
 	params: {
@@ -28,14 +29,13 @@ export default function EventDetails(props: EventDetailsProps) {
 	) as CalendarViewContextType;
 	const { axios } = useContext(AuthContext) as AuthContextType;
 
-	const router = useRouter();
-
 	const findEvent = () => {
 		return calendars
 			.find((cal) => cal.id === Number(props.params.calendarId))
 			?.events?.find((event) => event.id === Number(props.params.eventId));
 	};
 
+	const router = useRouter();
 	const event = findEvent();
 
 	useEffect(() => {
@@ -44,6 +44,7 @@ export default function EventDetails(props: EventDetailsProps) {
 	}, [calendars]);
 
 	const [eventDetails, setEventDetails] = useState(event);
+	const [isOpen, setOpen] = useState(false);
 
 	const onChangeHandler = (
 		event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -97,7 +98,23 @@ export default function EventDetails(props: EventDetailsProps) {
 	};
 
 	const handleEditEvent = () => {
+		if (eventDetails?.template !== null) {
+			setOpen(true);
+		} else {
+			sendEditRequest();
+		}
+	};
+
+	const sendEditRequest = (editAll: boolean = false) => {
 		toast.info("Updating event...");
+		console.log({
+			name: eventDetails?.name,
+			description: eventDetails?.description,
+			begin_date: eventDetails?.begin_date,
+			end_date: eventDetails?.end_date,
+			calendar: props.params.calendarId,
+			repeated: editAll,
+		});
 		axios
 			.patch(`/events/${eventDetails?.id}/`, {
 				name: eventDetails?.name,
@@ -105,6 +122,7 @@ export default function EventDetails(props: EventDetailsProps) {
 				begin_date: eventDetails?.begin_date,
 				end_date: eventDetails?.end_date,
 				calendar: props.params.calendarId,
+				repeated: editAll,
 			})
 			.then((res: AxiosResponse) => {
 				editEvent(parseInt(props.params.calendarId), res.data);
@@ -168,10 +186,10 @@ export default function EventDetails(props: EventDetailsProps) {
 						onChange={onChangeHandler}
 					/>
 				</div>
-				<div className="col-start-3 col-end-5">
+				<div className="col-start-3 col-end-4">
 					<h2 className="my-3 text-xl">Repeated</h2>
 					<p className="rounded-2xl border-2 border-solid border-[#C4C4C4] p-2 text-[#A0A0A0]">
-						TODO
+						{eventDetails.template !== null ? "Yes" : "No"}
 					</p>
 				</div>
 				<div className="col-start-1 col-end-5 row-start-3 row-end-4">
@@ -225,6 +243,11 @@ export default function EventDetails(props: EventDetailsProps) {
 					</Link>
 				)}
 			</div>
+			<EditAllRepeatedEventsDialog
+				isOpen={isOpen}
+				setOpen={setOpen}
+				sendRequest={sendEditRequest}
+			/>
 		</div>
 	);
 }
