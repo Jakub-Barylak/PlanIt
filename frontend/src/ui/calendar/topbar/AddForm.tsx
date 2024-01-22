@@ -8,9 +8,10 @@ import {
 } from "@/providers/CalendarProvider";
 import { Calendar } from "@/lib/types";
 import AddFormRepeat from "./AddFormRepeat";
+import { toast } from "react-toastify";
 
 export default function AddForm() {
-	const { calendars } = useContext(
+	const { calendars, forceRefresh } = useContext(
 		CalendarViewContext,
 	) as CalendarViewContextType;
 	const { axios } = useContext(AuthContext) as AuthContextType;
@@ -63,12 +64,16 @@ export default function AddForm() {
 		if (formState.repeated) {
 			formData = { ...formData, ...repeatedValues };
 		}
-		//console.log(formData);
 		axios
 			.post("/events/", { ...formData })
 			.then((response) => {
 				// TODO : update calendar
-				alert("Event added");
+				if (formData.repeated) {
+					toast.success("Repeated event added");
+				} else {
+					toast.success("Event added");
+				}
+				forceRefresh();
 			})
 			.catch((error) => {
 				console.log(error);

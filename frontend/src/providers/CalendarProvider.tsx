@@ -22,6 +22,7 @@ export type CalendarViewContextType = {
 	shareCalendar: (calendarId: number, email: string, coworked: boolean) => void;
 	deleteEvent: (calendarId: number, eventId: number) => void;
 	editEvent: (calendarId: number, updatedEvent: Event) => void;
+	forceRefresh: () => void;
 	// fetchCalendarsInRange: (begin_date: DateTime, end_date: DateTime) => void;
 };
 
@@ -37,6 +38,7 @@ export default function CalendarProvider({
 	const [startDate, setStartDate] = useState(DateTime.now().startOf("week"));
 	const [numberOfDays, setNumberOfDays] = useState(7);
 	const [calendars, setCalendars] = useState<Calendar[]>([]);
+	const [forceRefresh, setForceRefresh] = useState(false);
 
 	const currentDate = DateTime.now();
 	const [startFetch, setStartFetch] = useState(
@@ -70,6 +72,27 @@ export default function CalendarProvider({
 				});
 		}
 	}, [accessToken, refreshToken]);
+
+	useEffect(() => {
+		if (forceRefresh) {
+			setForceRefresh(false);
+			axios
+				.post("/events/get-all-user-events/", {
+					begin_date: startFetch.toISODate(),
+					end_date: endFetch.toISODate(),
+				})
+				.then((response) => {
+					const data = response.data as Calendar[];
+					data.forEach((calendar) => {
+						calendar.isVisible = calendar.isVisible ?? true;
+					});
+					setCalendars(data);
+				})
+				.catch((error: AxiosError) => {
+					if (error?.response?.status !== 401) console.log(error);
+				});
+		}
+	}, [forceRefresh]);
 
 	const calendarCallback = (data: Calendar[]) => {
 		const calendarsCopy = structuredClone(calendars);
@@ -345,6 +368,7 @@ export default function CalendarProvider({
 				updateCalendar,
 				deleteEvent,
 				editEvent,
+				forceRefresh: () => setForceRefresh(true),
 			}}
 		>
 			{children}
