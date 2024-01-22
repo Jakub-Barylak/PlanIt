@@ -13,7 +13,7 @@ export default function MonthView(props: MonthDayViewProps) {
 	// if (props.events.length > 0) console.log(props.events);
 	return (
 		<>
-			<div className="grid h-full w-full grid-rows-[auto_1fr] p-3 light:bg-lightMode-calendar-bg light:text-black dark:bg-darkMode-background">
+			<div className="grid h-full w-full grid-rows-[auto_1fr] bg-lightMode-calendar-bg  p-3 light:text-black dark:bg-darkMode-background ">
 				<div
 					className={`text-right ${
 						props.month !== props.date.getMonth() + 1

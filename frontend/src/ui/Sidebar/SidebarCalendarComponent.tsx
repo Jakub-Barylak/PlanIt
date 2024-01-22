@@ -9,6 +9,7 @@ import { useContext, useState } from "react";
 import "react-contexify/dist/ReactContexify.css";
 import { SidebarCalendarViewShareDialog } from "./SidebarCalendarViewShareDialog";
 import { SidebarCalendarViewEditCalendarDialog } from "./SidebarCalendarViewEditCalendarDialog";
+import { ThemeContext, ThemeContextType } from "@/providers/ThemeProvider";
 
 export const SidebarCalendarComponent = ({
 	calendar,
@@ -24,6 +25,8 @@ export const SidebarCalendarComponent = ({
 	const calendarContext = useContext(
 		CalendarViewContext,
 	) as CalendarViewContextType;
+
+	const { theme } = useContext(ThemeContext) as ThemeContextType;
 
 	const { show } = useContextMenu({
 		id: MENU_ID,
@@ -74,6 +77,7 @@ export const SidebarCalendarComponent = ({
 					id={MENU_ID}
 					style={{ position: "absolute" }}
 					onVisibilityChange={setMenuVisible}
+					theme={theme as string}
 				>
 					<Item disabled>{calendar.name}</Item>
 					<Separator />

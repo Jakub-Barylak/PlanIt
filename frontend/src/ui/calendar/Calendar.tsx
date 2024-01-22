@@ -32,7 +32,7 @@ export default function Calendar() {
 
 		return (
 			<div className="m-10 flex-grow overflow-y-auto rounded-2xl">
-				<div className="flex flex-row flex-nowrap light:bg-[#F6F7F9] dark:bg-none">
+				<div className="flex flex-row flex-nowrap light:bg-lightMode-calendar-bg dark:bg-none">
 					<DaysView days={numberOfDays} start={context.startDate} />
 				</div>
 			</div>

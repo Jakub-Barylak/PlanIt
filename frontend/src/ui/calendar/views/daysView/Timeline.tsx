@@ -3,7 +3,7 @@ import HourCell from "./HourCell";
 export default function Timeline() {
 	const hours = [...Array(24)].map((_, i) => i);
 	return (
-		<div className="flex flex-shrink flex-col">
+		<div className="flex flex-shrink flex-col bg-lightMode-calendar-bg dark:bg-darkMode-background">
 			<div className="flex h-[3.25rem] justify-center "></div>
 			<div className="grid flex-1 grid-rows-288">
 				<div

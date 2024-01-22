@@ -44,7 +44,7 @@ export default function LongDayView(props: LongDayViewProps) {
 		.replace(".", "");
 
 	return (
-		<div className="flex flex-1 flex-col">
+		<div className="flex flex-1 flex-col bg-lightMode-calendar-bg dark:bg-darkMode-background">
 			<div className="flex h-16 flex-col justify-center border-b-1 border-dashed border-b-[#EEEEEF]">
 				<div className="text-center text-[#848585]">
 					{localizedWeekday[0].toUpperCase() + localizedWeekday.slice(1)}

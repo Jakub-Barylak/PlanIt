@@ -102,7 +102,7 @@ export default function MonthView() {
 						</div>
 					);
 				})}
-				<div className="col-span-7 flex-grow overflow-hidden rounded-2xl dark:border-1 dark:border-darkMode-border dark:bg-darkMode-border">
+				<div className="col-span-7 flex-grow overflow-hidden rounded-2xl bg-lightMode-border dark:border-1 dark:border-darkMode-border dark:bg-darkMode-border">
 					<div
 						className={`grid h-full w-full grid-cols-7 gap-[1px] overflow-y-auto ${
 							daysToAddInFront + daysInMonth + daysToAddInBack > 35
