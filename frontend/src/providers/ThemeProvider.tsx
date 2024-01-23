@@ -33,13 +33,11 @@ export default function ThemeProvider({
 	function initHandler() {
 		if (isLocalStorageEmpty()) {
 			localStorage.setItem("isDarkTheme", "false");
-			document.querySelector("body")!.classList.add("dark");
 			setIsDark(false);
 		} else {
 			const isDarkTheme: boolean = JSON.parse(
 				localStorage.getItem("isDarkTheme")!,
 			);
-			isDarkTheme && document!.querySelector("body")!.classList.add("dark");
 			setIsDark(() => {
 				return isDarkTheme;
 			});
@@ -51,12 +49,7 @@ export default function ThemeProvider({
 			localStorage.getItem("isDarkTheme")!,
 		);
 		setIsDark(!isDarkTheme);
-		toggleDarkClassToBody();
 		setValueToLocalStorage();
-	}
-
-	function toggleDarkClassToBody(): void {
-		document!.querySelector("body")!.classList.toggle("dark");
 	}
 
 	function setValueToLocalStorage(): void {
