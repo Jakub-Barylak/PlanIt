@@ -143,7 +143,7 @@ onShowTaskManagerChange}) => {
 
     
     <div className={`h-100vh  flex flex-col items-start gap-4 p-4 bg-${isDark  ? 'bg-dark' : 'bg-white'} `} > 
-    <div className={`h-full  w-0.5 bg-${isDark  ? 'gray-500' : 'gray-200'} absolute ${showTaskManager ? 'left-[75vw]' : 'opacity-0 invisible'}  top-0 bottom-4 transition-all duration-300 z-2'}`}></div>  
+    <div className={`h-full  w-0.5 bg-${isDark  ? 'gray-500' : 'gray-200'} absolute ${showTaskManager ? 'left-[82vw]' : 'opacity-0 invisible'}  top-0 bottom-4 transition-all duration-300 z-2'}`}></div>  
   
 
     <span
@@ -165,7 +165,7 @@ onShowTaskManagerChange}) => {
     
   </div>
 </span>
-<h2 className={`text-xl mt-[-5vh] mx-auto ${isDark  ? 'text-gray-400' : 'text-gray-700'}  ${showTaskManager ? 'text-center' : 'text-center text-ml-[3vw] '} `} style={{ width: showTaskManager ? '20vw' : '10vw' }}>  To Do</h2>
+<h2 className={`text-xl mt-[-5vh] mx-auto ${isDark  ? 'text-gray-400' : 'text-gray-700'}  ${showTaskManager ? 'text-center' : 'text-center text-ml-[3vw] '} `} style={{ width: showTaskManager ? '16vw' : '5vw' }}>  To Do</h2>
 
 <div className={`h-0.5 bg-${isDark  ? 'gray-500' : 'gray-200'} w-full mt-[0vh] ${showTaskManager ? '' : 'opacity-0 invisible'}`}></div>
 
@@ -175,7 +175,7 @@ onShowTaskManagerChange}) => {
       
       style={{
         overflowY: 'auto',
-        maxHeight: 'calc(100vh - 12vh)', //'auto',
+        maxHeight: '85vh',//'calc(100vh - 15vh)', //'auto',
       }}
     >
         <ul 
