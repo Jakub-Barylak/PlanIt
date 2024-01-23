@@ -64,7 +64,7 @@ export default function ThemeProvider({
 	}
 
 	return (
-		<ThemeContext.Provider value={{ isDark: false, toggleThemeHandler }}>
+		<ThemeContext.Provider value={{ isDark, toggleThemeHandler }}>
 			<body
 				className={`${inter.className} max-h-screen ${
 					isDark ? "dark" : "light"
