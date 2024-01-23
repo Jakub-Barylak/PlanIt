@@ -59,7 +59,9 @@ onShowTaskManagerChange}) => {
   if (!themeContext) {
     return <div>Error: ThemeContext is null</div>;
   }
-  const { theme, setTheme}: ThemeContextType = themeContext;
+  const { isDark, toggleThemeHandler } = useContext(
+    ThemeContext
+  ) as ThemeContextType;
 
   const arrowStyle = {
     marginTop: showTaskManager ? '-8%' : '-15px',
@@ -140,8 +142,8 @@ onShowTaskManagerChange}) => {
   return (
 
     
-    <div className={`h-100vh  flex flex-col items-start gap-4 p-4 bg-${theme === 'dark' ? 'bg-dark' : 'bg-white'} `} > 
-    <div className={`h-full  w-0.5 bg-${theme === 'dark' ? 'gray-500' : 'gray-200'} absolute ${showTaskManager ? 'left-[75vw]' : 'opacity-0 invisible'}  top-0 bottom-4 transition-all duration-300 '}`}></div>  
+    <div className={`h-100vh  flex flex-col items-start gap-4 p-4 bg-${isDark  ? 'bg-dark' : 'bg-white'} `} > 
+    <div className={`h-full  w-0.5 bg-${isDark  ? 'gray-500' : 'gray-200'} absolute ${showTaskManager ? 'left-[75vw]' : 'opacity-0 invisible'}  top-0 bottom-4 transition-all duration-300 '}`}></div>  
   
 
     <span
@@ -150,7 +152,7 @@ onShowTaskManagerChange}) => {
 
         <div
     className={`w-8 h-8 p-1
-    ${theme === 'dark' ? 'bg-darkMode-background border-darkMode-secondary-text' : 'bg-gray-200 border-gray-200'}
+    ${isDark ? 'bg-darkMode-background border-darkMode-secondary-text' : 'bg-gray-200 border-gray-200'}
     rounded flex items-center justify-center border-2`}
 
   >
@@ -158,14 +160,14 @@ onShowTaskManagerChange}) => {
      className={`${
       showTaskManager ? 'rotate-180' : 'rotate-0'
     } transform cursor-pointer transition duration-200 ease-in-out ${
-      theme === 'dark' ? 'text-white' : 'text-black'
+      isDark  ? 'text-white' : 'text-black'
     }`}  />
     
   </div>
 </span>
-<h2 className={`text-xl mt-[-5vh] mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}  ${showTaskManager ? 'text-center' : 'text-center text-ml-[3vw] '} `} style={{ width: showTaskManager ? '20vw' : '10vw' }}>  To Do</h2>
+<h2 className={`text-xl mt-[-5vh] mx-auto ${isDark  ? 'text-gray-400' : 'text-gray-700'}  ${showTaskManager ? 'text-center' : 'text-center text-ml-[3vw] '} `} style={{ width: showTaskManager ? '20vw' : '10vw' }}>  To Do</h2>
 
-<div className={`h-0.5 bg-${theme === 'dark' ? 'gray-500' : 'gray-200'} w-full mt-[0vh] ${showTaskManager ? '' : 'opacity-0 invisible'}`}></div>
+<div className={`h-0.5 bg-${isDark  ? 'gray-500' : 'gray-200'} w-full mt-[0vh] ${showTaskManager ? '' : 'opacity-0 invisible'}`}></div>
 
 
       {showTaskManager && (
@@ -187,10 +189,10 @@ onShowTaskManagerChange}) => {
             onDragStart={(event) => handleDragStart(index, event)}
             onDragOver={(event) => event.preventDefault()}
             onDrop={(event) => handleDrop(index, event)}
-            className={`flex items-center justify-between bg-myCustomBackground text-${theme === 'dark' ? 'white' : 'black'} p-1 rounded-2 w-full box-border mb-0`}
+            className={`flex items-center justify-between bg-myCustomBackground text-${isDark  ? 'white' : 'black'} p-1 rounded-2 w-full box-border mb-0`}
             >
 
-      <Task task={task} onToggle={() => handleToggle(index)} darkMode={theme === 'dark'} />
+      <Task task={task} onToggle={() => handleToggle(index)} darkMode={isDark } />
       <div className="flex items-center" >
       <div className="mr-2">
       <RemoveTask onRemove={() => handleRemoveTask(index)} />

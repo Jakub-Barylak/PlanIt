@@ -16,8 +16,9 @@ const DailyPlaner: React.FC = () => {
 		return <div>Error: ThemeContext is null</div>;
 	}
 
-	const { theme }: ThemeContextType = themeContext;
+	const { isDark  }: ThemeContextType = themeContext;
 	const [showTaskManager, setShowTaskManager] = useState<boolean>(true);
+
 
 	const handleShowTaskManagerChange = (newShowTaskManager: boolean) => {
 		setShowTaskManager(newShowTaskManager);
@@ -31,8 +32,8 @@ const DailyPlaner: React.FC = () => {
 		style={{
 			width: showTaskManager ? '25vw' : 'auto', // Szerokość 100% ekranu
 			maxWidth: '25vw',
-			color: theme === 'dark' ? 'white' : 'black',
-			background: theme === 'dark' ? '#161920' : '#FFFFFF',
+			color: isDark  ? 'white' : 'black',
+			background: isDark  ? '#161920' : '#FFFFFF',
 			transition: 'height 0.3s ease', // dodaj płynne przejści
 		  }}
 			>
