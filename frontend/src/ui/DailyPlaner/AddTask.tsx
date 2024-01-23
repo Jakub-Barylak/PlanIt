@@ -25,11 +25,12 @@ const AddTask: React.FC<AddTaskProps> = ({ onAdd, flag, setFlag }) => {
       onAdd(newTask);
       setNewTask('');
 
-      setFlag(!flag);
+     
 
       axios.post("/todo_lists/", {"todo_element": newTask, "done": false})
       .then((res)=>{
         toast.success("Added to-do task")
+        setFlag(!flag);
       })
       .catch((error)=>{
         toast.error("Error to-do list")

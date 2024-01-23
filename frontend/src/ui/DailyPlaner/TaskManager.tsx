@@ -59,15 +59,16 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
   
   const handleToggle = (index: number) => {
     const newTasks = [...tasks];
-    newTasks[index] = {
-      ...newTasks[index],
-      done: !newTasks[index].done,
-    };
-    setTasks(newTasks);
-    setFlag(!flag);
+    
     axios.patch(`/todo_lists/${tasks[index].id}/`, {"done": !newTasks[index].done})
     .then(()=>{
       toast.success("Task done")
+      newTasks[index] = {
+        ...newTasks[index],
+        done: !newTasks[index].done,
+      };
+      setTasks(newTasks);
+      setFlag(!flag);
     })
     .catch((error)=>{
       toast.error("ups")
@@ -85,10 +86,11 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
     const newTasks = [...tasks];
     newTasks.splice(index, 1);
     setTasks(newTasks);
-    setFlag(!flag);
+    
     axios.delete(`/todo_lists/${tasks[index].id}/`)
     .then(()=>{
       toast.success("Task removed successfully")
+      setFlag(!flag);
     })
     .catch((error)=>{
       toast.error("Task didn't remove")
