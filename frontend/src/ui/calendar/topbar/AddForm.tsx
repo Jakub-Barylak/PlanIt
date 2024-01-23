@@ -67,7 +67,6 @@ export default function AddForm() {
 		axios
 			.post("/events/", { ...formData })
 			.then((response) => {
-				// TODO : update calendar
 				if (formData.repeated) {
 					toast.success("Repeated event added");
 				} else {
@@ -105,6 +104,8 @@ export default function AddForm() {
 				<label htmlFor="calendar">Calendar</label>
 				<select name="calendar" id="calendar" onChange={handleChange}>
 					{calendars.map((calendar: Calendar) => {
+						if (calendar.shared === true && calendar.coworked === false)
+							return null;
 						return (
 							<option value={calendar.id} key={calendar.id}>
 								{calendar.name}
