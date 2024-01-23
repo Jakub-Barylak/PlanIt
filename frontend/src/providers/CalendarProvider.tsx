@@ -224,8 +224,8 @@ export default function CalendarProvider({
 				},
 			})
 			.then((response) => {
-				console.log(response);
-				console.log("calendar " + calendarId + " deleted");
+				// console.log(response);
+				// console.log("calendar " + calendarId + " deleted");
 				const calendarsCopy = structuredClone(calendars);
 				calendarsCopy.splice(
 					calendarsCopy.findIndex((c) => c.id === calendarId),
@@ -254,7 +254,7 @@ export default function CalendarProvider({
 		const calendarsCopy = structuredClone(calendars);
 		const calendar = calendarsCopy.find((c) => c.id === calendarId);
 		if (calendar === undefined) {
-			console.log("calendar not found");
+			// console.log("calendar not found");
 			return;
 		}
 		const t = toast.loading("Updating calendar...");
@@ -265,8 +265,8 @@ export default function CalendarProvider({
 				color: color ?? calendar.color,
 			})
 			.then((response) => {
-				console.log(response);
-				console.log("calendar " + calendarId + " updated");
+				// console.log(response);
+				// console.log("calendar " + calendarId + " updated");
 				calendar.name = name ?? calendar.name;
 				calendar.color = color ?? calendar.color;
 				setCalendars(calendarsCopy);
@@ -296,7 +296,7 @@ export default function CalendarProvider({
 				coworked: coworked,
 			})
 			.then((response) => {
-				console.log(response);
+				// console.log(response);
 				toast.update(t, {
 					render: `Calendar successfully shared with ${email}`,
 					type: "success",

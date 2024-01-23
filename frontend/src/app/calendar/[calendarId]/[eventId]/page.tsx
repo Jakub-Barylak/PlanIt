@@ -55,7 +55,7 @@ export default function EventDetails(props: EventDetailsProps) {
 		event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
 	) => {
 		if (eventDetails === undefined) return;
-		console.log({ value: event.target.value, name: event.target.name });
+		// console.log({ value: event.target.value, name: event.target.name });
 		if (
 			event.target.name === "begin_date" ||
 			event.target.name === "end_date"
@@ -115,14 +115,14 @@ export default function EventDetails(props: EventDetailsProps) {
 
 	const sendEditRequest = (editAll: boolean = false) => {
 		toast.info("Updating event...");
-		console.log({
-			name: eventDetails?.name,
-			description: eventDetails?.description,
-			begin_date: eventDetails?.begin_date,
-			end_date: eventDetails?.end_date,
-			calendar: props.params.calendarId,
-			repeated: editAll,
-		});
+		// console.log({
+		// 	name: eventDetails?.name,
+		// 	description: eventDetails?.description,
+		// 	begin_date: eventDetails?.begin_date,
+		// 	end_date: eventDetails?.end_date,
+		// 	calendar: props.params.calendarId,
+		// 	repeated: editAll,
+		// });
 		axios
 			.patch(`/events/${eventDetails?.id}/`, {
 				name: eventDetails?.name,

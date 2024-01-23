@@ -35,7 +35,7 @@ const RegisterPane: NextPage = () => {
 			return;
 		}
 
-		console.log(username, password, email);
+		// console.log(username, password, email);
 
 		let a = await axios
 			.post("http://" + "localhost:8000" + "/signup/", {

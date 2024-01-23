@@ -43,7 +43,7 @@ export default function AddForm() {
 		} else {
 			setFormState({ ...formState, [name]: value });
 		}
-		console.log(formState);
+		// console.log(formState);
 	};
 
 	useEffect(() => {
@@ -59,7 +59,7 @@ export default function AddForm() {
 
 	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		console.log("Tutaj");
+		// console.log("Tutaj");
 		let formData = { ...formState };
 		if (formState.repeated) {
 			formData = { ...formData, ...repeatedValues };
