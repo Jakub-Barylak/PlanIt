@@ -20,18 +20,18 @@ const DailyPlaner: React.FC = () => {
 
 	return (
 		<div
-			style={{
-				textAlign: "center",
-				paddingTop: "20px",
-				color: theme === "dark" ? "white" : "black",
-				background: theme === "dark" ? '#161920' : '#FFFFFF',//"#333" : "white",
-			}}
+			// style={{
+			// 	textAlign: "center",
+			// 	paddingTop: "20px",
+			// 	color: theme === "dark" ? "white" : "black",
+			// 	background: theme === "dark" ? '#161920' : '#FFFFFF',//"#333" : "white",
+			// }}
 		>
 			<h2
-				style={{ fontSize: "24px" }}
-				onClick={() => {
-					toast("Hello, World!");
-				}}
+				// style={{ fontSize: "24px" }}
+				// onClick={() => {
+				// 	toast("Hello, World!");
+				// }}
 			>
 			</h2>
 			<TaskManager initialTasks={initialTasks} />

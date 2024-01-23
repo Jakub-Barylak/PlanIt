@@ -81,13 +81,12 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
   return (
 
     
-    <div className={`h-auto  flex flex-col items-start gap-4 p-4 bg-${theme === 'dark' ? 'dark' : 'white'} `} >
-    <div className={`h-full  w-0.5 bg-${theme === 'dark' ? 'gray-600' : 'gray-200'} absolute ${showTaskManager ? 'left-[79.7%]' : 'left-[93.8%]'}  top-0 bottom-4 transition-all duration-300`}></div>  
-    <div className={`h-1 bg-${theme === 'dark' ? 'gray-600' : 'gray-200'} w-full mb-[-10%] h-0.5`}></div>
+    <div className={`h-100vh  flex flex-col items-start gap-4 p-4 bg-${theme === 'dark' ? 'bg-dark' : 'bg-white'} `} style={{ width: showTaskManager ? '25vw' : '0vw)' }}>
+    <div className={`h-full  w-0.5 bg-${theme === 'dark' ? 'gray-500' : 'gray-200'} absolute ${showTaskManager ? 'left-[75vw]' : 'left-[93.8%]'}  top-0 bottom-4 transition-all duration-300 ${showTaskManager  ? '': 'opacity-0 invisible'}`}></div>  
 
     <span
     onClick={toggleTaskManager}
-    className={`cursor-pointer inline-block mr-5 ${showTaskManager ? 'ml-[-12%] mt-[-9%]' : 'ml-[-60%] mt-[-75%]'}  z-10`} >
+    className={`cursor-pointer inline-block mr-5 ${showTaskManager ? 'ml-[-3vw] mt-[1vh]' : 'ml-[15vw] mt-[1vh]'}  z-10`} >
 
         <div
     className={`w-8 h-8 p-1
@@ -104,14 +103,17 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
     
   </div>
 </span>
-<h2 className={`text-xl mb-2 mt-[-50px] mx-auto ${showTaskManager ? '' : 'mb-8'} ${showTaskManager ? 'text-left' : 'text-right'}`} style={{ color: theme === 'dark' ? 'text-gray' : '' }}>  To Do</h2>
+<h2 className={`text-xl mb-2 mt-[-6vh] mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}  ${showTaskManager ? 'text-center' : 'text-center ml-[13vw] '} `} style={{ width: showTaskManager ? '20vw' : '15vw' }}>  To Do</h2>
+
+<div className={`h-0.5 bg-${theme === 'dark' ? 'gray-500' : 'gray-200'} w-full mt-[0vh] ${showTaskManager ? '' : 'opacity-0 invisible'}`}></div>
+
 
       {showTaskManager && (
       <div
       
       style={{
         overflowY: 'auto',
-        maxHeight: 'calc(100vh - 60px)', //'auto',
+        maxHeight: 'calc(100vh - 12vh)', //'auto',
       }}
     >
         <ul 
