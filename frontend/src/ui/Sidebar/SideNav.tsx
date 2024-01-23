@@ -43,6 +43,9 @@ export const SideNav: FC<Props> = ({
 		toggleThemeHandler();
 	};
 
+	// Comment to disable generated user image
+	imageSrc = `https://api.dicebear.com/7.x/notionists/svg?scale=120&seed=${user?.username}`;
+
 	return (
 		<>
 			{/* MAIN DIV */}
@@ -60,7 +63,7 @@ export const SideNav: FC<Props> = ({
 					}`}
 				>
 					{/* USER IMAGE */}
-					<div className="rounded-lg">
+					<div className="h-[50px] w-[50px] rounded-lg bg-lightMode-logo-bg dark:bg-darkMode-hr">
 						<Image
 							alt=""
 							src={imageSrc}
