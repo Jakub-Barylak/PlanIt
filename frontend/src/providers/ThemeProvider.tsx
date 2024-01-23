@@ -1,18 +1,18 @@
 "use client";
-import { useState, createContext, useLayoutEffect } from "react";
+import { useState, createContext, useLayoutEffect, useEffect } from "react";
 import { Inter } from "next/font/google";
 import { getCookie, hasCookie, setCookie } from "cookies-next";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export type ThemeContextType = {
-	theme: string;
-	setTheme: (theme: string) => void;
+	isDark: boolean;
+	toggleThemeHandler: () => void;
 };
 
 export const ThemeContext = createContext({
-	theme: "",
-	setTheme: (theme: string) => {},
+	isDark: false,
+	toggleThemeHandler: () => {},
 });
 
 export default function ThemeProvider({
@@ -20,27 +20,49 @@ export default function ThemeProvider({
 }: {
 	children: React.ReactNode;
 }) {
-	const isBrowserDefaultDark = () => {
-		if (typeof window !== "undefined")
-			return window.matchMedia("(prefers-color-scheme: dark)").matches;
-		return false;
-	};
+	const [isDark, setIsDark] = useState(false);
 
-	const getDefaultTheme = () => {
-		if (hasCookie("theme")) {
-			// console.log("has cookie");
-			return getCookie("theme");
+	useEffect(() => {
+		initHandler();
+	});
+
+	function isLocalStorageEmpty() {
+		return !localStorage.getItem("isDarkTheme");
+	}
+
+	function initHandler() {
+		if (isLocalStorageEmpty()) {
+			localStorage.setItem("isDarkTheme", "false");
+			setIsDark(false);
 		} else {
-			// console.log("no cookie");
-			return isBrowserDefaultDark() ? "dark" : "light";
+			const isDarkTheme: boolean = JSON.parse(
+				localStorage.getItem("isDarkTheme")!,
+			);
+			setIsDark(() => {
+				return isDarkTheme;
+			});
 		}
-	};
+	}
 
-	const [theme, setTheme] = useState<string>(getDefaultTheme() as string);
+	function toggleThemeHandler(): void {
+		const isDarkTheme: boolean = JSON.parse(
+			localStorage.getItem("isDarkTheme")!,
+		);
+		setIsDark(!isDarkTheme);
+		setValueToLocalStorage();
+	}
+
+	function setValueToLocalStorage(): void {
+		localStorage.setItem("isDarkTheme", `${!isDark}`);
+	}
 
 	return (
-		<ThemeContext.Provider value={{ theme, setTheme }}>
-			<body className={`${inter.className} max-h-screen ${theme}`}>
+		<ThemeContext.Provider value={{ isDark, toggleThemeHandler }}>
+			<body
+				className={`${inter.className} max-h-screen ${
+					isDark ? "dark" : "light"
+				}`}
+			>
 				{children}
 			</body>
 		</ThemeContext.Provider>
