@@ -6,6 +6,7 @@ import { useContext } from "react";
 import { DateTime } from "luxon";
 import DisplayDate from "./DisplayDate";
 import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
+import type { View } from "@/lib/types";
 
 export default function DatePicker() {
 	const context = useContext(CalendarViewContext) as CalendarViewContextType;
@@ -40,13 +41,32 @@ export default function DatePicker() {
 				{context.startDate.year} - {endDate.day} {endDate.monthLong}{" "}
 				{endDate.year}
 			</div> */}
-			<p className="text-center">
-				<DisplayDate
-					start={context.startDate}
-					end={endDate}
-					view={context.view}
-				/>
-			</p>
+			<div className="align-center flex justify-center">
+				<span
+					className="h-min-content w-min-content cursor-pointer"
+					onClick={() => {
+						const view = context.view;
+						if (view === "day")
+							context.setStartDate(DateTime.now().startOf("day"));
+						else if (view === "3day")
+							context.setStartDate(
+								DateTime.now().startOf("day").minus({ days: 1 }),
+							);
+						else if (view === "week")
+							context.setStartDate(DateTime.now().startOf("week"));
+						else if (view === "month")
+							context.setStartDate(DateTime.now().startOf("month"));
+						else if (view === "year")
+							context.setStartDate(DateTime.now().startOf("year"));
+					}}
+				>
+					<DisplayDate
+						start={context.startDate}
+						end={endDate}
+						view={context.view}
+					/>
+				</span>
+			</div>
 			<FaChevronRight
 				className="cursor-pointer text-2xl"
 				onClick={() => {
