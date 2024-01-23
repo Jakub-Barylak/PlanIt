@@ -24,7 +24,7 @@ type EventDetailsProps = {
 };
 
 export default function EventDetails(props: EventDetailsProps) {
-	const { calendars, deleteEvent, editEvent } = useContext(
+	const { calendars, deleteEvent, editEvent, forceRefresh } = useContext(
 		CalendarViewContext,
 	) as CalendarViewContextType;
 	const { axios } = useContext(AuthContext) as AuthContextType;
@@ -89,6 +89,9 @@ export default function EventDetails(props: EventDetailsProps) {
 						parseInt(props.params.calendarId),
 						parseInt(props.params.eventId),
 					);
+					if (event!.template !== null) {
+						forceRefresh();
+					}
 					router.push("/calendar");
 				}
 			})
