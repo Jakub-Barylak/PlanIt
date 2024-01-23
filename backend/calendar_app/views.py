@@ -388,10 +388,6 @@ class EventViewSet(viewsets.ModelViewSet):
             return Response(template_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-
-
-
     def has_pattern_changed(self, original_data, updated_template):
         # Check if any of the pattern-related fields have changed
         return any([
@@ -495,8 +491,10 @@ class EventViewSet(viewsets.ModelViewSet):
 
         while current_date <= until_date:
             if self.is_event_day(event_template, current_date):
-                event = self.create_event(event_template, current_date)
-                events.append(event)
+                # Check if the event already exists
+                if not self.event_exists(event_template, current_date):
+                    event = self.create_event(event_template, current_date)
+                    events.append(event)
             current_date = self.increment_date(event_template.every, current_date, event_template)
 
         # Update generation_date only if the new until_date is later
@@ -505,6 +503,14 @@ class EventViewSet(viewsets.ModelViewSet):
             event_template.save()
 
         return events
+
+    def event_exists(self, event_template, date):
+        return Event.objects.filter(
+            template=event_template,
+            begin_date=date,
+            end_date=date + (event_template.end_date - event_template.begin_date)
+        ).exists()
+
 
 
 
