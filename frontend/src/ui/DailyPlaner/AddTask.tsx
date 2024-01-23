@@ -1,13 +1,20 @@
 // components/AddTask.tsx
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Image from 'next/image';
+import { AuthContext, AuthContextType } from "@/providers/AuthProvider";
+import {toast} from "react-toastify"
+
 
 interface AddTaskProps {
   onAdd: (newTask: string) => void;
+  flag: Boolean;
+  setFlag: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const AddTask: React.FC<AddTaskProps> = ({ onAdd }) => {
+const AddTask: React.FC<AddTaskProps> = ({ onAdd, flag, setFlag }) => {
   const [newTask, setNewTask] = useState<string>('');
+
+  const { axios } = useContext(AuthContext) as AuthContextType;
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewTask(event.target.value);
@@ -17,7 +24,18 @@ const AddTask: React.FC<AddTaskProps> = ({ onAdd }) => {
     if (newTask.trim() !== '') {
       onAdd(newTask);
       setNewTask('');
+
+      setFlag(!flag);
+
+      axios.post("/todo_lists/", {"todo_element": newTask, "done": false})
+      .then((res)=>{
+        toast.success("Added to-do task")
+      })
+      .catch((error)=>{
+        toast.error("Error to-do list")
+      })
     }
+
   };
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {

@@ -1,15 +1,14 @@
 // components/RemoveTask.tsx
 import React from 'react';
 import Image from 'next/image';
+import { AuthContext, AuthContextType } from "@/providers/AuthProvider";
+import {toast} from "react-toastify"
 
 interface RemoveTaskProps {
   onRemove: () => void;
 }
 
 const RemoveTask: React.FC<RemoveTaskProps> = ({ onRemove }) => (
-  //<span role="img" aria-label="Delete" onClick={onRemove}>
- // 🗑️
-//</span>
 
 <span role="img" aria-label="Delete" onClick={onRemove}>
 

@@ -2,7 +2,7 @@
 
 
 // components/TaskManager.tsx
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import Task from './Task';
 import AddTask from './AddTask';
 import RemoveTask from './RemoveTask';
@@ -10,16 +10,40 @@ import MoveTask from './MoveTask';
 import Image from 'next/image';
 import { ThemeContext, ThemeContextType } from "@/providers/ThemeProvider";
 import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
+import { AuthContext, AuthContextType } from "@/providers/AuthProvider";
+import {  AxiosResponse } from 'axios';
+import {toast} from "react-toastify"
+
 
 
 interface TaskManagerProps {
-  initialTasks: { text: string; completed: boolean }[];
+  initialTasks: { todo_element: string; done: boolean, id?: number}[];
 }
 
 
 
 const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
+  const { axios } = useContext(AuthContext) as AuthContextType;
+
   const [tasks, setTasks] = useState(initialTasks);
+
+  const [flag, setFlag] = useState(false);
+
+  useEffect(()=>{
+    axios.get("/todo_lists/")
+    .then((res: AxiosResponse)=>{
+      setTasks(res.data)
+    })
+  },[])
+
+  useEffect(()=>{
+  axios.get("/todo_lists/")
+  .then((res: AxiosResponse)=>{
+    setTasks(res.data)
+  })
+  },[flag])
+
+  
   const [showTaskManager, setShowTaskManager] = useState<boolean>(true);
   
   const themeContext = useContext(ThemeContext);
@@ -37,13 +61,23 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
     const newTasks = [...tasks];
     newTasks[index] = {
       ...newTasks[index],
-      completed: !newTasks[index].completed,
+      done: !newTasks[index].done,
     };
     setTasks(newTasks);
+    setFlag(!flag);
+    axios.patch(`/todo_lists/${tasks[index].id}/`, {"done": !newTasks[index].done})
+    .then(()=>{
+      toast.success("Task done")
+    })
+    .catch((error)=>{
+      toast.error("ups")
+      console.log(error)
+    })
   };
 
-  const handleAddTask = (text: string) => {
-    const newTask = { text, completed: false };
+  console.log(tasks)
+  const handleAddTask = (todo_element: string) => {
+    const newTask = { todo_element, done: false };
     setTasks([...tasks, newTask]);
   };
 
@@ -51,6 +85,16 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
     const newTasks = [...tasks];
     newTasks.splice(index, 1);
     setTasks(newTasks);
+    setFlag(!flag);
+    axios.delete(`/todo_lists/${tasks[index].id}/`)
+    .then(()=>{
+      toast.success("Task removed successfully")
+    })
+    .catch((error)=>{
+      toast.error("Task didn't remove")
+      console.log(error)
+    })
+
   };
 
   const handleMoveTask = (dragIndex: number, hoverIndex: number) => {
@@ -82,7 +126,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
 
     
     <div className={`h-100vh  flex flex-col items-start gap-4 p-4 bg-${theme === 'dark' ? 'bg-dark' : 'bg-white'} `} style={{ width: showTaskManager ? '25vw' : '0vw)' }}>
-    <div className={`h-full  w-0.5 bg-${theme === 'dark' ? 'gray-500' : 'gray-200'} absolute ${showTaskManager ? 'left-[75vw]' : 'left-[93.8%]'}  top-0 bottom-4 transition-all duration-300 ${showTaskManager  ? '': 'opacity-0 invisible'}`}></div>  
+    <div className={`h-full  w-0.5 bg-${theme === 'dark' ? 'gray-500' : 'gray-200'} absolute ${showTaskManager ? 'left-[75vw]' : ''}  top-0 bottom-4 transition-all duration-300 ${showTaskManager  ? '': 'opacity-0 invisible'}`}></div>  
 
     <span
     onClick={toggleTaskManager}
@@ -130,7 +174,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
             className={`flex items-center justify-between bg-myCustomBackground text-${theme === 'dark' ? 'white' : 'black'} p-1 rounded-2 w-full box-border mb-0`}
             >
 
-<Task task={task} onToggle={() => handleToggle(index)} darkMode={theme === 'dark'} />
+      <Task task={task} onToggle={() => handleToggle(index)} darkMode={theme === 'dark'} />
       <div className="flex items-center" >
       <div className="mr-2">
       <RemoveTask onRemove={() => handleRemoveTask(index)} />
@@ -149,7 +193,9 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
                   display: 'flex' 
                 }}
             >
-            <AddTask onAdd={handleAddTask} />
+            <AddTask onAdd={handleAddTask} 
+            flag = {flag}
+            setFlag ={setFlag}/>
           </div>
           </div>
       )}
