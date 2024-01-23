@@ -32,15 +32,15 @@ export const SideNav: FC<Props> = ({
 }): JSX.Element => {
 	const [showSidebar, setShowSidebar] = useState<boolean>(true);
 	const { user, resetTokens } = useContext(AuthContext) as AuthContextType;
-	const { theme, setTheme } = useContext(ThemeContext) as ThemeContextType;
+	const { isDark, toggleThemeHandler } = useContext(
+		ThemeContext,
+	) as ThemeContextType;
 	const { calendars } = useContext(
 		CalendarViewContext,
 	) as CalendarViewContextType;
 
 	const toggleTheme = () => {
-		const isCurrentThemeDark = theme === "dark";
-		setTheme(isCurrentThemeDark ? "light" : "dark");
-		setCookie("theme", isCurrentThemeDark ? "light" : "dark");
+		toggleThemeHandler();
 	};
 
 	return (
@@ -329,10 +329,10 @@ export const SideNav: FC<Props> = ({
 							alt="PlanIt"
 							src={
 								showSidebar
-									? theme == "light"
+									? !isDark
 										? "/black-logo.svg"
 										: "/white-logo.svg"
-									: theme == "light"
+									: !isDark
 										? "/dark-no-background.svg"
 										: "/light-no-background.svg"
 							}
