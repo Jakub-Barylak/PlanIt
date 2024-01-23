@@ -32,7 +32,7 @@ export default function ThemeProvider({
 
 	function initHandler() {
 		if (isLocalStorageEmpty()) {
-			localStorage.setItem("isDarkTheme", "true");
+			localStorage.setItem("isDarkTheme", "false");
 			document.querySelector("body")!.classList.add("dark");
 			setIsDark(false);
 		} else {
