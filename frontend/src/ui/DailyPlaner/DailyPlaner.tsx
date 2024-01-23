@@ -30,8 +30,8 @@ const DailyPlaner: React.FC = () => {
   		//${showTaskManager ? "w-[15vw]" : "max-w-[calc(50px+1rem)]"}}
 
 		style={{
-			width: showTaskManager ? '21vw' : 'auto', // Szerokość 100% ekranu 
-			maxWidth: '21vw',
+			width: showTaskManager ? '20vw' : 'auto', // Szerokość 100% ekranu 
+			maxWidth: '20vw',
 			color: isDark  ? 'white' : 'black',
 			background: isDark  ? '#161920' : '#FFFFFF',
 			transition: 'height 0.3s ease', // dodaj płynne przejści

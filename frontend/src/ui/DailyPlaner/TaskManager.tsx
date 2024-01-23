@@ -189,7 +189,7 @@ onShowTaskManagerChange}) => {
             onDragStart={(event) => handleDragStart(index, event)}
             onDragOver={(event) => event.preventDefault()}
             onDrop={(event) => handleDrop(index, event)}
-            className={`flex items-center justify-between bg-myCustomBackground text-${isDark  ? 'white' : 'black'} p-1 rounded-2 w-6/7 box-border mb-0`}
+            className={`flex items-center justify-between bg-myCustomBackground text-${isDark  ? 'white' : 'black'} p-1 rounded-2 w-full box-border mb-0`}
             >
 
       <Task task={task} onToggle={() => handleToggle(index)} darkMode={isDark } />
