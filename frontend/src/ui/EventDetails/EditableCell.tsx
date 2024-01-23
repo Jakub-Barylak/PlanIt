@@ -11,6 +11,7 @@ type EditableCellProps = {
 	onChange: (
 		event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
 	) => void;
+	canEdit: boolean;
 };
 
 export default function EditableCell(props: EditableCellProps) {
@@ -33,7 +34,7 @@ export default function EditableCell(props: EditableCellProps) {
 			.minus({ hour: 1 })
 			.toLocaleString(DateTime.DATETIME_SHORT);
 	}
-	if (isEditing) {
+	if (isEditing && props.canEdit === true) {
 		if (props.type === "textarea") {
 			return (
 				<div className="relative">

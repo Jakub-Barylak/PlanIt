@@ -35,8 +35,13 @@ export default function EventDetails(props: EventDetailsProps) {
 			?.events?.find((event) => event.id === Number(props.params.eventId));
 	};
 
+	const findCalendar = () => {
+		return calendars.find((cal) => cal.id === Number(props.params.calendarId));
+	};
+
 	const router = useRouter();
 	const event = findEvent();
+	const calendar = findCalendar();
 
 	useEffect(() => {
 		const event = findEvent();
@@ -160,6 +165,9 @@ export default function EventDetails(props: EventDetailsProps) {
 		event.begin_date === eventDetails.begin_date &&
 		event.end_date === eventDetails.end_date
 	);
+	const canEdit =
+		calendar?.shared === false ||
+		(calendar.shared === true && calendar.coworked === true);
 
 	return (
 		<div className="h-screen flex-grow overflow-x-auto px-10 pt-10">
@@ -171,9 +179,11 @@ export default function EventDetails(props: EventDetailsProps) {
 					}}
 				>
 					Event details
-					<p className="text-sm text-[#A0A0A0]">
-						Double click any element to edit
-					</p>
+					{canEdit && (
+						<p className="text-sm text-[#A0A0A0]">
+							Double click any element to edit
+						</p>
+					)}
 				</h1>
 				<div className="col-start-3 col-end-5 flex items-center justify-end">
 					<div className="cursor-pointer text-4xl" onClick={handleDeleteEvent}>
@@ -187,6 +197,7 @@ export default function EventDetails(props: EventDetailsProps) {
 						name="name"
 						type="text"
 						onChange={onChangeHandler}
+						canEdit={canEdit}
 					/>
 				</div>
 				<div className="col-start-3 col-end-4">
@@ -202,6 +213,7 @@ export default function EventDetails(props: EventDetailsProps) {
 						name="description"
 						type="textarea"
 						onChange={onChangeHandler}
+						canEdit={canEdit}
 					/>
 				</div>
 				<div className="col-start-1 col-end-3 row-start-4 row-end-5">
@@ -211,6 +223,7 @@ export default function EventDetails(props: EventDetailsProps) {
 						name="begin_date"
 						type="datetime-local"
 						onChange={onChangeHandler}
+						canEdit={canEdit}
 					/>
 				</div>
 				<div className="col-start-3 col-end-5 row-start-4 row-end-5">
@@ -220,6 +233,7 @@ export default function EventDetails(props: EventDetailsProps) {
 						name="end_date"
 						type="datetime-local"
 						onChange={onChangeHandler}
+						canEdit={canEdit}
 					/>
 				</div>
 				{changed ? (
