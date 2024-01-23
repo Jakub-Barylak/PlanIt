@@ -143,17 +143,17 @@ onShowTaskManagerChange}) => {
 
     
     <div className={`h-100vh  flex flex-col items-start gap-4 p-4 bg-${isDark  ? 'bg-dark' : 'bg-white'} `} > 
-    <div className={`h-full  w-0.5 bg-${isDark  ? 'gray-500' : 'gray-200'} absolute ${showTaskManager ? 'left-[75vw]' : 'opacity-0 invisible'}  top-0 bottom-4 transition-all duration-300 '}`}></div>  
+    <div className={`h-full  w-0.5 bg-${isDark  ? 'gray-500' : 'gray-200'} absolute ${showTaskManager ? 'left-[75vw]' : 'opacity-0 invisible'}  top-0 bottom-4 transition-all duration-300 z-2'}`}></div>  
   
 
     <span
     onClick={toggleTaskManager}
-    className={`cursor-pointer inline-block mr-5 ${showTaskManager ? 'ml-[-3vw] mt-[1vh]' : 'ml-[-5vw] mt-[0vh]'}`} >
-
-        <div
+    //</div>className={`cursor-pointer inline-block mr-5 ${showTaskManager ? 'ml-[-3vw] mt-[1vh]' : 'ml-[-5vw] mt-[0vh] z-10'}`} >
+    className={`cursor-pointer inline-block mr-5 ${showTaskManager ? 'ml-[-3vw] mt-[1vh]' : 'ml-[-5vw] mt-[1vh]'}  z-10`} >
+      <div
     className={`w-8 h-8 p-1
-    ${isDark ? 'bg-darkMode-background border-darkMode-secondary-text' : 'bg-gray-200 border-gray-200'}
-    rounded flex items-center justify-center border-2`}
+    ${isDark ? 'bg-gray-900 border-darkMode-secondary-text' : 'bg-gray-200 border-gray-200'}
+    rounded flex items-center justify-center border-2 `}
 
   >
     <SlArrowLeft
@@ -180,7 +180,7 @@ onShowTaskManagerChange}) => {
     >
         <ul 
           
-          className={`block mt-[-5%] bg-myCustomBackground text-myCustomColor max-w-content overflow-hidden transition-width duration-300 ease-in-out`}
+          //className={`block mt-[-5%] bg-myCustomBackground text-myCustomColor max-w-content overflow-hidden transition-width duration-300 ease-in-out`}
         >
           {tasks.map((task, index) => (
             <li 
