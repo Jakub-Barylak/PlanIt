@@ -18,16 +18,23 @@ import {toast} from "react-toastify"
 
 interface TaskManagerProps {
   initialTasks: { todo_element: string; done: boolean, id?: number}[];
+  onShowTaskManagerChange: (value: boolean) => void;
+  //showTaskManager: boolean;
+  //setShowTaskManager: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 
 
-const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
+const TaskManager: React.FC<TaskManagerProps> = ({ 
+  initialTasks,
+onShowTaskManagerChange}) => {
   const { axios } = useContext(AuthContext) as AuthContextType;
 
   const [tasks, setTasks] = useState(initialTasks);
 
   const [flag, setFlag] = useState(false);
+
+  
 
   useEffect(()=>{
     axios.get("/todo_lists/")
@@ -44,6 +51,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
   },[flag])
 
   
+
   const [showTaskManager, setShowTaskManager] = useState<boolean>(true);
   
   const themeContext = useContext(ThemeContext);
@@ -120,19 +128,25 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
     setTasks(newTasks);
   };
 
-  const toggleTaskManager = () => {
-    setShowTaskManager(!showTaskManager);
-  };
+  // const toggleTaskManager = () => {
+  //   setShowTaskManager(!showTaskManager);
+  // };
 
+  const toggleTaskManager = () => {
+    const newShowTaskManager = !showTaskManager;
+    setShowTaskManager(newShowTaskManager);
+    onShowTaskManagerChange(newShowTaskManager); // Wywołanie callbacka
+  };
   return (
 
     
-    <div className={`h-100vh  flex flex-col items-start gap-4 p-4 bg-${theme === 'dark' ? 'bg-dark' : 'bg-white'} `} style={{ width: showTaskManager ? '25vw' : '0vw)' }}>
-    <div className={`h-full  w-0.5 bg-${theme === 'dark' ? 'gray-500' : 'gray-200'} absolute ${showTaskManager ? 'left-[75vw]' : ''}  top-0 bottom-4 transition-all duration-300 ${showTaskManager  ? '': 'opacity-0 invisible'}`}></div>  
+    <div className={`h-100vh  flex flex-col items-start gap-4 p-4 bg-${theme === 'dark' ? 'bg-dark' : 'bg-white'} `} > 
+    <div className={`h-full  w-0.5 bg-${theme === 'dark' ? 'gray-500' : 'gray-200'} absolute ${showTaskManager ? 'left-[75vw]' : 'opacity-0 invisible'}  top-0 bottom-4 transition-all duration-300 '}`}></div>  
+  
 
     <span
     onClick={toggleTaskManager}
-    className={`cursor-pointer inline-block mr-5 ${showTaskManager ? 'ml-[-3vw] mt-[1vh]' : 'ml-[15vw] mt-[1vh]'}  z-10`} >
+    className={`cursor-pointer inline-block mr-5 ${showTaskManager ? 'ml-[-3vw] mt-[1vh]' : 'ml-[-5vw] mt-[0vh]'}`} >
 
         <div
     className={`w-8 h-8 p-1
@@ -149,7 +163,7 @@ const TaskManager: React.FC<TaskManagerProps> = ({ initialTasks }) => {
     
   </div>
 </span>
-<h2 className={`text-xl mb-2 mt-[-6vh] mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}  ${showTaskManager ? 'text-center' : 'text-center ml-[13vw] '} `} style={{ width: showTaskManager ? '20vw' : '15vw' }}>  To Do</h2>
+<h2 className={`text-xl mt-[-5vh] mx-auto ${theme === 'dark' ? 'text-gray-400' : 'text-gray-700'}  ${showTaskManager ? 'text-center' : 'text-center text-ml-[3vw] '} `} style={{ width: showTaskManager ? '20vw' : '10vw' }}>  To Do</h2>
 
 <div className={`h-0.5 bg-${theme === 'dark' ? 'gray-500' : 'gray-200'} w-full mt-[0vh] ${showTaskManager ? '' : 'opacity-0 invisible'}`}></div>
 
