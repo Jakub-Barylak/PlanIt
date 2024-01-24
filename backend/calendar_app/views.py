@@ -595,18 +595,23 @@ class DeleteCalendarView(APIView):
             return Response({"error": "Calendar ID is required"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            # Fetch the calendar, considering shared access as well
             calendar = Calendar.objects.filter(id=calendar_id).first()
             if not calendar:
                 return Response({"message": "Calendar not found"}, status=status.HTTP_404_NOT_FOUND)
 
-            # Check if the user is the owner or has shared access with coworked=True
-            if calendar.owner != request.user and not SharedCalendarUser.objects.filter(user=request.user, calendar=calendar, coworked=True).exists():
-                return Response({"message": "You do not have permission to delete this calendar"}, status=status.HTTP_403_FORBIDDEN)
+            # If the user is the owner of the calendar, delete the calendar
+            if calendar.owner == request.user:
+                calendar.delete()
+                return Response({"message": "Calendar deleted successfully"}, status=status.HTTP_200_OK)
 
-            # Delete the calendar
-            calendar.delete()
-            return Response({"message": "Calendar deleted successfully"}, status=status.HTTP_200_OK)
+            # If the user is a shared user with coworked access, remove their access
+            shared_access = SharedCalendarUser.objects.filter(user=request.user, calendar=calendar, coworked=True).first()
+            if shared_access:
+                shared_access.delete()
+                return Response({"message": "Removed from shared calendar successfully"}, status=status.HTTP_200_OK)
+
+            # If the user is neither the owner nor a shared user with coworking access
+            return Response({"message": "You do not have permission to perform this action"}, status=status.HTTP_403_FORBIDDEN)
 
         except Exception as e:
             return Response({"message": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
