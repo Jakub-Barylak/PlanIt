@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useState, useEffect, useLayoutEffect } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, redirect } from "next/navigation";
 import { getCookie, setCookie, hasCookie, deleteCookie } from "cookies-next";
 import { UserProfile } from "@/lib/types";
 import axios, {
@@ -61,7 +61,8 @@ export default function AuthProvider({
 		deleteCookie(RefreshCookieString);
 		setAccessToken(null);
 		setRefreshToken(null);
-		router.push("/login");
+		// router.push("/login");
+		redirect("/login");
 	}
 
 	// Create Axios instance
@@ -115,7 +116,7 @@ export default function AuthProvider({
 		},
 	);
 
-	const publicPages = ["/login", "/login/register"];
+	const publicPages = ["/login", "/login/register", "/"];
 	const path = usePathname();
 
 	if (!publicPages.includes(path)) {
@@ -129,8 +130,8 @@ export default function AuthProvider({
 		} else if (typeof window !== "undefined") {
 			// TODO odkomentować jak będzie działać logowanie i rejestracja
 			// console.log("redirect to login");
-			// redirect("/login");
-			router.push("/login");
+			redirect("/login");
+			// router.push("/login");
 		}
 	}
 
